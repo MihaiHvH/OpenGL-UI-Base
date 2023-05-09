@@ -1,0 +1,1 @@
+g++ main.cpp interface/interface.cpp graphics/graphics.cpp graphics/buton/buton.cpp graphics/textBox/textBox.cpp graphics/checkBox/checkBox.cpp graphics/image/image.cpp graphics/slider/slider.cpp -o OpenGL-Base -g -lGL -lglut -lIL
