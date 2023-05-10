@@ -25,7 +25,8 @@ pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, GLUT_BITMAP_TIMES_ROMAN_2
     printf("CheckBox state: %d\n", state);
 });
 
-pGraphics::pImage image({ 10, 200 }, { 100, 100 }, "ALT TEXT", "images/imagep.png");
+pGraphics::pImage imageALT({ 10, 200 }, { 100, 100 }, "ALT TEXT", "images/imagep.png");
+pGraphics::pImage image({ 150, 200 }, { 100, 100 }, "ALT TEXT", "images/image.png");
 
 pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, 2, false, GLUT_BITMAP_TIMES_ROMAN_24, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.white, interface.graphics.red, Render, [](double value) {
     /*
@@ -43,14 +44,17 @@ void Render() {
     buton.draw(interface);
     textBox.draw(interface);
     checkBox.draw(interface);
-    image.draw();
     slider.draw(interface);
+    image.draw();
+    imageALT.draw();
 
     glutSwapBuffers();
 }
 
 void Resize(GLint newWidth, GLint newHeight) {
     if (newWidth >= 8 && newHeight >= 8) {
+        interface.screen.size = { newWidth, newHeight };
+
         glViewport( 0, 0, newWidth, newHeight );
         glMatrixMode( GL_PROJECTION );
         glLoadIdentity();
@@ -132,6 +136,7 @@ int main(int argc, char **argv) {
     ilInit();
 
     image.load();
+    imageALT.load();
 
     /*image loading --end--*/
 
