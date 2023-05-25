@@ -46,10 +46,10 @@ void pGraphics::pImage::draw(int alpha) {
     if (!image) {
         glColor4f(0.f, 0.f, 0.f, 1.f);
         glBegin(GL_POLYGON);
-        glVertex2f(pos.first, pos.second); //corner down
-        glVertex2f(pos.first + size.first, pos.second); //right down corner
-        glVertex2f(pos.first + size.first, pos.second + size.second); //right up corner
-        glVertex2f(pos.first, pos.second + size.second); //corner up
+        glVertex2i(pos.first, pos.second); //corner down
+        glVertex2i(pos.first + size.first, pos.second); //right down corner
+        glVertex2i(pos.first + size.first, pos.second + size.second); //right up corner
+        glVertex2i(pos.first, pos.second + size.second); //corner up
 
         glEnd();
 
@@ -59,8 +59,8 @@ void pGraphics::pImage::draw(int alpha) {
         glColor4f(1.f, 0.f, 0.f, 1.f);
         const unsigned char* str = reinterpret_cast<const unsigned char*>(altText.c_str());
         std::pair<int, int> sz = { glutBitmapWidth(GLUT_BITMAP_HELVETICA_12, altText[0]), glutBitmapLength(GLUT_BITMAP_HELVETICA_12, str) };
-        glRasterPos2f(pos.first + size.first / 2 - sz.second / 2, pos.second + size.second / 2 + sz.first / 2);
-        for (int i = 0; i < strlen(altText.c_str()); ++i)
+        glRasterPos2i(pos.first + size.first / 2 - sz.second / 2, pos.second + size.second / 2 + sz.first / 2);
+        for (size_t i = 0; i < strlen(altText.c_str()); ++i)
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, altText[i]);
     }
     glEnd();

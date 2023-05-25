@@ -25,6 +25,7 @@ pGraphics::pSlider::pSlider(std::pair<int, int> pPos, std::pair<int, int> pSize,
     value = min_max.first;
     pxOn = 0;
     pxOff = size.first - 4;
+    
     if (real) {
             value = std::round(value);
             std::string str = std::to_string(value);
@@ -60,13 +61,13 @@ pGraphics::pSlider::pSlider(std::pair<int, int> pPos, std::pair<int, int> pSize,
 
 void pGraphics::pSlider::draw(pInterface interface) {
     interface.graphics.drawRect(pos, size, outlineColor);
-    interface.graphics.drawRect({ pos.first + 2, pos.second + 2}, { pxOn, size.second - 4 }, onColor);
-    interface.graphics.drawRect({ pos.first + pxOn + 2, pos.second + 2 }, { pxOff, size.second - 4 }, offColor);
+    interface.graphics.drawRect({ pos.first + 2, pos.second + 2}, { (int)pxOn, size.second - 4 }, onColor);
+    interface.graphics.drawRect({ pos.first + (int)pxOn + 2, pos.second + 2 }, { (int)pxOff, size.second - 4 }, offColor);
 
     const unsigned char* str = reinterpret_cast<const unsigned char*>(valueText.c_str());
     std::pair<int, int> sz = { glutBitmapLength(font, str), glutBitmapWidth(font, valueText[0])};
 
-    interface.graphics.drawText({ pos.first + 2 + pxOn - sz.first / 2, pos.second + sz.second / 2 + size.second / 2 }, font, valueText.c_str(), valueTextColor);
+    interface.graphics.drawText({ pos.first + 2 + (int)pxOn - sz.first / 2, pos.second + sz.second / 2 + size.second / 2 }, font, valueText.c_str(), valueTextColor);
 
     str = reinterpret_cast<const unsigned char*>(text.c_str());
     sz = { glutBitmapLength(font, str), glutBitmapWidth(font, text[0])};

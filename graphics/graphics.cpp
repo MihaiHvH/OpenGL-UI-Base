@@ -1,6 +1,10 @@
 #include "../main.hpp"
 #include "graphics.hpp"
 
+#ifndef M_PI
+    #define M_PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067
+#endif
+
 pGraphics::pGraphics() {
     black =  createNewColor(0, 0, 0);
     white =  createNewColor(255, 255,255);
@@ -17,7 +21,7 @@ pGraphics::~pGraphics() {
 }
 
 pColor pGraphics::createNewColor(int r, int g, int b, int a) {
-    pColor color;
+    pColor color{};
     color.a = a;
     color.r = r;
     color.g = g;
@@ -37,10 +41,10 @@ bool pGraphics::mouseInRegion(std::pair<int, int> mousePointer, std::pair<int, i
 void pGraphics::drawRect(std::pair<int, int> pos, std::pair<int, int> size, pColor color) {
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glBegin(GL_POLYGON);
-    glVertex2f(pos.first, pos.second); //corner down
-    glVertex2f(pos.first + size.first, pos.second); //right down corner
-    glVertex2f(pos.first + size.first, pos.second + size.second); //right up corner
-    glVertex2f(pos.first, pos.second + size.second); //corner up
+    glVertex2i(pos.first, pos.second); //corner down
+    glVertex2i(pos.first + size.first, pos.second); //right down corner
+    glVertex2i(pos.first + size.first, pos.second + size.second); //right up corner
+    glVertex2i(pos.first, pos.second + size.second); //corner up
     glEnd();
 }
 
@@ -61,11 +65,11 @@ void pGraphics::drawFilledCircle(std::pair<int, int> pos, double r, pColor color
 }
 
 void pGraphics::drawTriangle(std::pair<int, int> point1, std::pair<int, int> point2, std::pair<int, int> point3, pColor color) {
-    glColor4f(color.r, color.g, color.b, color.a);
+    glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glBegin(GL_TRIANGLES);
-    glVertex2d(point1.first, point1.second);
-    glVertex2d(point2.first, point2.second);
-    glVertex2d(point3.first, point3.second);
+    glVertex2i(point1.first, point1.second);
+    glVertex2i(point2.first, point2.second);
+    glVertex2i(point3.first, point3.second);
     glEnd();
 }
 
@@ -74,8 +78,8 @@ void pGraphics::drawText(std::pair<int, int> pos, void *font, const char *str, p
     glPushMatrix();
     glLoadIdentity();
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
-    glRasterPos2f(pos.first, pos.second);
+    glRasterPos2i(pos.first, pos.second);
     
-    for (int i = 0; i < strlen(str); ++i)
+    for (size_t i = 0; i < strlen(str); ++i)
         glutBitmapCharacter(font, str[i]);
 }

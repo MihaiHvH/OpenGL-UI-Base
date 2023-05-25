@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef _WIN32
+	#define IL_USE_PRAGMA_LIBS
+#endif
+
 #include <utility>
 #include <string.h>
 #include <stdio.h>

@@ -1,6 +1,10 @@
 #include "../../main.hpp"
 #include "buton.hpp"
 
+#ifdef _WIN32
+    #undef interface
+#endif
+
 pGraphics::pButon::~pButon() {
 
 }
@@ -27,7 +31,7 @@ void pGraphics::pButon::draw(pInterface interface) {
     active ? color = initColor : color = activeColor;
     
     std::pair<int, int> textSize = { glutBitmapLength(font, reinterpret_cast<const unsigned char*>(text.c_str())), 0};
-    for (int i = 0; i < strlen(text.c_str()); ++i)
+    for (size_t i = 0; i < strlen(text.c_str()); ++i)
         if (textSize.second < glutBitmapWidth(font, text.c_str()[i]))
             textSize.second = glutBitmapWidth(font, text.c_str()[i]);
     

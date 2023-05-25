@@ -30,7 +30,7 @@ void pGraphics::pCheckBox::draw(pInterface interface) {
     interface.graphics.drawRect({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, color);
 
     int wSz = 0; //max WText
-    for (int i = 0; i < strlen(text.c_str()); ++i)
+    for (size_t i = 0; i < strlen(text.c_str()); ++i)
         if (wSz < glutBitmapWidth(font, text.c_str()[i]))
             wSz = glutBitmapWidth(font, text.c_str()[i]);
             

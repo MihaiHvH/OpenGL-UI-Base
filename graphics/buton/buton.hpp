@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef _WIN32
+    #undef interface
+#endif
+
 #include <utility>
 #include "../../structs.hpp"
 #include "../../interface/interface.hpp"

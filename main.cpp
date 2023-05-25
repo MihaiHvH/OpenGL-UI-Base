@@ -65,16 +65,10 @@ void Resize(GLint newWidth, GLint newHeight) {
 }
 
 void ProcessSpecialInput(int key, int x, int y) {
-    switch (key) {
-
-    }
     textBox.onSpeciaKeyPress(key);
 }
 
 void ProcessInput(unsigned char key, int x, int y) {
-    switch (key) {
-        
-    }
     textBox.onKeyPress(key);
 }
 
