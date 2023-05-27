@@ -39,6 +39,8 @@ bool pGraphics::mouseInRegion(std::pair<int, int> mousePointer, std::pair<int, i
 }
 
 void pGraphics::drawRect(std::pair<int, int> pos, std::pair<int, int> size, pColor color) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glBegin(GL_POLYGON);
     glVertex2i(pos.first, pos.second); //corner down
@@ -50,7 +52,8 @@ void pGraphics::drawRect(std::pair<int, int> pos, std::pair<int, int> size, pCol
 
 void pGraphics::drawFilledCircle(std::pair<int, int> pos, double r, pColor color) {
     glDisable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     glBegin(GL_POLYGON);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
@@ -65,6 +68,8 @@ void pGraphics::drawFilledCircle(std::pair<int, int> pos, double r, pColor color
 }
 
 void pGraphics::drawTriangle(std::pair<int, int> point1, std::pair<int, int> point2, std::pair<int, int> point3, pColor color) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glBegin(GL_TRIANGLES);
     glVertex2i(point1.first, point1.second);
@@ -74,6 +79,8 @@ void pGraphics::drawTriangle(std::pair<int, int> point1, std::pair<int, int> poi
 }
 
 void pGraphics::drawText(std::pair<int, int> pos, void *font, const char *str, pColor color) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
