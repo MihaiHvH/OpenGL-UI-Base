@@ -58,7 +58,7 @@ void Resize(GLint newWidth, GLint newHeight) {
         glViewport( 0, 0, newWidth, newHeight );
         glMatrixMode( GL_PROJECTION );
         glLoadIdentity();
-        glOrtho( 0, GLdouble (newWidth), GLdouble (newHeight), 0, 0, 100);
+        gluOrtho2D( 0, GLdouble (newWidth), GLdouble (newHeight), 0);
         Render();
         glutPostRedisplay();
     }
@@ -111,6 +111,10 @@ void HandleMouseDrag(int x, int y) {
     slider.handleMouse(interface);
 }
 
+void HandleIdle() {
+
+}
+
 int main(int argc, char **argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -122,7 +126,7 @@ int main(int argc, char **argv) {
     glEnable(GL_TEXTURE_2D);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho( 0, 640, 640, 0, 0, 100);
+    gluOrtho2D( 0, interface.screen.initialSize.first, interface.screen.initialSize.second, 0);
     glClearColor(1.0, 1.0, 1.0, 1.0);
 
     /*image loading --start--*/
@@ -141,6 +145,7 @@ int main(int argc, char **argv) {
     glutMouseFunc(HandleMouseKeys);
     glutPassiveMotionFunc(HandleMouseMovement);
     glutMotionFunc(HandleMouseDrag);
+    glutIdleFunc(HandleIdle);
 
     glutMainLoop();
 

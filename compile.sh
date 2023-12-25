@@ -1,1 +1,11 @@
-g++ main.cpp interface/interface.cpp graphics/graphics.cpp graphics/buton/buton.cpp graphics/textBox/textBox.cpp graphics/checkBox/checkBox.cpp graphics/image/image.cpp graphics/slider/slider.cpp -o OpenGL-Base -g -lGL -lglut -lIL
+#!/bin/bash
+
+files=`find . -name '*.*' -a \( -name '*.cpp' \)`
+
+name=$1
+
+if [ -z "$name" ]; then
+    name="OpenGL-Base"
+fi
+
+g++ $files -o $name -g -lGL -lglut -lIL -lGLU
