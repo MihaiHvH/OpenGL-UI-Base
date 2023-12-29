@@ -38,7 +38,19 @@ bool pGraphics::mouseInRegion(std::pair<int, int> mousePointer, std::pair<int, i
     return false;
 }
 
-void pGraphics::drawRect(std::pair<int, int> pos, std::pair<int, int> size, pColor color) {
+void pGraphics::draw4PointRect(std::pair<int, int> point[4], pColor color) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
+    glBegin(GL_POLYGON);
+    glVertex2i(point[0].first, point[0].second);
+    glVertex2i(point[1].first, point[1].second);
+    glVertex2i(point[2].first, point[2].second);
+    glVertex2i(point[3].first, point[3].second);
+    glEnd();
+}
+
+void pGraphics::drawSquare(std::pair<int, int> pos, std::pair<int, int> size, pColor color) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
@@ -50,7 +62,7 @@ void pGraphics::drawRect(std::pair<int, int> pos, std::pair<int, int> size, pCol
     glEnd();
 }
 
-void pGraphics::drawFilledCircle(std::pair<int, int> pos, double r, pColor color) {
+void pGraphics::drawFilledCircle(std::pair<int, int> centrePos, double r, pColor color) {
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -61,7 +73,7 @@ void pGraphics::drawFilledCircle(std::pair<int, int> pos, double r, pColor color
         double angle = 2 * M_PI * i / 360;
         double x = cos(angle) * r;
         double y = sin(angle) * r;
-        glVertex2d(pos.first + x, pos.second + y);
+        glVertex2d(centrePos.first + x, centrePos.second + y);
         i += 0.25;
     }
     glEnd();
@@ -76,6 +88,21 @@ void pGraphics::drawTriangle(std::pair<int, int> point1, std::pair<int, int> poi
     glVertex2i(point2.first, point2.second);
     glVertex2i(point3.first, point3.second);
     glEnd();
+}
+
+std::pair<int, int> pGraphics::getTextSize(const char* str, void* font) {
+    const unsigned char* s = reinterpret_cast<unsigned const char*>(str);
+
+    int wMax = -1;
+    
+    for (int i = 0; i < strlen(str); ++i) {
+        if (wMax == -1)
+            wMax = glutBitmapWidth(font, str[i]);
+        if (wMax < glutBitmapWidth(font, str[i]))
+            wMax = glutBitmapWidth(font, str[i]);
+    }
+
+    return { glutBitmapLength(font, s), wMax };
 }
 
 void pGraphics::drawText(std::pair<int, int> pos, void *font, const char *str, pColor color) {

@@ -23,9 +23,9 @@ pGraphics::pTextBox::pTextBox(std::pair<int, int> pPos, std::pair<int, int> pSiz
 }
 
 void pGraphics::pTextBox::draw(pInterface interface) {
-    interface.graphics.drawRect(pos, size, outlineColor);
-    interface.graphics.drawRect({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, insideColor);
-    if (selected) interface.graphics.drawRect(barPos, barSize, barColor);
+    interface.graphics.drawSquare(pos, size, outlineColor);
+    interface.graphics.drawSquare({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, insideColor);
+    if (selected) interface.graphics.drawSquare(barPos, barSize, barColor);
 
     int sz = 0; 
     if (text.size() >= 0) sz = glutBitmapWidth(font, text[0]);

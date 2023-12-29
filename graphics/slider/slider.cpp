@@ -60,9 +60,9 @@ pGraphics::pSlider::pSlider(std::pair<int, int> pPos, std::pair<int, int> pSize,
 }
 
 void pGraphics::pSlider::draw(pInterface interface) {
-    interface.graphics.drawRect(pos, size, outlineColor);
-    interface.graphics.drawRect({ pos.first + 2, pos.second + 2}, { (int)pxOn, size.second - 4 }, onColor);
-    interface.graphics.drawRect({ pos.first + (int)pxOn + 2, pos.second + 2 }, { (int)pxOff, size.second - 4 }, offColor);
+    interface.graphics.drawSquare(pos, size, outlineColor);
+    interface.graphics.drawSquare({ pos.first + 2, pos.second + 2}, { (int)pxOn, size.second - 4 }, onColor);
+    interface.graphics.drawSquare({ pos.first + (int)pxOn + 2, pos.second + 2 }, { (int)pxOff, size.second - 4 }, offColor);
 
     const unsigned char* str = reinterpret_cast<const unsigned char*>(valueText.c_str());
     std::pair<int, int> sz = { glutBitmapLength(font, str), glutBitmapWidth(font, valueText[0])};

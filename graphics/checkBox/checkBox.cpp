@@ -23,11 +23,11 @@ void pGraphics::pCheckBox::checkClick(pInterface interface) {
 }
 
 void pGraphics::pCheckBox::draw(pInterface interface) {
-    interface.graphics.drawRect(pos, size, outlineColor);
+    interface.graphics.drawSquare(pos, size, outlineColor);
     
     pColor color;
     active ? color = onColor : color = offColor;
-    interface.graphics.drawRect({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, color);
+    interface.graphics.drawSquare({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, color);
 
     int wSz = 0; //max WText
     for (size_t i = 0; i < strlen(text.c_str()); ++i)
