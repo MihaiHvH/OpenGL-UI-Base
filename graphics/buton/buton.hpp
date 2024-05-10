@@ -1,9 +1,5 @@
 #pragma once
 
-#ifdef _WIN32
-    #undef interface
-#endif
-
 #include <utility>
 #include "../../structs.hpp"
 #include "../../interface/interface.hpp"
@@ -13,8 +9,8 @@ class pGraphics::pButon {
     bool active = false;
     /*BUTTON VARS*/
 
-    std::pair<int, int> pos;
-    std::pair<int, int> size;
+    std::pair<double, double> pos;
+    std::pair<double, double> size;
     pColor initColor;
     pColor activeColor;
     void* font;
@@ -23,9 +19,11 @@ class pGraphics::pButon {
     void(*onClick)(bool);
 
     public:
-    pButon(std::pair<int, int> pos, std::pair<int, int> size, pColor initColor, pColor activeColor,
+    pButon(std::pair<double, double> pos, std::pair<double, double> size, pColor initColor, pColor activeColor,
                  void* font, pColor textColor, std::string text, void(*onClickFunction)(bool));
     ~pButon();
     void draw(pInterface interface);
     void checkClick(pInterface interface);
+    void updatePos(std::pair<double, double> pPos);
+    void updateSize(std::pair<double, double> pSize);
 };

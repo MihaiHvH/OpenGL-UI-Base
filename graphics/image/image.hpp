@@ -4,8 +4,8 @@
 
 class pGraphics::pImage {
     private:
-    std::pair<int, int> pos;
-    std::pair<int, int> size;
+    std::pair<double, double> pos;
+    std::pair<double, double> size;
     std::string altText;
     std::string imageLocation;
     
@@ -13,9 +13,11 @@ class pGraphics::pImage {
     ILuint image;
 
     public:
-    pImage(std::pair<int, int> pPos, std::pair<int, int> pSize, std::string pAltText, std::string pImageLocation);
+    pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pAltText, std::string pImageLocation);
     ~pImage();
     
     void load();
     void draw(int alpha = 255);
+    void updatePos(std::pair<double, double> pPos);
+    void updateSize(std::pair<double, double> pSize);
 };

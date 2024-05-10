@@ -9,7 +9,7 @@ pGraphics::pButon::~pButon() {
 
 }
 
-pGraphics::pButon::pButon(std::pair<int, int> pPos, std::pair<int, int> pSize, pColor pInitColor, pColor pActiveColor,
+pGraphics::pButon::pButon(std::pair<double, double> pPos, std::pair<double, double> pSize, pColor pInitColor, pColor pActiveColor,
                  void* pFont, pColor pTextColor, std::string pText, void(*onClickFunction)(bool)) {
     pos = pPos;
     size = pSize;
@@ -35,6 +35,14 @@ void pGraphics::pButon::draw(pInterface interface) {
         if (textSize.second < glutBitmapWidth(font, text.c_str()[i]))
             textSize.second = glutBitmapWidth(font, text.c_str()[i]);
     
-    interface.graphics.drawSquare(pos, size, color);
+    interface.graphics.drawRect(pos, size, color);
     interface.graphics.drawText({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 }, font, text.c_str(), textColor);   
+}
+
+void pGraphics::pButon::updatePos(std::pair<double, double> pPos) {
+    pos = pPos;
+}
+
+void pGraphics::pButon::updateSize(std::pair<double, double> pSize) {
+    size = pSize;
 }

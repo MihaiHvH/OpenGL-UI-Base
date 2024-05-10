@@ -4,7 +4,7 @@ pGraphics::pCheckBox::~pCheckBox() {
 
 }
 
-pGraphics::pCheckBox::pCheckBox(std::pair<int, int> pPos, std::pair<int, int> pSize, void* pFont, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, pColor pOnColor, pColor pOffColor, void(*pOnStateChange)(bool)) {
+pGraphics::pCheckBox::pCheckBox(std::pair<double, double> pPos, std::pair<double, double> pSize, void* pFont, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, pColor pOnColor, pColor pOffColor, void(*pOnStateChange)(bool)) {
     pos = pPos;
     size = pSize;
     font = pFont;
@@ -23,11 +23,11 @@ void pGraphics::pCheckBox::checkClick(pInterface interface) {
 }
 
 void pGraphics::pCheckBox::draw(pInterface interface) {
-    interface.graphics.drawSquare(pos, size, outlineColor);
+    interface.graphics.drawRect(pos, size, outlineColor);
     
     pColor color;
     active ? color = onColor : color = offColor;
-    interface.graphics.drawSquare({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, color);
+    interface.graphics.drawRect({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, color);
 
     int wSz = 0; //max WText
     for (size_t i = 0; i < strlen(text.c_str()); ++i)
@@ -42,4 +42,12 @@ void pGraphics::pCheckBox::draw(pInterface interface) {
         int sz = glutBitmapLength(font, str);
         interface.graphics.drawText({ pos.first - sz - 10, 0 }, font, text.c_str(), textColor);
     }
+}
+
+void pGraphics::pCheckBox::updatePos(std::pair<double, double> pPos) {
+    pos = pPos;
+}
+
+void pGraphics::pCheckBox::updateSize(std::pair<double, double> pSize) {
+    size = pSize;
 }

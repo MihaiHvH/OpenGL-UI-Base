@@ -4,8 +4,8 @@
 
 class pGraphics::pSlider {
     private:
-    std::pair<int, int> pos;
-    std::pair<int, int> size;
+    std::pair<double, double> pos;
+    std::pair<double, double> size;
     std::pair<double, double> min_max;
     int precision;
     bool real;
@@ -37,4 +37,6 @@ class pGraphics::pSlider {
 
     void draw(pInterface interface);
     void handleMouse(pInterface interface);
+    void updatePos(std::pair<double, double> pPos);
+    void updateSize(std::pair<double, double> pSize);
 };

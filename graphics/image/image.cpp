@@ -5,7 +5,7 @@ pGraphics::pImage::~pImage() {
 
 }
 
-pGraphics::pImage::pImage(std::pair<int, int> pPos, std::pair<int, int> pSize, std::string pAltText, std::string pImageLocation) {
+pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pAltText, std::string pImageLocation) {
     pos = pPos;
     size = pSize;
     altText = pAltText;
@@ -42,6 +42,8 @@ void pGraphics::pImage::draw(int alpha) {
         glTexCoord2i(1, 0); glVertex3i(pos.first + size.first, pos.second, 0);
         glTexCoord2i(1, 1); glVertex3i(pos.first + size.first, pos.second + size.second, 0);
         glTexCoord2i(0, 1); glVertex3i(pos.first, pos.second + size.second, 0);
+        glDisable(GL_TEXTURE_2D);
+        glEnd();
     }
     if (!image) {
         glColor4f(0.f, 0.f, 0.f, 1.f);
@@ -63,5 +65,12 @@ void pGraphics::pImage::draw(int alpha) {
         for (size_t i = 0; i < strlen(altText.c_str()); ++i)
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, altText[i]);
     }
-    glEnd();
+}
+
+void pGraphics::pImage::updatePos(std::pair<double, double> pPos) {
+    pos = pPos;
+}
+
+void pGraphics::pImage::updateSize(std::pair<double, double> pSize) {
+    size = pSize;
 }

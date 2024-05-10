@@ -6,7 +6,7 @@ pGraphics::pTextBox::~pTextBox() {
     
 }
 
-pGraphics::pTextBox::pTextBox(std::pair<int, int> pPos, std::pair<int, int> pSize, int pMaxChr, void* pFont, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pRender)(void), void(*pOnEnter)(std::string text)) {
+pGraphics::pTextBox::pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, void* pFont, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pRender)(void), void(*pOnEnter)(std::string text)) {
     pos = pPos;
     size = pSize;
     maxChr = pMaxChr;
@@ -23,9 +23,9 @@ pGraphics::pTextBox::pTextBox(std::pair<int, int> pPos, std::pair<int, int> pSiz
 }
 
 void pGraphics::pTextBox::draw(pInterface interface) {
-    interface.graphics.drawSquare(pos, size, outlineColor);
-    interface.graphics.drawSquare({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, insideColor);
-    if (selected) interface.graphics.drawSquare(barPos, barSize, barColor);
+    interface.graphics.drawRect(pos, size, outlineColor);
+    interface.graphics.drawRect({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, insideColor);
+    if (selected) interface.graphics.drawRect(barPos, barSize, barColor);
 
     int sz = 0; 
     if (text.size() >= 0) sz = glutBitmapWidth(font, text[0]);
@@ -91,4 +91,12 @@ void pGraphics::pTextBox::onSpeciaKeyPress(int key) {
     if (key == GLUT_KEY_RIGHT && barAltPos + 1 <= maxBarAltPos)
         barPos.first += glutBitmapWidth(font, text.c_str()[++barAltPos]);
     render();
+}
+
+void pGraphics::pTextBox::updatePos(std::pair<double, double> pPos) {
+    pos = pPos;
+}
+
+void pGraphics::pTextBox::updateSize(std::pair<double, double> pSize) {
+    size = pSize;
 }

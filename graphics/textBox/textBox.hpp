@@ -6,10 +6,10 @@ class pGraphics::pTextBox {
     private: 
     bool selected = false;
     int incr = 0;
-    std::pair<int, int> barPos;
-    std::pair<int, int> barSize;
-    std::pair<int, int> pos;
-    std::pair<int, int> size;
+    std::pair<double, double> barPos;
+    std::pair<double, double> barSize;
+    std::pair<double, double> pos;
+    std::pair<double, double> size;
     int maxChr;
     void* font;
     pColor outlineColor;
@@ -25,11 +25,13 @@ class pGraphics::pTextBox {
 
     public:
     //if pMaxChr == -1 => auto
-    pTextBox(std::pair<int, int> pPos, std::pair<int, int> pSize, int pMaxChr, void* pFont, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pRender)(void), void(*pOnEnter)(std::string text));
+    pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, void* pFont, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pRender)(void), void(*pOnEnter)(std::string text));
     ~pTextBox();
 
     void onKeyPress(unsigned char key);
     void checkClick(pInterface interface);
     void draw(pInterface interface);
+    void updatePos(std::pair<double, double> pPos);
+    void updateSize(std::pair<double, double> pSize);
     void onSpeciaKeyPress(int key);
 };

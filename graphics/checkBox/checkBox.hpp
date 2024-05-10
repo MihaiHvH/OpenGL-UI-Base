@@ -6,8 +6,8 @@ class pGraphics::pCheckBox {
     private:
     bool active = false;
     
-    std::pair<int, int> pos;
-    std::pair<int, int> size;
+    std::pair<double, double> pos;
+    std::pair<double, double> size;
     void* font;
     std::string text;
     bool textOrientation;
@@ -18,9 +18,11 @@ class pGraphics::pCheckBox {
     void(*onChangeState)(bool);
 
     public:
-    pCheckBox(std::pair<int, int> pPos, std::pair<int, int> pSize, void* pFont, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, pColor pOnColor, pColor pOffColor, void(*pOnStateChange)(bool));
+    pCheckBox(std::pair<double, double> pPos, std::pair<double, double> pSize, void* pFont, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, pColor pOnColor, pColor pOffColor, void(*pOnStateChange)(bool));
     ~pCheckBox();
 
     void checkClick(pInterface interface);
     void draw(pInterface interface);
+    void updatePos(std::pair<double, double> pPos);
+    void updateSize(std::pair<double, double> pSize);
 };
