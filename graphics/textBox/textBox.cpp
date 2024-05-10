@@ -49,7 +49,10 @@ void pGraphics::pTextBox::onKeyPress(unsigned char key) {
         else if (key != 8 && key != 127 && maxChr == -1) {
             int wsz = glutBitmapWidth(font, key);
             if (sz + wsz + 8 <= size.first) {
-                text.insert(text.begin() + barAltPos + 1, key);
+                if (text.size() == 0)
+                    text.push_back(key);
+                else 
+                    text.insert(text.begin() + barAltPos + 1, key);
                 barPos.first += wsz;
                 ++barAltPos;
                 ++maxBarAltPos;
@@ -62,7 +65,10 @@ void pGraphics::pTextBox::onKeyPress(unsigned char key) {
             --maxBarAltPos;
         }
         else if (key == 127 && text.size() >= 1 && barAltPos < maxBarAltPos) {
-            text.erase(text.begin() + barAltPos + 1);
+            if (barAltPos == -1)
+                text.erase(text.begin());
+            else 
+                text.erase(text.begin() + barAltPos + 1);
             --maxBarAltPos;
         }
         render();

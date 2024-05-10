@@ -2,6 +2,7 @@
 
 #ifdef _WIN32
 	#define IL_USE_PRAGMA_LIBS
+	#define NDEBUG
 #endif
 
 #include <utility>
