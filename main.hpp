@@ -4,6 +4,7 @@
 	#define IL_USE_PRAGMA_LIBS
 	#define NDEBUG
 	#undef interface
+	#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 #endif
 
 #include <utility>
