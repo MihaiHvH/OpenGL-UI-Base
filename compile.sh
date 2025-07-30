@@ -8,4 +8,4 @@ if [ -z "$name" ]; then
     name="OpenGL-UI-Base"
 fi
 
-g++ $files -o $name -g -lGL -lglut -lIL -lGLU
+g++ -I./include -L./lib $files -o $name -g -lGL -lglut -lIL -lGLU
