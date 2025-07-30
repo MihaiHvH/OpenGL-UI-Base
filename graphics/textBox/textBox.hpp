@@ -2,7 +2,7 @@
 
 #include "../../main.hpp"
 
-class pGraphics::pTextBox {
+class pGraphics::pTextBox : public pGraphics {
     private: 
     bool selected = false;
     int incr = 0;
@@ -17,7 +17,6 @@ class pGraphics::pTextBox {
     pColor barColor;
     pColor textColor;
     void(*onEnter)(std::string text);
-    void(*render)(void);
     std::string text = "";
     std::string oText = "";
     int barAltPos = -1;
@@ -25,12 +24,12 @@ class pGraphics::pTextBox {
 
     public:
     //if pMaxChr == -1 => auto
-    pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, void* pFont, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pRender)(void), void(*pOnEnter)(std::string text));
+    pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, void* pFont, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pOnEnter)(std::string text));
     ~pTextBox();
 
     void onKeyPress(unsigned char key);
-    void checkClick(pInterface interface);
-    void draw(pInterface interface);
+    void checkClick();
+    void draw();
     void updatePos(std::pair<double, double> pPos);
     void updateSize(std::pair<double, double> pSize);
     void onSpeciaKeyPress(int key);

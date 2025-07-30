@@ -7,4 +7,3 @@ pInterface::pInterface() {
 pInterface::~pInterface() {
 
 }
-

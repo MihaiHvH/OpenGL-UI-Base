@@ -21,22 +21,17 @@ pGraphics::pButon::pButon(std::pair<double, double> pPos, std::pair<double, doub
     onClick = onClickFunction;
 }
 
-void pGraphics::pButon::checkClick(pInterface interface) {
-    if (interface.graphics.mouseInRegion(interface.screen.mousePointer, pos, size) && interface.screen.leftClick)
+void pGraphics::pButon::checkClick() {
+    if (this->mouseInRegion(pos, size) && screen.leftClick)
         active = !active, onClick(active);
 }
 
-void pGraphics::pButon::draw(pInterface interface) {
+void pGraphics::pButon::draw() {
     pColor color;
     active ? color = activeColor : color = initColor;
-    
-    std::pair<int, int> textSize = { glutBitmapLength(font, reinterpret_cast<const unsigned char*>(text.c_str())), 0};
-    for (size_t i = 0; i < strlen(text.c_str()); ++i)
-        if (textSize.second < glutBitmapWidth(font, text.c_str()[i]))
-            textSize.second = glutBitmapWidth(font, text.c_str()[i]);
-    
-    interface.graphics.drawRect(pos, size, color);
-    interface.graphics.drawText({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 }, font, text.c_str(), textColor);   
+    std::pair<int, int> textSize = this->getTextSize(text.c_str(), font);
+    this->drawRect(pos, size, color);
+    this->drawText({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 }, font, text.c_str(), textColor);   
 }
 
 void pGraphics::pButon::updatePos(std::pair<double, double> pPos) {

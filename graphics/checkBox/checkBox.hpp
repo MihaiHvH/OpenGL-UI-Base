@@ -2,7 +2,7 @@
 
 #include "../../main.hpp"
 
-class pGraphics::pCheckBox {
+class pGraphics::pCheckBox : public pGraphics {
     private:
     bool active = false;
     
@@ -21,8 +21,8 @@ class pGraphics::pCheckBox {
     pCheckBox(std::pair<double, double> pPos, std::pair<double, double> pSize, void* pFont, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, pColor pOnColor, pColor pOffColor, void(*pOnStateChange)(bool));
     ~pCheckBox();
 
-    void checkClick(pInterface interface);
-    void draw(pInterface interface);
+    void checkClick();
+    void draw();
     void updatePos(std::pair<double, double> pPos);
     void updateSize(std::pair<double, double> pSize);
 };

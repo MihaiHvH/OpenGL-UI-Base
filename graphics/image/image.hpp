@@ -2,7 +2,7 @@
 
 #include "../../main.hpp"
 
-class pGraphics::pImage {
+class pGraphics::pImage : public pGraphics {
     private:
     std::pair<double, double> pos;
     std::pair<double, double> size;

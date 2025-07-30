@@ -30,24 +30,22 @@ pColor pGraphics::createNewColor(int r, int g, int b, int a) {
     return color;
 }
 
-bool pGraphics::mouseInRegion(std::pair<int, int> mousePointer, std::pair<double, double> pos, std::pair<double, double> size) {
-    if (mousePointer.first >= pos.first &&
-        mousePointer.first <= pos.first + size.first &&
-        mousePointer.second >= pos.second &&
-        mousePointer.second <= pos.second + size.second)
-        return true;
-    return false;
+bool pGraphics::mouseInRegion(std::pair<double, double> pos, std::pair<double, double> size) {
+    return screen.mousePointer.first >= pos.first &&
+           screen.mousePointer.first <= pos.first + size.first &&
+           screen.mousePointer.second >= pos.second &&
+           screen.mousePointer.second <= pos.second + size.second;
 }
 
-void pGraphics::draw4PointRect(std::pair<double, double> point[4], pColor color) {
+void pGraphics::draw4PointRect(std::pair<double, double> points[4], pColor color) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glBegin(GL_POLYGON);
-    glVertex2d(point[0].first, point[0].second);
-    glVertex2d(point[1].first, point[1].second);
-    glVertex2d(point[2].first, point[2].second);
-    glVertex2d(point[3].first, point[3].second);
+    glVertex2d(points[0].first, points[0].second);
+    glVertex2d(points[1].first, points[1].second);
+    glVertex2d(points[2].first, points[2].second);
+    glVertex2d(points[3].first, points[3].second);
     glEnd();
 }
 
@@ -80,30 +78,22 @@ void pGraphics::drawFilledCircle(std::pair<double, double> centrePos, double r, 
     glEnd();
 }
 
-void pGraphics::drawTriangle(std::pair<double, double> point[3], pColor color) {
+void pGraphics::drawTriangle(std::pair<double, double> points[3], pColor color) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glBegin(GL_TRIANGLES);
-    glVertex2d(point[0].first, point[0].second);
-    glVertex2d(point[1].first, point[1].second);
-    glVertex2d(point[2].first, point[2].second);
+    glVertex2d(points[0].first, points[0].second);
+    glVertex2d(points[1].first, points[1].second);
+    glVertex2d(points[2].first, points[2].second);
     glEnd();
 }
 
 std::pair<int, int> pGraphics::getTextSize(const char* str, void* font) {
-    const unsigned char* s = reinterpret_cast<unsigned const char*>(str);
-
     int wMax = -1;
-    
-    for (int i = 0; i < strlen(str); ++i) {
-        if (wMax == -1)
-            wMax = glutBitmapWidth(font, str[i]);
-        if (wMax < glutBitmapWidth(font, str[i]))
-            wMax = glutBitmapWidth(font, str[i]);
-    }
-
-    return { glutBitmapLength(font, s), wMax };
+    for (size_t i = 0; i < strlen(str); ++i)
+        wMax = std::max(wMax, glutBitmapWidth(font, str[i]));
+    return { glutBitmapLength(font, reinterpret_cast<const unsigned char*>(str)), wMax };
 }
 
 void pGraphics::drawText(std::pair<double, double> pos, void *font, const char *str, pColor color) {

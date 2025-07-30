@@ -4,8 +4,6 @@
 #include "../graphics/graphics.hpp"
 
 class pInterface {
-    private:
-
     public:
     pInterface();
     ~pInterface();

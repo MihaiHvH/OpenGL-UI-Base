@@ -9,7 +9,7 @@
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "/home/mihai/Documents/GitHub/OpenGL-UI-Base",
-      "program": "/home/mihai/Documents/GitHub/OpenGL-UI-Base/OpenGL-Base",
+      "program": "/home/mihai/Documents/GitHub/OpenGL-UI-Base/OpenGL-UI-Base",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

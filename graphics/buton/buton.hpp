@@ -4,7 +4,7 @@
 #include "../../structs.hpp"
 #include "../../interface/interface.hpp"
 
-class pGraphics::pButon {
+class pGraphics::pButon : public pGraphics {
     private:
     bool active = false;
     /*BUTTON VARS*/
@@ -22,8 +22,8 @@ class pGraphics::pButon {
     pButon(std::pair<double, double> pos, std::pair<double, double> size, pColor initColor, pColor activeColor,
                  void* font, pColor textColor, std::string text, void(*onClickFunction)(bool));
     ~pButon();
-    void draw(pInterface interface);
-    void checkClick(pInterface interface);
+    void draw();
+    void checkClick();
     void updatePos(std::pair<double, double> pPos);
     void updateSize(std::pair<double, double> pSize);
 };

@@ -1,8 +1,7 @@
 #include "main.hpp"
 
+pScreen screen;
 pInterface interface;
-
-void Render();
 
 pGraphics::pButon buton({ 10, 10}, { 100, 50 }, interface.graphics.blue, interface.graphics.cyan, GLUT_BITMAP_TIMES_ROMAN_24, interface.graphics.black, "Button", [](bool state) {
     /*
@@ -11,7 +10,7 @@ pGraphics::pButon buton({ 10, 10}, { 100, 50 }, interface.graphics.blue, interfa
     printf("Buton state: %d\n", state);
 });
 
-pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, GLUT_BITMAP_TIMES_ROMAN_24, interface.graphics.black, interface.graphics.blue, interface.graphics.purple, interface.graphics.black, Render, [](std::string text) {
+pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, GLUT_BITMAP_TIMES_ROMAN_24, interface.graphics.black, interface.graphics.blue, interface.graphics.purple, interface.graphics.black, [](std::string text) {
     /*
         OnEnterFunction
     */
@@ -28,59 +27,59 @@ pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, GLUT_BITMAP_TIMES_ROMAN_2
 pGraphics::pImage imageALT({ 10, 200 }, { 100, 100 }, "ALT TEXT", "images/imagep.png");
 pGraphics::pImage image({ 150, 200 }, { 100, 100 }, "ALT TEXT", "images/image.png");
 
-pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, 2, false, GLUT_BITMAP_TIMES_ROMAN_24, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.white, interface.graphics.red, Render, [](double value) {
+pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, 2, false, GLUT_BITMAP_TIMES_ROMAN_24, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.white, interface.graphics.red, [](double value) {
     /*
         OnValueChange
     */
     printf("Slider value: %f\n", value);
 });
 
-void Render() {
+void render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_TEXTURE_2D);
 
     /* RENDERING CODE */
 
-    buton.draw(interface);
-    textBox.draw(interface);
-    checkBox.draw(interface);
-    slider.draw(interface);
+    buton.draw();
+    textBox.draw();
+    checkBox.draw();
+    slider.draw();
     image.draw();
     imageALT.draw();
 
     glutSwapBuffers();
 }
 
-void Resize(GLint newWidth, GLint newHeight) {
+void resize(GLint newWidth, GLint newHeight) {
     if (newWidth >= 8 && newHeight >= 8) {
-        interface.screen.size = { newWidth, newHeight };
+        screen.size = { newWidth, newHeight };
 
         glViewport( 0, 0, newWidth, newHeight );
         glMatrixMode( GL_PROJECTION );
         glLoadIdentity();
         gluOrtho2D( 0, GLdouble (newWidth), GLdouble (newHeight), 0);
-        Render();
+        render();
         glutPostRedisplay();
     }
 }
 
-void ProcessSpecialInput(int key, int x, int y) {
+void processSpecialInput(int key, int x, int y) {
     textBox.onSpeciaKeyPress(key);
 }
 
-void ProcessInput(unsigned char key, int x, int y) {
+void processInput(unsigned char key, int x, int y) {
     textBox.onKeyPress(key);
 }
 
-void HandleMouseKeys(int button, int state, int x, int y) {
+void handleMouseKeys(int button, int state, int x, int y) {
     switch(button) {
         case GLUT_LEFT_BUTTON: {
-            interface.screen.leftClick = state;
+            screen.leftClick = state;
 
-            buton.checkClick(interface);
-            textBox.checkClick(interface);
-            checkBox.checkClick(interface);
-            slider.handleMouse(interface);
+            buton.checkClick();
+            textBox.checkClick();
+            checkBox.checkClick();
+            slider.handleMouse();
 
             if (state != GLUT_DOWN)
                 break;
@@ -88,7 +87,7 @@ void HandleMouseKeys(int button, int state, int x, int y) {
             break;
         }
         case GLUT_RIGHT_BUTTON: {
-            interface.screen.rightClick = state;
+            screen.rightClick = state;
 
             if (state != GLUT_DOWN)
                 break;
@@ -96,22 +95,21 @@ void HandleMouseKeys(int button, int state, int x, int y) {
             break;
         }
     }
-    Render();
 }
 
-void HandleMouseMovement(int x, int y) {
-    interface.screen.mousePointer = { x, y };
+void handleMouseMovement(int x, int y) {
+    screen.mousePointer = { x, y };
 }
 
-void HandleMouseDrag(int x, int y) {
-    interface.screen.mousePointer = { x, y };
-    if (interface.screen.leftClick != interface.screen.leftClickDrag)
-        interface.screen.leftClickDrag = interface.screen.leftClick;
+void handleMouseDrag(int x, int y) {
+    screen.mousePointer = { x, y };
+    if (screen.leftClick != screen.leftClickDrag)
+        screen.leftClickDrag = screen.leftClick;
     
-    slider.handleMouse(interface);
+    slider.handleMouse();
 }
 
-void HandleIdle() {
+void handleIdle() {
 
 }
 
@@ -120,14 +118,16 @@ int main(int argc, char **argv) {
     glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(interface.screen.initialSize.first, interface.screen.initialSize.second);
-    glutCreateWindow (interface.screen.windowName.c_str());
+    glutInitWindowSize(screen.initialSize.first, screen.initialSize.second);
+    glutCreateWindow (screen.windowName.c_str());
 
     glEnable(GL_TEXTURE_2D);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D( 0, interface.screen.initialSize.first, interface.screen.initialSize.second, 0);
+    gluOrtho2D( 0, screen.initialSize.first, screen.initialSize.second, 0);
     glClearColor(1.0, 1.0, 1.0, 1.0);
+    
+    screen.render = render;
 
     /*image loading --start--*/
 
@@ -138,14 +138,14 @@ int main(int argc, char **argv) {
 
     /*image loading --end--*/
 
-    glutDisplayFunc(Render);
-    glutKeyboardFunc(ProcessInput);
-    glutSpecialFunc(ProcessSpecialInput);
-    glutReshapeFunc(Resize);
-    glutMouseFunc(HandleMouseKeys);
-    glutPassiveMotionFunc(HandleMouseMovement);
-    glutMotionFunc(HandleMouseDrag);
-    glutIdleFunc(HandleIdle);
+    glutDisplayFunc(render);
+    glutKeyboardFunc(processInput);
+    glutSpecialFunc(processSpecialInput);
+    glutReshapeFunc(resize);
+    glutMouseFunc(handleMouseKeys);
+    glutPassiveMotionFunc(handleMouseMovement);
+    glutMotionFunc(handleMouseDrag);
+    glutIdleFunc(handleIdle);
 
     glutMainLoop();
 
