@@ -58,7 +58,6 @@ void resize(GLint newWidth, GLint newHeight) {
         glMatrixMode( GL_PROJECTION );
         glLoadIdentity();
         gluOrtho2D( 0, GLdouble (newWidth), GLdouble (newHeight), 0);
-        render();
         glutPostRedisplay();
     }
 }

@@ -8,6 +8,5 @@ class pInterface {
     pInterface();
     ~pInterface();
 
-    pScreen screen;
     pGraphics graphics;
 };
