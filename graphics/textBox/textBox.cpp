@@ -73,27 +73,23 @@ void pGraphics::pTextBox::onKeyPress(unsigned char key) {
 }
 
 void pGraphics::pTextBox::checkClick() {
-    if (this->mouseInRegion(pos, size) && screen.leftClick) {
+    if (this->mouseInRegion(pos, size)) {
         selected = !selected;
+        screen.render();
         if (!selected)
             onEnter(text);
     }
-    if (!this->mouseInRegion(pos, size) && screen.leftClick && selected)
-        selected = false, onEnter(text);
+    if (!this->mouseInRegion(pos, size) && selected) {
+        selected = false;
+        screen.render();
+    }
 }
 
 void pGraphics::pTextBox::onSpeciaKeyPress(int key) {
+    int oBarPos = barPos.first;
     if (key == GLUT_KEY_LEFT && barAltPos - 1 >= -1)
         barPos.first -= glutBitmapWidth(font, text.c_str()[barAltPos--]);
     if (key == GLUT_KEY_RIGHT && barAltPos + 1 <= maxBarAltPos)
         barPos.first += glutBitmapWidth(font, text.c_str()[++barAltPos]);
-    screen.render();
-}
-
-void pGraphics::pTextBox::updatePos(std::pair<double, double> pPos) {
-    pos = pPos;
-}
-
-void pGraphics::pTextBox::updateSize(std::pair<double, double> pSize) {
-    size = pSize;
+    if (oBarPos != barPos.first) screen.render();
 }

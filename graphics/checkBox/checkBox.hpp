@@ -23,6 +23,4 @@ class pGraphics::pCheckBox : public pGraphics {
 
     void checkClick();
     void draw();
-    void updatePos(std::pair<double, double> pPos);
-    void updateSize(std::pair<double, double> pSize);
 };

@@ -6,8 +6,6 @@ class pGraphics {
     public:
     pGraphics();
     ~pGraphics();
-
-    void(*render)(void);
     
     class pButon;
     class pTextBox;

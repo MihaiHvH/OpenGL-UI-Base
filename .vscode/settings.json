@@ -129,6 +129,7 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp",
-    "text_encoding": "cpp"
+    "text_encoding": "cpp",
+    "netfwd": "cpp"
   }
 }

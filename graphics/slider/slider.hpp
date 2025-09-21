@@ -36,6 +36,4 @@ class pGraphics::pSlider : public pGraphics {
 
     void draw();
     void handleMouse();
-    void updatePos(std::pair<double, double> pPos);
-    void updateSize(std::pair<double, double> pSize);
 };

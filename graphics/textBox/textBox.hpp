@@ -30,7 +30,5 @@ class pGraphics::pTextBox : public pGraphics {
     void onKeyPress(unsigned char key);
     void checkClick();
     void draw();
-    void updatePos(std::pair<double, double> pPos);
-    void updateSize(std::pair<double, double> pSize);
     void onSpeciaKeyPress(int key);
 };

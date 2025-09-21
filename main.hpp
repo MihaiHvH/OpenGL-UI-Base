@@ -1,10 +1,9 @@
 #pragma once
 
 #ifdef _WIN32
-	#define IL_USE_PRAGMA_LIBS
-	#define NDEBUG
-	#undef interface
-	#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+    #define IL_USE_PRAGMA_LIBS
+    #define NDEBUG
+    #pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 #endif
 
 #include <utility>
@@ -14,8 +13,14 @@
 #include <algorithm>
 #include <vector>
 #include <cstring>
+#include <random>
 
 #include "include/IL/ilut.h"
+
+#ifdef _WIN32
+    #undef interface
+#endif
+
 #include "include/GL/glut.h"
 
 #include "interface/interface.hpp"

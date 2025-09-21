@@ -22,8 +22,11 @@ pGraphics::pButon::pButon(std::pair<double, double> pPos, std::pair<double, doub
 }
 
 void pGraphics::pButon::checkClick() {
-    if (this->mouseInRegion(pos, size) && screen.leftClick)
-        active = !active, onClick(active);
+    if (this->mouseInRegion(pos, size)) {
+        active = !active;
+        onClick(active);
+        screen.render();
+    }
 }
 
 void pGraphics::pButon::draw() {
@@ -32,12 +35,4 @@ void pGraphics::pButon::draw() {
     std::pair<int, int> textSize = this->getTextSize(text.c_str(), font);
     this->drawRect(pos, size, color);
     this->drawText({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 }, font, text.c_str(), textColor);   
-}
-
-void pGraphics::pButon::updatePos(std::pair<double, double> pPos) {
-    pos = pPos;
-}
-
-void pGraphics::pButon::updateSize(std::pair<double, double> pSize) {
-    size = pSize;
 }

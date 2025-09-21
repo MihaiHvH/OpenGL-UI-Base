@@ -22,8 +22,7 @@ void pGraphics::pImage::load() {
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 
-        0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
+        glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
         ilDeleteImage(image);
     }
 }
@@ -50,12 +49,4 @@ void pGraphics::pImage::draw(int alpha) {
         std::pair<int, int> sz = this->getTextSize(altText.c_str(), GLUT_BITMAP_HELVETICA_12);
         this->drawText({ pos.first + size.first / 2 - sz.first / 2, pos.second + size.second / 2 + sz.second / 2 }, GLUT_BITMAP_HELVETICA_12, altText.c_str(), this->red);
     }
-}
-
-void pGraphics::pImage::updatePos(std::pair<double, double> pPos) {
-    pos = pPos;
-}
-
-void pGraphics::pImage::updateSize(std::pair<double, double> pSize) {
-    size = pSize;
 }

@@ -24,6 +24,4 @@ class pGraphics::pButon : public pGraphics {
     ~pButon();
     void draw();
     void checkClick();
-    void updatePos(std::pair<double, double> pPos);
-    void updateSize(std::pair<double, double> pSize);
 };

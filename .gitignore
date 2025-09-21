@@ -7,7 +7,4 @@
 /Release
 /.vs
 /.vscode
-
 *.out
-*.exe
-OpenGL-Base

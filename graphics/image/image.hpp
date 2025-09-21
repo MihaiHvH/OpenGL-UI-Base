@@ -18,6 +18,4 @@ class pGraphics::pImage : public pGraphics {
     
     void load();
     void draw(int alpha = 255);
-    void updatePos(std::pair<double, double> pPos);
-    void updateSize(std::pair<double, double> pSize);
 };

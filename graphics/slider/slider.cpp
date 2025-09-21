@@ -25,36 +25,25 @@ pGraphics::pSlider::pSlider(std::pair<int, int> pPos, std::pair<int, int> pSize,
     pxOn = 0;
     pxOff = size.first - 4;
     
-    if (real) {
-            value = std::round(value);
-            std::string str = std::to_string(value);
-            if (str.find('.') != std::string::npos) {
-                str = str.substr(0, str.find_last_not_of('0')+1);
-                if (str.find('.') == str.size() - 1)
-                    str = str.substr(0, str.size() - 1);
-            }
-            valueText = str;
+    if (real || (!real && precision == -1)) {
+        value = real ? std::round(value) : value;
+        std::string str = std::to_string(value);
+        if (str.find('.') != std::string::npos) {
+            str = str.substr(0, str.find_last_not_of('0') + 1);
+            if (str.find('.') == str.size() - 1)
+                str = str.substr(0, str.size() - 1);
         }
-    if (!real) {
-        if (precision == -1) {
-            std::string str = std::to_string(value);
-            if (str.find('.') != std::string::npos) {
-                str = str.substr(0, str.find_last_not_of('0') + 1);
-                if (str.find('.') == str.size() - 1)
-                    str = str.substr(0, str.size() - 1);
-            }
-            valueText = str;
+        valueText = str;
+    }
+    else {
+        const double multiplier = std::pow(10.0, precision);
+        valueText = std::to_string(std::ceil(value * multiplier) / multiplier);
+        if(valueText.find('.') != std::string::npos) {
+            valueText = valueText.substr(0, valueText.find_last_not_of('0') + 1);
+            if (valueText.find('.') == valueText.size() - 1)
+                valueText = valueText.substr(0, valueText.size() - 1);
         }
-        else {
-            const double multiplier = std::pow(10.0, precision);
-            valueText = std::to_string(std::ceil(value * multiplier) / multiplier);
-            if(valueText.find('.') != std::string::npos) {
-                valueText = valueText.substr(0, valueText.find_last_not_of('0') + 1);
-                if(valueText.find('.') == valueText.size() - 1)
-                    valueText = valueText.substr(0, valueText.size() - 1);
-            }
-            value = std::ceil(value * multiplier) / multiplier;
-        }
+        value = std::ceil(value * multiplier) / multiplier;
     }
 }
 
@@ -80,8 +69,10 @@ void pGraphics::pSlider::handleMouse() {
         pxOff = size.first - pxOn - 4;
         value = (((pxOn * (min_max.second - min_max.first)) / (size.first - 4)) + min_max.first);
         
-        if (real) {
-            value = std::round(value);
+        std::string oldValueTex = valueText;
+
+        if (real || (!real && precision == -1)) {
+            value = real ? std::round(value) : value;
             std::string str = std::to_string(value);
             if (str.find('.') != std::string::npos) {
                 str = str.substr(0, str.find_last_not_of('0') + 1);
@@ -90,36 +81,19 @@ void pGraphics::pSlider::handleMouse() {
             }
             valueText = str;
         }
-        if (!real) {
-            if (precision == -1) {
-                std::string str = std::to_string(value);
-                if (str.find('.') != std::string::npos) {
-                    str = str.substr(0, str.find_last_not_of('0') + 1);
-                    if (str.find('.') == str.size() - 1)
-                        str = str.substr(0, str.size() - 1);
-                }
-                valueText = str;
+        else {
+            const double multiplier = std::pow(10.0, precision);
+            valueText = std::to_string(std::ceil(value * multiplier) / multiplier);
+            if(valueText.find('.') != std::string::npos) {
+                valueText = valueText.substr(0, valueText.find_last_not_of('0') + 1);
+                if (valueText.find('.') == valueText.size() - 1)
+                    valueText = valueText.substr(0, valueText.size() - 1);
             }
-            else {
-                const double multiplier = std::pow(10.0, precision);
-                valueText = std::to_string(std::ceil(value * multiplier) / multiplier);
-                if(valueText.find('.') != std::string::npos) {
-                    valueText = valueText.substr(0, valueText.find_last_not_of('0') + 1);
-                    if (valueText.find('.') == valueText.size() - 1)
-                        valueText = valueText.substr(0, valueText.size() - 1);
-                }
-                value = std::ceil(value * multiplier) / multiplier;
-            }
+            value = std::ceil(value * multiplier) / multiplier;
         }
-        onValueChange(value);
+        if (oldValueTex != valueText) {
+            onValueChange(value);
+            screen.render();
+        }
     }
-    screen.render();
-}
-
-void pGraphics::pSlider::updatePos(std::pair<double, double> pPos) {
-    pos = pPos;
-}
-
-void pGraphics::pSlider::updateSize(std::pair<double, double> pSize) {
-    size = pSize;
 }

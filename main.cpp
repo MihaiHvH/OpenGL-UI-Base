@@ -27,7 +27,7 @@ pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, GLUT_BITMAP_TIMES_ROMAN_2
 pGraphics::pImage imageALT({ 10, 200 }, { 100, 100 }, "ALT TEXT", "images/imagep.png");
 pGraphics::pImage image({ 150, 200 }, { 100, 100 }, "ALT TEXT", "images/image.png");
 
-pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, 2, false, GLUT_BITMAP_TIMES_ROMAN_24, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.white, interface.graphics.red, [](double value) {
+pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, GLUT_BITMAP_TIMES_ROMAN_24, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.white, interface.graphics.red, [](double value) {
     /*
         OnValueChange
     */
@@ -35,8 +35,8 @@ pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, 2, false, GL
 });
 
 void render() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_TEXTURE_2D);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /* RENDERING CODE */
 
@@ -50,16 +50,14 @@ void render() {
     glutSwapBuffers();
 }
 
-void resize(GLint newWidth, GLint newHeight) {
-    if (newWidth >= 8 && newHeight >= 8) {
-        screen.size = { newWidth, newHeight };
-
-        glViewport( 0, 0, newWidth, newHeight );
-        glMatrixMode( GL_PROJECTION );
-        glLoadIdentity();
-        gluOrtho2D( 0, GLdouble (newWidth), GLdouble (newHeight), 0);
-        glutPostRedisplay();
-    }
+void resize(int newWidth, int newHeight) {
+    screen.size = { newWidth, newHeight };
+    
+    glViewport(0, 0, newWidth, newHeight);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D( 0, newWidth, newHeight, 0);
+    glutPostRedisplay();
 }
 
 void processSpecialInput(int key, int x, int y) {
@@ -75,13 +73,13 @@ void handleMouseKeys(int button, int state, int x, int y) {
         case GLUT_LEFT_BUTTON: {
             screen.leftClick = state;
 
+            if (state != GLUT_DOWN)
+                break;
+
             buton.checkClick();
             textBox.checkClick();
             checkBox.checkClick();
             slider.handleMouse();
-
-            if (state != GLUT_DOWN)
-                break;
 
             break;
         }
@@ -119,8 +117,6 @@ int main(int argc, char **argv) {
     glutInitWindowPosition(100,100);
     glutInitWindowSize(screen.initialSize.first, screen.initialSize.second);
     glutCreateWindow (screen.windowName.c_str());
-
-    glEnable(GL_TEXTURE_2D);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D( 0, screen.initialSize.first, screen.initialSize.second, 0);
@@ -144,8 +140,7 @@ int main(int argc, char **argv) {
     glutMouseFunc(handleMouseKeys);
     glutPassiveMotionFunc(handleMouseMovement);
     glutMotionFunc(handleMouseDrag);
-    glutIdleFunc(handleIdle);
-
+    glutIdleFunc(handleIdle); //Use only if needed, takes a lot of cpu
     glutMainLoop();
 
     return 0;
