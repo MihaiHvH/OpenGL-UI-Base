@@ -1,10 +1,4 @@
 #include "../main.hpp"
-#include <GL/gl.h>
-#include "graphics.hpp"
-
-#ifndef M_PI
-    #define M_PI 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067
-#endif
 
 pGraphics::pGraphics() {
     black =  createNewColor(0, 0, 0);
@@ -37,19 +31,17 @@ bool pGraphics::mouseInRegion(std::pair<double, double> pos, std::pair<double, d
            screen.mousePointer.second <= pos.second + size.second;
 }
 
-void pGraphics::draw4PointRect(std::pair<double, double> points[4], pColor color) {
+void pGraphics::drawPolygon(std::vector<std::pair<double, double>> points, pColor color) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glBegin(GL_POLYGON);
-    glVertex2d(points[0].first, points[0].second);
-    glVertex2d(points[1].first, points[1].second);
-    glVertex2d(points[2].first, points[2].second);
-    glVertex2d(points[3].first, points[3].second);
+    for (std::pair<double, double> point : points)
+        glVertex2d(point.first, point.second);
     glEnd();
 }
 
-void pGraphics::drawRect(std::pair<double, double> pos, std::pair<double, double> size, pColor color) {
+void pGraphics::drawRectangle(std::pair<double, double> pos, std::pair<double, double> size, pColor color) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
@@ -65,12 +57,11 @@ void pGraphics::drawFilledCircle(std::pair<double, double> centrePos, double r, 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
-    for (double i = 0; i <= 100;) {
+    for (double i = 0; i <= 100; ++i) {
         double angle = M_PI * i / 50;
         double x = cos(angle) * r;
         double y = sin(angle) * r;
         glVertex2d(centrePos.first + x, centrePos.second + y);
-        i += 0.25;
     }
     glEnd();
 }
@@ -82,11 +73,12 @@ void pGraphics::drawOutlinedCircle(std::pair<double, double> centrePos, double r
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glBegin(GL_TRIANGLE_STRIP);
-    for (int i = 0; i <= 100; i++) {
+    for (int i = 0; i <= 100; ++i) {
         double angle = M_PI * i / 50;
-        double cx = cos(angle), cy = sin(angle);
-        glVertex2d(centrePos.first + cx * outer, centrePos.second + cy * outer);
-        glVertex2d(centrePos.first + cx * inner, centrePos.second + cy * inner);
+        double x = cos(angle);
+        double y = sin(angle);
+        glVertex2d(centrePos.first + x * outer, centrePos.second + y * outer);
+        glVertex2d(centrePos.first + x * inner, centrePos.second + y * inner);
     }
     glEnd();
 }
@@ -102,14 +94,14 @@ void pGraphics::drawTriangle(std::pair<double, double> points[3], pColor color) 
     glEnd();
 }
 
-std::pair<int, int> pGraphics::getTextSize(const char* str, void* font) {
-    int wMax = -1;
-    for (size_t i = 0; i < strlen(str); ++i)
-        wMax = std::max(wMax, glutBitmapWidth(font, str[i]));
-    return { glutBitmapLength(font, reinterpret_cast<const unsigned char*>(str)), wMax };
+std::pair<int, int> pGraphics::getTextSize(std::string text, void* font) {
+    int wMax = 0;
+    for (int chr : text)
+        wMax = std::max(wMax, glutBitmapWidth(font, chr));
+    return { glutBitmapLength(font, reinterpret_cast<const unsigned char*>(text.c_str())), wMax };
 }
 
-void pGraphics::drawText(std::pair<double, double> pos, void *font, const char *str, pColor color) {
+void pGraphics::drawText(std::pair<double, double> pos, void *font, std::string text, pColor color) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glMatrixMode(GL_MODELVIEW);
@@ -118,8 +110,9 @@ void pGraphics::drawText(std::pair<double, double> pos, void *font, const char *
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
     glRasterPos2d(pos.first, pos.second);
     
-    for (size_t i = 0; i < strlen(str); ++i)
-        glutBitmapCharacter(font, str[i]);
+    for (int chr : text)
+        glutBitmapCharacter(font, chr);
+
     glEnd();
 }
 

@@ -29,8 +29,8 @@ void pGraphics::pCheckBox::draw() {
     pColor color = active ? onColor : offColor;
     int wSz = this->getTextSize(text.c_str(), font).second;
 
-    this->drawRect(pos, size, outlineColor);
-    this->drawRect({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, color);
+    this->drawRectangle(pos, size, outlineColor);
+    this->drawRectangle({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, color);
 
     if (textOrientation) //right
         this->drawText({ pos.first + 10 + size.first, (pos.second + (size.second / 2)) + wSz / 2 }, font, text.c_str(), textColor);

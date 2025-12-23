@@ -1,9 +1,4 @@
-#include "../../main.hpp"
 #include "buton.hpp"
-
-#ifdef _WIN32
-    #undef interface
-#endif
 
 pGraphics::pButon::~pButon() {
 
@@ -33,6 +28,6 @@ void pGraphics::pButon::draw() {
     pColor color;
     active ? color = activeColor : color = initColor;
     std::pair<int, int> textSize = this->getTextSize(text.c_str(), font);
-    this->drawRect(pos, size, color);
+    this->drawRectangle(pos, size, color);
     this->drawText({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 }, font, text.c_str(), textColor);   
 }

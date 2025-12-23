@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../structs.hpp"
-#include "../graphics/graphics.hpp"
+#include "../main.hpp"
 
 class pInterface {
     public:

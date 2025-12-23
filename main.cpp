@@ -56,7 +56,7 @@ void resize(int newWidth, int newHeight) {
     glViewport(0, 0, newWidth, newHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D( 0, newWidth, newHeight, 0);
+    gluOrtho2D(0, newWidth, newHeight, 0);
     glutPostRedisplay();
 }
 
@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
     glutCreateWindow (screen.windowName.c_str());
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D( 0, screen.initialSize.first, screen.initialSize.second, 0);
+    gluOrtho2D(0, screen.initialSize.first, screen.initialSize.second, 0);
     glClearColor(1.0, 1.0, 1.0, 1.0);
     
     screen.render = render;

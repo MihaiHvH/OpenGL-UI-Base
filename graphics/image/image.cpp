@@ -13,11 +13,10 @@ pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, doub
 
 void pGraphics::pImage::load() {
     image = ilLoadImage(imageLocation.c_str());
-    ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-    if (!image) {
+    if (!image)
         printf("Failed to load image %s\n", imageLocation.c_str());
-    }
     else {
+        ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
         glGenTextures(1, &textureID);
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -41,11 +40,11 @@ void pGraphics::pImage::draw(int alpha) {
         glTexCoord2d(1, 0); glVertex3d(pos.first + size.first, pos.second, 0);
         glTexCoord2d(1, 1); glVertex3d(pos.first + size.first, pos.second + size.second, 0);
         glTexCoord2d(0, 1); glVertex3d(pos.first, pos.second + size.second, 0);
-        glDisable(GL_TEXTURE_2D);
         glEnd();
+        glDisable(GL_TEXTURE_2D);
     }
-    if (!image) {
-        this->drawRect(pos, size, this->black);
+    else {
+        this->drawRectangle(pos, size, this->black);
         std::pair<int, int> sz = this->getTextSize(altText.c_str(), GLUT_BITMAP_HELVETICA_12);
         this->drawText({ pos.first + size.first / 2 - sz.first / 2, pos.second + size.second / 2 + sz.second / 2 }, GLUT_BITMAP_HELVETICA_12, altText.c_str(), this->red);
     }

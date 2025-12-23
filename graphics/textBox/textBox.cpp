@@ -22,9 +22,9 @@ pGraphics::pTextBox::pTextBox(std::pair<double, double> pPos, std::pair<double, 
 }
 
 void pGraphics::pTextBox::draw() {
-    this->drawRect(pos, size, outlineColor);
-    this->drawRect({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, insideColor);
-    if (selected) this->drawRect(barPos, barSize, barColor);
+    this->drawRectangle(pos, size, outlineColor);
+    this->drawRectangle({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, insideColor);
+    if (selected) this->drawRectangle(barPos, barSize, barColor);
     
     int sz = this->getTextSize(text.c_str(), font).second;
     this->drawText({ pos.first + 6, pos.second + (size.second / 2) + sz / 2 + 2}, font, text.c_str(), textColor);

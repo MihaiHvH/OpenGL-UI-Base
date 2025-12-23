@@ -48,9 +48,9 @@ pGraphics::pSlider::pSlider(std::pair<int, int> pPos, std::pair<int, int> pSize,
 }
 
 void pGraphics::pSlider::draw() {
-    this->drawRect(pos, size, outlineColor);
-    this->drawRect({ pos.first + 2, pos.second + 2}, { (int)pxOn, size.second - 4 }, onColor);
-    this->drawRect({ pos.first + (int)pxOn + 2, pos.second + 2 }, { (int)pxOff, size.second - 4 }, offColor);
+    this->drawRectangle(pos, size, outlineColor);
+    this->drawRectangle({ pos.first + 2, pos.second + 2}, { (int)pxOn, size.second - 4 }, onColor);
+    this->drawRectangle({ pos.first + (int)pxOn + 2, pos.second + 2 }, { (int)pxOff, size.second - 4 }, offColor);
 
     std::pair<int, int> sz = this->getTextSize(valueText.c_str(), font);
     this->drawText({ pos.first + 2 + (int)pxOn - sz.first / 2, pos.second + sz.second / 2 + size.second / 2 }, font, valueText.c_str(), valueTextColor);

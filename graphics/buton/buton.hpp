@@ -1,8 +1,6 @@
 #pragma once
 
-#include <utility>
-#include "../../structs.hpp"
-#include "../../interface/interface.hpp"
+#include "../../main.hpp"
 
 class pGraphics::pButon : public pGraphics {
     private:
