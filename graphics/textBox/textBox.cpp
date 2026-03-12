@@ -55,7 +55,7 @@ void pGraphics::pTextBox::onKeyPress(unsigned char key) {
                 ++maxBarAltPos;
             }
         }
-        else if (key == 8 && text.size() >= 1 && barAltPos - 1 >= -1) {
+        else if (key == 8 && text.size() >= 1 && barAltPos >= 0) {
             barPos.first -= glutBitmapWidth(font, text.at(barAltPos));
             text.erase(text.begin() + barAltPos);
             --barAltPos;
@@ -86,10 +86,67 @@ void pGraphics::pTextBox::checkClick() {
 }
 
 void pGraphics::pTextBox::onSpeciaKeyPress(int key) {
+    if (!selected) return;
     int oBarPos = barPos.first;
-    if (key == GLUT_KEY_LEFT && barAltPos - 1 >= -1)
+    if (key == GLUT_KEY_LEFT && barAltPos >= 0)
         barPos.first -= glutBitmapWidth(font, text.c_str()[barAltPos--]);
     if (key == GLUT_KEY_RIGHT && barAltPos + 1 <= maxBarAltPos)
         barPos.first += glutBitmapWidth(font, text.c_str()[++barAltPos]);
     if (oBarPos != barPos.first) screen.render();
+}
+
+void pGraphics::pTextBox::setPos(std::pair<double, double> newPos) {
+    pos = newPos;
+    setText(text);
+}
+
+void pGraphics::pTextBox::setSize(std::pair<double, double> newSize) {
+    size = newSize;
+    barSize = { 2, size.second - 8 };
+    setText(text);
+}
+
+void pGraphics::pTextBox::setMaxChr(int newMaxChr) {
+    maxChr = newMaxChr;
+}
+
+void pGraphics::pTextBox::setFont(void* newFont) {
+    font = newFont;
+}
+
+void pGraphics::pTextBox::setOutlineColor(pColor newOutlineColor) {
+    outlineColor = newOutlineColor;
+}
+
+void pGraphics::pTextBox::setInsideColor(pColor newInsideColor) {
+    insideColor = newInsideColor;
+}
+
+void pGraphics::pTextBox::setBarColor(pColor newBarColor) {
+    barColor = newBarColor;
+}
+
+void pGraphics::pTextBox::setTextColor(pColor newTextColor) {
+    textColor = newTextColor;
+}
+
+void pGraphics::pTextBox::setFunction(void(*newOnEnter)(std::string)) {
+    onEnter = newOnEnter;
+}
+
+void pGraphics::pTextBox::setText(std::string newText) {
+    barPos = { 6 + pos.first, 4 + pos.second };
+    barSize = { 2, size.second - 8 };
+    barAltPos = -1;
+    maxBarAltPos = -1;
+    text = newText;
+    for (unsigned int i = 0; i < newText.size(); ++i) {
+        barPos.first += glutBitmapWidth(font, newText.at(i));
+        ++barAltPos;
+        ++maxBarAltPos;
+    }
+}
+
+std::string pGraphics::pTextBox::getText() {
+    return text;
 }

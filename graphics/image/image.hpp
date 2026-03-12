@@ -9,8 +9,8 @@ class pGraphics::pImage : public pGraphics {
     std::string altText;
     std::string imageLocation;
     
-    GLuint textureID;
-    ILuint image;
+    GLuint textureID = 0;
+    bool loaded = false;
 
     public:
     pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pAltText, std::string pImageLocation);
@@ -18,4 +18,11 @@ class pGraphics::pImage : public pGraphics {
     
     void load();
     void draw(int alpha = 255);
+
+    void setPos(std::pair<double, double> newPos);
+    void setSize(std::pair<double, double> newSize);
+    void setAltText(std::string newAltText);
+    void setImage(std::string newImageLocation);
+    std::string getImage();
+    bool isImageLoaded();
 };

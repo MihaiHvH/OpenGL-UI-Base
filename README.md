@@ -16,12 +16,22 @@ A cross-platform C++ UI framework built on OpenGL and DevIL, featuring interacti
 
 Run the build script:
 ```sh
-./compile.sh
+./linux_compile.sh
+```
+
+Or with a custom output name:
+```sh
+./linux_compile.sh MyAppName
 ```
 
 ### Windows
 
-Open `OpenGL-UI-Base.sln` in Visual Studio and build.
+Run the build script (requires MinGW):
+```sh
+./windows_compile.sh
+```
+
+Or open `OpenGL-UI-Base.sln` in Visual Studio and build.
 
 ### Dependencies
 
@@ -47,15 +57,16 @@ Creates a clickable button. The callback is called when the button is pressed.
 
 ```cpp
 pGraphics::pButon buton(
-    { 10, 10 },                // Position (x, y)
-    { 100, 50 },               // Size (width, height)
-    interface.graphics.blue,   // Initial color
-    interface.graphics.cyan,   // Active color
-    GLUT_BITMAP_TIMES_ROMAN_24,// Font
-    interface.graphics.black,  // Text color
-    "Button",                  // Text
-    [](bool state) {           // OnClick callback
-        printf("Buton state: %d\n", state);
+    { 10, 10 },                              // Position (x, y)
+    { 100, 50 },                             // Size (width, height)
+    { interface.graphics.blue,
+      interface.graphics.cyan,
+      interface.graphics.red },             // Colors {idle, active1, active2}
+    GLUT_BITMAP_TIMES_ROMAN_24,              // Font
+    interface.graphics.black,                // Text color
+    "Button",                                // Text
+    [](int state) {                          // OnClick callback
+        printf("Button state: %d\n", state);
     }
 );
 ```
@@ -130,8 +141,8 @@ pGraphics::pSlider slider(
     { 260, 50 },               // Position
     { 100, 50 },               // Size
     { 0.f, 100.f },            // Min/max values
-    2,                         // Precision (decimal places)
-    false,                     // Real (true for integer values)
+    -1,                        // Precision (-1 for float, 0+ for decimal places)
+    false,                     // Real value (true for integer only)
     GLUT_BITMAP_TIMES_ROMAN_24,// Font
     false,                     // Text position (false = left)
     "Slider",                  // Label

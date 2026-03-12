@@ -1,7 +1,8 @@
 #include "image.hpp"
 
 pGraphics::pImage::~pImage() {
-
+    if (textureID != 0)
+        glDeleteTextures(1, &textureID);
 }
 
 pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pAltText, std::string pImageLocation) {
@@ -12,22 +13,30 @@ pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, doub
 }
 
 void pGraphics::pImage::load() {
-    image = ilLoadImage(imageLocation.c_str());
-    if (!image)
-        printf("Failed to load image %s\n", imageLocation.c_str());
-    else {
-        ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-        glGenTextures(1, &textureID);
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
-        ilDeleteImage(image);
+    if (textureID != 0) {
+        glDeleteTextures(1, &textureID);
+        textureID = 0;
     }
+    loaded = false;
+    
+    ILuint image = ilLoadImage(imageLocation.c_str());
+    if (!image) {
+        printf("Failed to load image %s\n", imageLocation.c_str());
+        return;
+    }
+    
+    ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
+    ilDeleteImage(image);
+    loaded = true;
 }
 
 void pGraphics::pImage::draw(int alpha) {
-    if (image) {
+    if (loaded && textureID != 0) {
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -48,4 +57,29 @@ void pGraphics::pImage::draw(int alpha) {
         std::pair<int, int> sz = this->getTextSize(altText.c_str(), GLUT_BITMAP_HELVETICA_12);
         this->drawText({ pos.first + size.first / 2 - sz.first / 2, pos.second + size.second / 2 + sz.second / 2 }, GLUT_BITMAP_HELVETICA_12, altText.c_str(), this->red);
     }
+}
+
+void pGraphics::pImage::setPos(std::pair<double, double> newPos) {
+    pos = newPos;
+}
+
+void pGraphics::pImage::setSize(std::pair<double, double> newSize) {
+    size = newSize;
+}
+
+void pGraphics::pImage::setAltText(std::string newAltText) {
+    altText = newAltText;
+}
+
+void pGraphics::pImage::setImage(std::string newImageLocation) {
+    imageLocation = newImageLocation;
+    load();
+}
+
+std::string pGraphics::pImage::getImage() {
+    return imageLocation;
+}
+
+bool pGraphics::pImage::isImageLoaded() {
+    return loaded;
 }

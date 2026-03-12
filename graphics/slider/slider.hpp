@@ -6,7 +6,7 @@ class pGraphics::pSlider : public pGraphics {
     private:
     std::pair<double, double> pos;
     std::pair<double, double> size;
-    std::pair<double, double> min_max;
+    std::pair<double, double> minMax;
     int precision;
     bool real;
     void *font;
@@ -31,9 +31,26 @@ class pGraphics::pSlider : public pGraphics {
     pPrecision shows the number with pPrecision decimals, if the pPrecision's decimal is 0 than it doesn't show the 0
     pTextPos, if false left otherwise right
     */
-    pSlider(std::pair<int, int> pPos, std::pair<int, int> pSize, std::pair<double, double> pMin_max, int pPrecision, bool pReal, void *pFont, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*onValueChange)(double value));
+    pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pPrecision, bool pReal, void *pFont, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*onValueChange)(double));
     ~pSlider();
 
     void draw();
     void handleMouse();
+
+    void setPos(std::pair<double, double> newPos);
+    void setSize(std::pair<double, double> newSize);
+    void setMinMax(std::pair<double, double> newMinMax);
+    void setPrecision(int newPrecision);
+    void setReal(bool newReal);
+    void setFont(void *newFont);
+    void setTextPos(bool newTextPos);
+    void setText(std::string newText);
+    void setOnColor(pColor newOnColor);
+    void setOffColor(pColor newOffColor);
+    void setOutlineColor(pColor newOutlineColor);
+    void setValueTextColor(pColor newValueTextColor);
+    void setTextColor(pColor newTextColor);
+    void setFunction(void(*newOnValueChange)(double));
+    void setValue(double newValue);
+    double getValue();
 };

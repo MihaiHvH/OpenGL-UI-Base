@@ -3,7 +3,7 @@
 #include "../main.hpp"
 
 namespace utils {
-    template <typename T> T randomNumber(T min, T max, std::vector<T> excluding = {}) {
+    template <typename T> T generateRandomNumber(T min, T max, std::vector<T> excluding = {}) {
         std::random_device rd;
         std::mt19937_64 mt(rd());
 
@@ -28,7 +28,7 @@ namespace utils {
             return number;
         }
         else {
-            printf("[UTILS][randomNumber]: Number type unsupported!\n");
+            printf("[UTILS][generateRandomNumber]: Number type unsupported!\n");
             return T{};
         }
     }

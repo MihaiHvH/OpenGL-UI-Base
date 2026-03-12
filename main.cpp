@@ -3,7 +3,7 @@
 pScreen screen;
 pInterface interface;
 
-pGraphics::pButon buton({ 10, 10}, { 100, 50 }, interface.graphics.blue, interface.graphics.cyan, GLUT_BITMAP_TIMES_ROMAN_24, interface.graphics.black, "Button", [](bool state) {
+pGraphics::pButon buton({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, GLUT_BITMAP_TIMES_ROMAN_24, interface.graphics.black, "Button", [](int state) {
     /*
         OnClickFunction
     */
@@ -17,7 +17,7 @@ pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, GLUT_BITMAP_TIMES_ROMA
     printf("TextBox text: %s\n", text.c_str());
 });
 
-pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, GLUT_BITMAP_TIMES_ROMAN_24, "Check #1", true, interface.graphics.black, interface.graphics.blue, interface.graphics.purple, interface.graphics.yellow, [](bool state) {
+pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, GLUT_BITMAP_TIMES_ROMAN_24, "Check #1", true, interface.graphics.black, interface.graphics.blue, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
     /*
         OnStateChange
     */
@@ -130,8 +130,6 @@ int main(int argc, char **argv) {
 
     image.load();
     imageALT.load();
-
-    /*image loading --end--*/
 
     glutDisplayFunc(render);
     glutKeyboardFunc(processInput);
