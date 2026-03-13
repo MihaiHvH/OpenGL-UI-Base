@@ -13,7 +13,6 @@
 #ifndef ILU_REGION_H
 #define ILU_REGION_H
 
-#include "il.h"
 typedef struct Edge
 {
 	ILint	yUpper;

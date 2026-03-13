@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //
 // ImageLib Sources
-// Copyright (C) 2000-2017 by Denton Woods
+// Copyright (C) 2000-2009 by Denton Woods
 // Last modified: 01/06/2009
 //
 // Filename: IL/devil_internal_exports.h
@@ -13,7 +13,7 @@
 #ifndef IL_EXPORTS_H
 #define IL_EXPORTS_H
 
-#include "il.h"
+#include "IL/il.h"
 
 #ifdef DEBUG
 	#include <assert.h>
@@ -21,22 +21,28 @@
 	#define assert(x)
 #endif
 
-
-#ifdef NOINLINE
-    // No inlining. Treat all inline funcs as static.
-    // Functions will be replicated in all translation units
-    // use them.
-    #define STATIC_INLINE static
+//#ifndef NOINLINE
+#ifndef INLINE
+#if defined(__GNUC__)
+	#define INLINE extern inline
+#elif defined(_MSC_VER)	//@TODO: Get this working in MSVC++.
+						//  http://www.greenend.org.uk/rjk/2003/03/inline.html
+	#ifndef NOINLINE	
+		#define INLINE __inline
+	#else
+		#define INLINE
+	#endif
+	/*#ifndef _WIN64  // Cannot use inline assembly in x64 target platform.
+		#define USE_WIN32_ASM
+	#endif//_WIN64*/
+	
 #else
-    #if defined(_MSC_VER) && !defined(__cplusplus)
-        // MSVC compiler uses __inline when compiling C (not C++)
-        #define STATIC_INLINE static __inline
-    #else
-        // Portable across C99, GNU89, C++...
-        #define STATIC_INLINE static inline
-    #endif
-#endif // NOINLINE
-
+	#define INLINE inline
+#endif
+#endif
+//#else
+//#define INLINE
+//#endif //NOINLINE
 
 #ifdef __cplusplus
 extern "C" {
@@ -136,7 +142,6 @@ ILAPI ILimage*  ILAPIENTRY ilNewImageFull  (ILuint Width, ILuint Height, ILuint 
 ILAPI ILboolean ILAPIENTRY ilInitImage     (ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data);
 ILAPI ILboolean ILAPIENTRY ilResizeImage   (ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILubyte Bpc);
 ILAPI ILboolean ILAPIENTRY ilTexImage_     (ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data);
-ILAPI ILboolean ILAPIENTRY ilTexImageSurface_(ILimage *Image, ILuint Width, ILuint Height, ILuint Depth, ILubyte Bpp, ILenum Format, ILenum Type, void *Data);
 ILAPI ILboolean ILAPIENTRY ilTexSubImage_  (ILimage *Image, void *Data);
 ILAPI void*     ILAPIENTRY ilConvertBuffer (ILuint SizeOfData, ILenum SrcFormat, ILenum DestFormat, ILenum SrcType, ILenum DestType, ILpal *SrcPal, void *Buffer);
 ILAPI ILimage*  ILAPIENTRY iConvertImage   (ILimage *Image, ILenum DestFormat, ILenum DestType);

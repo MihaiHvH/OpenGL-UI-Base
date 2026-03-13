@@ -3,7 +3,7 @@
 
 /*#include <il/il.h>
 #include <il/ilu.h>*/
-#include "ilut.h"  // Probably only have to #include this one
+#include <IL/ilut.h>  // Probably only have to #include this one
 
 #ifdef _MSC_VER
 	#ifndef _IL_WRAP_BUILD_LIB
@@ -30,22 +30,22 @@ public:
 	ILboolean	ActiveLayer(ILuint);
 	ILboolean	ActiveMipmap(ILuint);
 	ILboolean	Clear(void);
-	void		ClearColour(ILclampf, ILclampf, ILclampf, ILclampf);
+	ILvoid		ClearColour(ILclampf, ILclampf, ILclampf, ILclampf);
 	ILboolean	Convert(ILenum);
 	ILboolean	Copy(ILuint);
 	ILboolean	Default(void);
 	ILboolean	Flip(void);
 	ILboolean	SwapColours(void);
 	ILboolean	Resize(ILuint, ILuint, ILuint);
-	ILboolean	TexImage(ILuint, ILuint, ILuint, ILubyte, ILenum, ILenum, void*);
+	ILboolean	TexImage(ILuint, ILuint, ILuint, ILubyte, ILenum, ILenum, ILvoid*);
 
 	
 	// Image handling
-	void		Bind(void) const;
-	void		Bind(ILuint);
-	void		Close(void) { this->Delete(); }
-	void		Delete(void);
-	void		iGenBind();
+	ILvoid		Bind(void) const;
+	ILvoid		Bind(ILuint);
+	ILvoid		Close(void) { this->Delete(); }
+	ILvoid		Delete(void);
+	ILvoid		iGenBind();
 	ILenum		PaletteAlphaIndex();
 
 	// Image characteristics
@@ -79,7 +79,7 @@ protected:
 	ILuint		Id;
 
 private:
-	void		iStartUp();
+	ILvoid		iStartUp();
 
 
 };
@@ -153,7 +153,7 @@ class ilValidate
 public:
 	static ILboolean	Valid(ILenum, char *);
 	static ILboolean	Valid(ILenum, FILE *);
-	static ILboolean	Valid(ILenum, void *, ILuint);
+	static ILboolean	Valid(ILenum, ILvoid *, ILuint);
 
 protected:
 
@@ -167,16 +167,16 @@ class ilState
 public:
 	static ILboolean		Disable(ILenum);
 	static ILboolean		Enable(ILenum);
-	static void			Get(ILenum, ILboolean &);
-	static void			Get(ILenum, ILint &);
+	static ILvoid			Get(ILenum, ILboolean &);
+	static ILvoid			Get(ILenum, ILint &);
 	static ILboolean		GetBool(ILenum);
 	static ILint			GetInt(ILenum);
 	static const char		*GetString(ILenum);
 	static ILboolean		IsDisabled(ILenum);
 	static ILboolean		IsEnabled(ILenum);
 	static ILboolean		Origin(ILenum);
-	static void			Pop(void);
-	static void			Push(ILuint);
+	static ILvoid			Pop(void);
+	static ILvoid			Push(ILuint);
 
 
 protected:
@@ -189,8 +189,8 @@ private:
 class ilError
 {
 public:
-	static void		Check(void (*Callback)(const char*));
-	static void		Check(void (*Callback)(ILenum));
+	static ILvoid		Check(ILvoid (*Callback)(const char*));
+	static ILvoid		Check(ILvoid (*Callback)(ILenum));
 	static ILenum		Get(void);
 	static const char	*String(void);
 	static const char	*String(ILenum);
