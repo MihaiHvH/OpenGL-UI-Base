@@ -16,13 +16,18 @@
 #include <random>
 
 #include "include/GL/glew.h"
+#include "include/GLFW/glfw3.h"
+
 #include "include/GL/glut.h"
+
 #include "include/GL/gl.h"
 #include "include/IL/ilut.h"
 
 #include "include/freetype-gl/texture-atlas.h"
 #include "include/freetype-gl/vertex-buffer.h"
 #include "include/freetype-gl/freetype-gl.h"
+#include "include/freetype-gl/mat4.h"
+#include "include/freetype-gl/shader.h"
 
 #undef interface
 #define IL_USE_PRAGMA_LIBS
@@ -31,7 +36,7 @@
 #include "structs.hpp"
 #include "utils/utils.hpp"
 #include "graphics/graphics.hpp"
-#include "graphics/buton/buton.hpp"
+#include "graphics/button/button.hpp"
 #include "graphics/textBox/textBox.hpp"
 #include "graphics/checkBox/checkBox.hpp"
 #include "graphics/image/image.hpp"

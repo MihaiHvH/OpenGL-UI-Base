@@ -26,17 +26,16 @@ void pGraphics::pCheckBox::checkClick() {
 
 void pGraphics::pCheckBox::draw() {
     if (colors.empty()) return;
-    int wSz = this->getTextSize(text.c_str(), font).second;
+    int wSz = this->getTextSize(text, font).second;
 
     this->drawRectangle(pos, size, outlineColor);
     this->drawRectangle({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, colors.at(state));
 
     if (textOrientation) //right
-        this->drawText({ pos.first + 10 + size.first, (pos.second + (size.second / 2)) + wSz / 2 }, font, text.c_str(), textColor);
+        this->drawText({ pos.first + 10 + size.first, (pos.second + (size.second / 2)) + wSz / 2 }, font, text, textColor);
     else { //left
-        const unsigned char* str = reinterpret_cast<const unsigned char*>(text.c_str());
-        int sz = glutBitmapLength(font, str);
-        this->drawText({ pos.first - sz - 10, pos.second + (size.second / 2) + wSz / 2 }, font, text.c_str(), textColor);
+        int sz = this->getTextSize(text, font).first;
+        this->drawText({ pos.first - sz - 10, pos.second + (size.second / 2) + wSz / 2 }, font, text, textColor);
     }
 }
 

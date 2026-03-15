@@ -5,7 +5,7 @@ class pGraphics {
     pGraphics();
     ~pGraphics();
     
-    class pButon;
+    class pButton;
     class pTextBox;
     class pCheckBox;
     class pImage;

@@ -14,11 +14,11 @@ struct pScreen {
     std::string windowName = "OpenGL-UI-Base";
     std::pair<int, int> size = { 640, 640 };
     std::pair<int, int> initialSize = { 640, 640 };
-    std::pair<int, int> mousePointer;
+    std::pair<double, double> mousePointer;
     bool leftClick = false;
     bool rightClick = false;
-    bool leftClickDrag = false;
 
+    GLFWwindow *window;
     void(*render)(void) = nullptr;
 };
 

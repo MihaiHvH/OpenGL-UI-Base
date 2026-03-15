@@ -2,12 +2,12 @@
 
 name=$1
 if [ -z "$name" ]; then
-    name="OpenGL-UI-Base"
+    name="OpenGL-UI-Base.exe"
 fi
 
-INCLUDES="-I./include -I./include/freetype-gl"
-FLAGS="-g"
-LIBS="-lGL -lglut -lIL -lGLU -lGLEW -lfreetype"
+INCLUDES="-I./include"
+FLAGS="-g -static"
+LIBS="-lglew32 -lglfw3 -lfreeglut -lDevIL -lopengl32 -lfreetype -lgdi32 -lpng -lbrotlidec -lz -lbz2"
 
 
 C_FILES=$(find ./include/freetype-gl -maxdepth 1 -name "*.c")
@@ -22,6 +22,6 @@ for src in $C_FILES; do
 done
 
 rm -f "$name"
-x86_64-w64-mingw32-g++ $INCLUDES $FLAGS $CPP_FILES $C_OBJECTS -L./lib -o "$name" $LIBS
+x86_64-w64-mingw32-g++ $INCLUDES $FLAGS $CPP_FILES $C_OBJECTS -L./lib/windows -o "$name" $LIBS
 
 echo "Built: $name"

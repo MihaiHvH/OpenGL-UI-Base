@@ -54,8 +54,8 @@ void pGraphics::pImage::draw(int alpha) {
     }
     else {
         this->drawRectangle(pos, size, this->black);
-        std::pair<int, int> sz = this->getTextSize(altText.c_str(), GLUT_BITMAP_HELVETICA_12);
-        this->drawText({ pos.first + size.first / 2 - sz.first / 2, pos.second + size.second / 2 + sz.second / 2 }, GLUT_BITMAP_HELVETICA_12, altText.c_str(), this->red);
+        std::pair<int, int> sz = this->getTextSize(altText, GLUT_BITMAP_HELVETICA_12);
+        this->drawText({ pos.first + size.first / 2 - sz.first / 2, pos.second + size.second / 2 + sz.second / 2 }, GLUT_BITMAP_HELVETICA_12, altText, this->red);
     }
 }
 

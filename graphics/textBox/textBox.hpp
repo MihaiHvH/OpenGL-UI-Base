@@ -26,10 +26,10 @@ class pGraphics::pTextBox : public pGraphics {
     pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, void* pFont, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pOnEnter)(std::string));
     ~pTextBox();
 
-    void onKeyPress(unsigned char key);
+    void onKeyPress(unsigned int key);
     void checkClick();
     void draw();
-    void onSpeciaKeyPress(int key);
+    void onSpeciaKeyPress(int key, int action);
 
     void setPos(std::pair<double, double> newPos);
     void setSize(std::pair<double, double> newSize);

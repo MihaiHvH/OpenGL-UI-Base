@@ -26,50 +26,29 @@ void pGraphics::pTextBox::draw() {
     this->drawRectangle({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, insideColor);
     if (selected) this->drawRectangle(barPos, barSize, barColor);
     
-    int sz = this->getTextSize(text.c_str(), font).second;
-    this->drawText({ pos.first + 6, pos.second + (size.second / 2) + sz / 2 + 2}, font, text.c_str(), textColor);
+    int sz = this->getTextSize(text, font).second;
+    this->drawText({ pos.first + 6, pos.second + (size.second / 2) + sz / 2 + 2}, font, text, textColor);
 }
 
-void pGraphics::pTextBox::onKeyPress(unsigned char key) {
-    if (selected) {
-        const unsigned char* str = reinterpret_cast<const unsigned char*>(text.c_str());
-        int sz = glutBitmapLength(font, str);
-
-        if (key == 13) //enter
-            selected = false, onEnter(text);
-        else if (key != 8 && key != 127 && (maxBarAltPos + 2 <= maxChr && maxChr != -1)) {
-            text.insert(text.begin() + barAltPos + 1, key);
-            barPos.first += glutBitmapWidth(font, key);
+void pGraphics::pTextBox::onKeyPress(unsigned int key) {
+    if (!selected) return;
+    if (maxBarAltPos + 2 <= maxChr && maxChr != -1) {
+        text.insert(text.begin() + barAltPos + 1, (char)key);
+        barPos.first += this->getTextSize(std::string({ (char)key }), font).first;
+        ++barAltPos;
+        ++maxBarAltPos;
+    }
+    else if (maxChr == -1) {
+        int sz = this->getTextSize(text, font).first;
+        int wsz = this->getTextSize(std::string({ char(key) }), font).first;
+        if (sz + wsz + 8 <= size.first) {
+            text.insert(text.begin() + barAltPos + 1, (char)key);
+            barPos.first += wsz;
             ++barAltPos;
             ++maxBarAltPos;
         }
-        else if (key != 8 && key != 127 && maxChr == -1) {
-            int wsz = glutBitmapWidth(font, key);
-            if (sz + wsz + 8 <= size.first) {
-                if (text.size() == 0)
-                    text.push_back(key);
-                else 
-                    text.insert(text.begin() + barAltPos + 1, key);
-                barPos.first += wsz;
-                ++barAltPos;
-                ++maxBarAltPos;
-            }
-        }
-        else if (key == 8 && text.size() >= 1 && barAltPos >= 0) {
-            barPos.first -= glutBitmapWidth(font, text.at(barAltPos));
-            text.erase(text.begin() + barAltPos);
-            --barAltPos;
-            --maxBarAltPos;
-        }
-        else if (key == 127 && text.size() >= 1 && barAltPos < maxBarAltPos) {
-            if (barAltPos == -1)
-                text.erase(text.begin());
-            else 
-                text.erase(text.begin() + barAltPos + 1);
-            --maxBarAltPos;
-        }
-        screen.render();
     }
+    screen.render();
 }
 
 void pGraphics::pTextBox::checkClick() {
@@ -79,19 +58,34 @@ void pGraphics::pTextBox::checkClick() {
         if (!selected)
             onEnter(text);
     }
-    if (!this->mouseInRegion(pos, size) && selected) {
+    else if (selected) {
         selected = false;
         screen.render();
+        onEnter(text);
     }
 }
 
-void pGraphics::pTextBox::onSpeciaKeyPress(int key) {
-    if (!selected) return;
+void pGraphics::pTextBox::onSpeciaKeyPress(int key, int action) {
+    if (!selected || action == GLFW_RELEASE) return;
     int oBarPos = barPos.first;
-    if (key == GLUT_KEY_LEFT && barAltPos >= 0)
-        barPos.first -= glutBitmapWidth(font, text.c_str()[barAltPos--]);
-    if (key == GLUT_KEY_RIGHT && barAltPos + 1 <= maxBarAltPos)
-        barPos.first += glutBitmapWidth(font, text.c_str()[++barAltPos]);
+    if (key == GLFW_KEY_ENTER) {
+        selected = false;
+        onEnter(text);
+    }
+    else if (key == GLFW_KEY_LEFT && barAltPos >= 0)
+        barPos.first -= this->getTextSize(std::string({ text.at(barAltPos--) }), font).first;
+    else if (key == GLFW_KEY_RIGHT && barAltPos + 1 <= maxBarAltPos)
+        barPos.first += this->getTextSize(std::string({ text.at(++barAltPos) }), font).first;
+    else if (key == GLFW_KEY_BACKSPACE && text.size() >= 1 && barAltPos >= 0) {
+        barPos.first -= this->getTextSize(std::string({ text.at(barAltPos) }), font).first;
+        text.erase(text.begin() + barAltPos);
+        --barAltPos;
+        --maxBarAltPos;
+    }
+    else if (key == GLFW_KEY_DELETE && text.size() >= 1 && barAltPos < maxBarAltPos) {
+        text.erase(text.begin() + barAltPos + 1);
+        --maxBarAltPos;
+    }
     if (oBarPos != barPos.first) screen.render();
 }
 
@@ -141,7 +135,7 @@ void pGraphics::pTextBox::setText(std::string newText) {
     maxBarAltPos = -1;
     text = newText;
     for (unsigned int i = 0; i < newText.size(); ++i) {
-        barPos.first += glutBitmapWidth(font, newText.at(i));
+        barPos.first += this->getTextSize(std::string({ newText.at(i) }), font).first;
         ++barAltPos;
         ++maxBarAltPos;
     }

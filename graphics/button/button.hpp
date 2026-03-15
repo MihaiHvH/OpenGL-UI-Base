@@ -2,7 +2,7 @@
 
 #include "../../main.hpp"
 
-class pGraphics::pButon : public pGraphics {
+class pGraphics::pButton : public pGraphics {
     private:
     int state = 0;
     /*BUTTON VARS*/
@@ -16,8 +16,8 @@ class pGraphics::pButon : public pGraphics {
     void(*onChangeState)(int);
 
     public:
-    pButon(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, void* font, pColor textColor, std::string text, void(*onChangeState)(int));
-    ~pButon();
+    pButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, void* font, pColor textColor, std::string text, void(*onChangeState)(int));
+    ~pButton();
     void draw();
     void checkClick();
     

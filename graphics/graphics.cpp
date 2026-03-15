@@ -16,12 +16,7 @@ pGraphics::~pGraphics() {
 }
 
 pColor pGraphics::createNewColor(int r, int g, int b, int a) {
-    pColor color{};
-    color.a = a;
-    color.r = r;
-    color.g = g;
-    color.b = b;
-    return color;
+    return { r, g, b, a };
 }
 
 bool pGraphics::mouseInRegion(std::pair<double, double> pos, std::pair<double, double> size) {

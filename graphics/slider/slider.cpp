@@ -51,19 +51,19 @@ void pGraphics::pSlider::draw() {
     this->drawRectangle({ pos.first + 2, pos.second + 2}, { (int)pxOn, size.second - 4 }, onColor);
     this->drawRectangle({ pos.first + (int)pxOn + 2, pos.second + 2 }, { (int)pxOff, size.second - 4 }, offColor);
 
-    std::pair<int, int> sz = this->getTextSize(valueText.c_str(), font);
-    this->drawText({ pos.first + 2 + (int)pxOn - sz.first / 2, pos.second + sz.second / 2 + size.second / 2 }, font, valueText.c_str(), valueTextColor);
+    std::pair<int, int> sz = this->getTextSize(valueText, font);
+    this->drawText({ pos.first + 2 + (int)pxOn - sz.first / 2, pos.second + sz.second / 2 + size.second / 2 }, font, valueText, valueTextColor);
 
-    sz = this->getTextSize(text.c_str(), font);
+    sz = this->getTextSize(text, font);
 
     if (textPos) //right
-        this->drawText({ pos.first + size.first + 10, pos.second + size.second / 2 + sz.second / 2 }, font, text.c_str(), textColor);
+        this->drawText({ pos.first + size.first + 10, pos.second + size.second / 2 + sz.second / 2 }, font, text, textColor);
     else //left
-        this->drawText({ pos.first - sz.first - 10, pos.second + size.second / 2 + sz.second / 2 }, font, text.c_str(), textColor);
+        this->drawText({ pos.first - sz.first - 10, pos.second + size.second / 2 + sz.second / 2 }, font, text, textColor);
 }
 
 void pGraphics::pSlider::handleMouse() {
-    if (this->mouseInRegion({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }) && (!screen.leftClickDrag || !screen.leftClick)) {
+    if (this->mouseInRegion({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }) /*&& (!screen.leftClickDrag || !screen.leftClick)*/) {
         pxOn = screen.mousePointer.first - pos.first - 2;
         pxOff = size.first - pxOn - 4;
         value = (((pxOn * (minMax.second - minMax.first)) / (size.first - 4)) + minMax.first);
