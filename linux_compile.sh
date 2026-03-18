@@ -7,7 +7,7 @@ fi
 
 INCLUDES="-I./include"
 FLAGS="-g"
-LIBS="-lGL -lglut -lIL -lILU -lILUT -lGLEW -lfreetype -lpng -ljpeg -ltiff -lz -lbz2 -lglfw"
+LIBS="-lGL -lIL -lILU -lILUT -lGLEW -lfreetype -lpng -ljpeg -ltiff -lz -lbz2 -lglfw"
 
 C_FILES=$(find ./include/freetype-gl -maxdepth 1 -name "*.c")
 

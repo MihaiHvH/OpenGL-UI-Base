@@ -28,17 +28,12 @@ void pGraphics::pButton::checkClick() {
 void pGraphics::pButton::draw() {
     if (colors.empty()) return;
     this->drawRectangle(pos, size, colors.at(state));
-    if (!isTextLoaded) return;
-    std::pair<int, int> textSize = textObj->getTextSize();
-    textObj->setPos({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 });
+    std::pair<double, double> textSize = textObj->getTextSize();
+    textObj->setPos({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second + textSize.second) / 2 });
     textObj->draw();
-    //this->drawText({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 }, font, text, textColor);   
 }
 
 void pGraphics::pButton::init() {
-    isTextLoaded = true;
-    std::pair<int, int> textSize = textObj->getTextSize();
-    textObj->setPos({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 });
     textObj->load();
 }
 

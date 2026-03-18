@@ -5,14 +5,19 @@ pGraphics::pImage::~pImage() {
         glDeleteTextures(1, &textureID);
 }
 
-pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pAltText, std::string pImageLocation) {
+pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation) {
     pos = pPos;
     size = pSize;
+    fontLocation = pFontLocation;
     altText = pAltText;
     imageLocation = pImageLocation;
+
+    textObj = new pGraphics::pText({ 0, 0 }, fontLocation, 14, altText, this->red);
 }
 
 void pGraphics::pImage::load() {
+    textObj->load();
+
     if (textureID != 0) {
         glDeleteTextures(1, &textureID);
         textureID = 0;
@@ -54,8 +59,9 @@ void pGraphics::pImage::draw(int alpha) {
     }
     else {
         this->drawRectangle(pos, size, this->black);
-        std::pair<int, int> sz = this->getTextSize(altText, GLUT_BITMAP_HELVETICA_12);
-        this->drawText({ pos.first + size.first / 2 - sz.first / 2, pos.second + size.second / 2 + sz.second / 2 }, GLUT_BITMAP_HELVETICA_12, altText, this->red);
+        std::pair<double, double> textSize = textObj->getTextSize();
+        textObj->setPos({ pos.first + (size.first - textSize.first) / 2, pos.second + (size.second + textSize.second) / 2 });
+        textObj->draw();
     }
 }
 

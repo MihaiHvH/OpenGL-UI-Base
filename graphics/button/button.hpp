@@ -16,7 +16,6 @@ class pGraphics::pButton : public pGraphics {
     std::string text;
     void(*onChangeState)(int);
     pGraphics::pText *textObj;
-    bool isTextLoaded = false;
 
     public:
     pButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, std::string pFontLocation, int pFontSize, pColor textColor, std::string text, void(*onChangeState)(int));

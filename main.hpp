@@ -20,8 +20,6 @@
 #include "include/GL/glew.h"
 #include "include/GLFW/glfw3.h"
 
-#include "include/GL/glut.h"
-
 #include "include/GL/gl.h"
 #include "include/IL/ilut.h"
 

@@ -4,13 +4,15 @@ pGraphics::pSlider::~pSlider() {
     
 }
 
-pGraphics::pSlider::pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pPrecision, bool pReal, void *pFont, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*pOnValueChange)(double value)) {
+pGraphics::pSlider::pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pPrecision, bool pReal, std::string pFontLocation, int pTextSize, int pValueTextSize, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*pOnValueChange)(double value)) {
     pos = pPos;
     size = pSize;
     minMax = pMinMax;
     precision = pPrecision;
     real = pReal;
-    font = pFont;
+    fontLocation = pFontLocation;
+    textSize = pTextSize;
+    valueTextSize = pValueTextSize;
     textPos = pTextPos;
     text = pText;
     onColor = pOnColor;
@@ -44,6 +46,14 @@ pGraphics::pSlider::pSlider(std::pair<double, double> pPos, std::pair<double, do
         }
         value = std::ceil(value * multiplier) / multiplier;
     }
+
+    textObj = new pGraphics::pText({ 0, 0 }, fontLocation, textSize, text, textColor);
+    valueTextObj = new pGraphics::pText({ 0, 0 }, fontLocation, valueTextSize, valueText, valueTextColor);
+}
+
+void pGraphics::pSlider::init() {
+    textObj->load();
+    valueTextObj->load();
 }
 
 void pGraphics::pSlider::draw() {
@@ -51,19 +61,25 @@ void pGraphics::pSlider::draw() {
     this->drawRectangle({ pos.first + 2, pos.second + 2}, { (int)pxOn, size.second - 4 }, onColor);
     this->drawRectangle({ pos.first + (int)pxOn + 2, pos.second + 2 }, { (int)pxOff, size.second - 4 }, offColor);
 
-    std::pair<int, int> sz = this->getTextSize(valueText, font);
-    this->drawText({ pos.first + 2 + (int)pxOn - sz.first / 2, pos.second + sz.second / 2 + size.second / 2 }, font, valueText, valueTextColor);
+    std::pair<double, double> textSize = valueTextObj->getTextSize();
+    valueTextObj->setText(valueText);
+    valueTextObj->setPos({ pos.first + 2 + (int)pxOn - textSize.first / 2, pos.second + textSize.second / 2 + size.second / 2 });
+    valueTextObj->draw();
+    //this->drawText({ pos.first + 2 + (int)pxOn - sz.first / 2, pos.second + sz.second / 2 + size.second / 2 }, font, valueText, valueTextColor);
 
-    sz = this->getTextSize(text, font);
+    textSize = textObj->getTextSize();
 
     if (textPos) //right
-        this->drawText({ pos.first + size.first + 10, pos.second + size.second / 2 + sz.second / 2 }, font, text, textColor);
+        textObj->setPos({ pos.first + size.first + 10, pos.second + size.second / 2 + textSize.second / 2 });
+        //this->drawText({ pos.first + size.first + 10, pos.second + size.second / 2 + sz.second / 2 }, font, text, textColor);
     else //left
-        this->drawText({ pos.first - sz.first - 10, pos.second + size.second / 2 + sz.second / 2 }, font, text, textColor);
+        textObj->setPos({ pos.first - textSize.first - 10, pos.second + size.second / 2 + textSize.second / 2 });
+        //this->drawText({ pos.first - sz.first - 10, pos.second + size.second / 2 + sz.second / 2 }, font, text, textColor);
+    textObj->draw();
 }
 
 void pGraphics::pSlider::handleMouse() {
-    if (this->mouseInRegion({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }) /*&& (!screen.leftClickDrag || !screen.leftClick)*/) {
+    if (this->mouseInRegion({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 })) {
         pxOn = screen.mousePointer.first - pos.first - 2;
         pxOff = size.first - pxOn - 4;
         value = (((pxOn * (minMax.second - minMax.first)) / (size.first - 4)) + minMax.first);
@@ -164,7 +180,7 @@ void pGraphics::pSlider::setReal(bool newReal) {
 }
 
 void pGraphics::pSlider::setFont(void *newFont) {
-    font = newFont;
+    // TO DO
 }
 
 void pGraphics::pSlider::setTextPos(bool newTextPos) {

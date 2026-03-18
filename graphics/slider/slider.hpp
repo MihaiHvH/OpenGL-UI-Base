@@ -9,7 +9,9 @@ class pGraphics::pSlider : public pGraphics {
     std::pair<double, double> minMax;
     int precision;
     bool real;
-    void *font;
+    std::string fontLocation;
+    int textSize;
+    int valueTextSize;
     bool textPos;
     std::string text;
     pColor onColor;
@@ -24,6 +26,9 @@ class pGraphics::pSlider : public pGraphics {
     double pxOff;
     std::string valueText;
 
+    pGraphics::pText* textObj;
+    pGraphics::pText* valueTextObj;
+
     public:
     /*
     if pReal = true than the value of pPrecision doesn't matter
@@ -31,8 +36,10 @@ class pGraphics::pSlider : public pGraphics {
     pPrecision shows the number with pPrecision decimals, if the pPrecision's decimal is 0 than it doesn't show the 0
     pTextPos, if false left otherwise right
     */
-    pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pPrecision, bool pReal, void *pFont, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*onValueChange)(double));
+    pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pPrecision, bool pReal, std::string pFontLocation, int pTextSize, int pValueTextSize, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*onValueChange)(double));
     ~pSlider();
+
+    void init();
 
     void draw();
     void handleMouse();

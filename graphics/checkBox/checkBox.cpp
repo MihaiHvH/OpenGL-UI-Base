@@ -8,6 +8,7 @@ pGraphics::pCheckBox::pCheckBox(std::pair<double, double> pPos, std::pair<double
     pos = pPos;
     size = pSize;
     fontLocation = pFontLocation;
+    fontSize = pFontSize;
     text = pText;
     textOrientation = pTextOrientation;
     textColor = pTextColor;
@@ -27,13 +28,7 @@ void pGraphics::pCheckBox::checkClick() {
 }
 
 void pGraphics::pCheckBox::init() {
-    std::pair<int, int> textSize = textObj->getTextSize();
-    if (textOrientation) //right
-        textObj->setPos({ pos.first + 10 + size.first, (pos.second + (size.second / 2)) + textSize.second / 2 });
-    else //left
-        textObj->setPos({ pos.first - textSize.first - 10, pos.second + (size.second / 2) + textSize.second / 2 });
     textObj->load();
-    isTextLoaded = true;
 }
 
 void pGraphics::pCheckBox::draw() {
@@ -42,8 +37,12 @@ void pGraphics::pCheckBox::draw() {
     this->drawRectangle(pos, size, outlineColor);
     this->drawRectangle({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, colors.at(state));
 
-    if (isTextLoaded)
-        textObj->draw();
+    std::pair<double, double> textSize = textObj->getTextSize();
+    if (textOrientation) //right
+        textObj->setPos({ pos.first + 10 + size.first, (pos.second + (size.second / 2)) + textSize.second / 2 });
+    else //left
+        textObj->setPos({ pos.first - textSize.first - 10, pos.second + (size.second / 2) + textSize.second / 2 });
+    textObj->draw();
 }
 
 void pGraphics::pCheckBox::setPos(std::pair<double, double> newPos) {

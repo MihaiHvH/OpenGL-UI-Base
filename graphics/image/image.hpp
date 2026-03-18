@@ -6,14 +6,17 @@ class pGraphics::pImage : public pGraphics {
     private:
     std::pair<double, double> pos;
     std::pair<double, double> size;
+    std::string fontLocation;
     std::string altText;
     std::string imageLocation;
     
     GLuint textureID = 0;
     bool loaded = false;
 
+    pGraphics::pText* textObj;
+
     public:
-    pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pAltText, std::string pImageLocation);
+    pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation);
     ~pImage();
     
     void load();

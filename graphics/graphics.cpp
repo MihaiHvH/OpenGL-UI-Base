@@ -89,28 +89,6 @@ void pGraphics::drawTriangle(std::pair<double, double> points[3], pColor color) 
     glEnd();
 }
 
-std::pair<int, int> pGraphics::getTextSize(std::string text, void* font) {
-    int wMax = 0;
-    for (int chr : text)
-        wMax = std::max(wMax, glutBitmapWidth(font, chr));
-    return { glutBitmapLength(font, reinterpret_cast<const unsigned char*>(text.c_str())), wMax };
-}
-
-void pGraphics::drawText(std::pair<double, double> pos, void *font, std::string text, pColor color) {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
-    glRasterPos2d(pos.first, pos.second);
-    
-    for (int chr : text)
-        glutBitmapCharacter(font, chr);
-
-    glEnd();
-}
-
 void pGraphics::drawFilledEllipse(std::pair<double, double> pos, std::pair<double, double> size, pColor color) { 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

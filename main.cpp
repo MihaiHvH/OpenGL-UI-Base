@@ -10,7 +10,7 @@ pGraphics::pButton Button({ 10, 10}, { 100, 50 }, { interface.graphics.blue, int
     printf("Button state: %d\n", state);
 });
 
-pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, GLUT_BITMAP_TIMES_ROMAN_24, interface.graphics.black, interface.graphics.blue, interface.graphics.purple, interface.graphics.black, [](std::string text) {
+pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, "include/freetype-gl/fonts/Vera.ttf", 20, interface.graphics.black, interface.graphics.blue, interface.graphics.purple, interface.graphics.black, [](std::string text) {
     /*
         OnEnterFunction
     */
@@ -24,10 +24,10 @@ pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, "include/freetype-gl/font
     printf("CheckBox state: %d\n", state);
 });
 
-pGraphics::pImage imageALT({ 10, 200 }, { 100, 100 }, "ALT TEXT", "images/imagep.png");
-pGraphics::pImage image({ 150, 200 }, { 100, 100 }, "ALT TEXT", "images/image.png");
+pGraphics::pImage imageALT({ 10, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/imagep.png");
+pGraphics::pImage image({ 150, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/image.png");
 
-pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, GLUT_BITMAP_TIMES_ROMAN_24, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.white, interface.graphics.red, [](double value) {
+pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, "include/freetype-gl/fonts/Vera.ttf", 24, 16, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.black, interface.graphics.red, [](double value) {
     /*
         OnValueChange
     */
@@ -35,9 +35,6 @@ pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, G
 });
 
 pGraphics::pText text({100, 100}, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.black);
-
-pGraphics::pText REALtext({100, 200}, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello REALWorld", interface.graphics.red);
-
 
 void render() {
     glDisable(GL_TEXTURE_2D);
@@ -52,7 +49,6 @@ void render() {
     image.draw();
     imageALT.draw();
     text.draw();
-    REALtext.draw();
 
     glfwSwapBuffers(screen.window);
     glfwPollEvents();
@@ -141,8 +137,6 @@ int main(int argc, char **argv) {
     screen.window = window;
     screen.render = render;
 
-    glutInit(&argc, argv);
-
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (err != GLEW_OK) {
@@ -152,11 +146,9 @@ int main(int argc, char **argv) {
 
     Button.init();
     checkBox.init();
-
+    slider.init();
+    textBox.init();
     text.load();
-    REALtext.load();
-
-    interface.graphics.init();
 
     /*image loading --start--*/
 
@@ -164,6 +156,8 @@ int main(int argc, char **argv) {
 
     image.load();
     imageALT.load();
+
+    interface.graphics.init();
 
     glfwSetWindowSizeCallback(window, resize);
     glfwSetKeyCallback(window, processSpecialInput);
