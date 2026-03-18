@@ -14,6 +14,8 @@
 #include <cmath>
 #include <algorithm>
 #include <random>
+#include <unordered_map>
+#include <cstring>
 
 #include "include/GL/glew.h"
 #include "include/GLFW/glfw3.h"
@@ -36,6 +38,7 @@
 #include "structs.hpp"
 #include "utils/utils.hpp"
 #include "graphics/graphics.hpp"
+#include "graphics/text/text.hpp"
 #include "graphics/button/button.hpp"
 #include "graphics/textBox/textBox.hpp"
 #include "graphics/checkBox/checkBox.hpp"

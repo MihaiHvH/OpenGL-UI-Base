@@ -4,7 +4,8 @@ class pGraphics {
     public:
     pGraphics();
     ~pGraphics();
-    
+
+    class pText;
     class pButton;
     class pTextBox;
     class pCheckBox;

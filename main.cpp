@@ -34,6 +34,8 @@ pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, G
     printf("Slider value: %f\n", value);
 });
 
+pGraphics::pText text({100, 100}, "include/freetype-gl/fonts/Vera.ttf", "Hello World", interface.graphics.black);
+
 void render() {
     glDisable(GL_TEXTURE_2D);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -46,6 +48,7 @@ void render() {
     slider.draw();
     image.draw();
     imageALT.draw();
+    text.draw();
 
     glfwSwapBuffers(screen.window);
     glfwPollEvents();
@@ -54,10 +57,12 @@ void render() {
 void resize(GLFWwindow *window, int newWidth, int newHeight) {
     screen.size = { newWidth, newHeight };
     
+    text.onResize(newWidth, newHeight);
+    
     glViewport(0, 0, newWidth, newHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, newWidth, newHeight,0, -1, 1);
+    glOrtho(0, newWidth, newHeight, 0, -1, 1);
 }
 
 void processSpecialInput(GLFWwindow *window, int key, int scancode, int action, int mods) {
@@ -103,10 +108,6 @@ void handleMouseMovement(GLFWwindow *window, double x, double y) {
     if (screen.leftClick == GLFW_PRESS) handleMouseDrag(x, y);
 }
 
-void handleIdle() {
-
-}
-
 void errorCallback(int error, const char* description) {
 	printf("An error has occurred: %s", description);
 }
@@ -130,7 +131,7 @@ int main(int argc, char **argv) {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, screen.initialSize.second, screen.initialSize.first, 0, -1, 1);
+    glOrtho(0, screen.initialSize.first, screen.initialSize.second, 0, -1, 1);
     glClearColor(1, 1, 1, 1);
     
     screen.window = window;
@@ -144,6 +145,8 @@ int main(int argc, char **argv) {
         printf("Error: %s\n", glewGetErrorString(err) );
         return 0;
     }
+
+    text.init(screen.initialSize.first, screen.initialSize.second);
 
     /*image loading --start--*/
 
@@ -160,6 +163,8 @@ int main(int argc, char **argv) {
 
     while (!glfwWindowShouldClose(window))
         render();
+
+    text.cleanup();
 
     glfwDestroyWindow(window);
     glfwTerminate();
