@@ -23,13 +23,15 @@ void pGraphics::pText::setText(vertex_buffer_t* buffer, std::string text) {
     for (int i = 0; i < text.size(); ++i) {
         texture_glyph_t *glyph = texture_font_get_glyph(font, std::string({ text.c_str()[i] }).c_str());
         if(glyph != NULL) {
+            size.first += glyph->width;
+            size.second = std::max(size.second, (int)glyph->height);
             float kerning = 0.0f;
             if( i > 0) kerning = texture_glyph_get_kerning(glyph, std::string({ text.c_str()[i - 1] }).c_str());
             pen.x += kerning;
-            int x0  = (int)(pen.x + glyph->offset_x);
-            int y0  = (int)(pen.y - glyph->offset_y);
-            int x1  = (int)( x0 + glyph->width );
-            int y1  = (int)( y0 + glyph->height );
+            float x0  = pen.x + glyph->offset_x;
+            float y0  = pen.y - glyph->offset_y;
+            float x1  = x0 + glyph->width;
+            float y1  = y0 + glyph->height;
             float s0 = glyph->s0;
             float t0 = glyph->t0;
             float s1 = glyph->s1;
@@ -52,12 +54,9 @@ void pGraphics::pText::load() {
     atlas = texture_atlas_new(512, 512, 3);
     textBuffer = vertex_buffer_new("vertex:3f,tex_coord:2f,color:4f,ashift:1f,agamma:1f");
 
-    if (!fontCache[fontLocation]) {
-        fontCache[fontLocation] = texture_font_new_from_file(atlas, fontSize, fontLocation.c_str());
-        texture_font_load_glyphs(fontCache[fontLocation], text.c_str());
-        font = fontCache[fontLocation];
-    }
-
+    font = texture_font_new_from_file(atlas, fontSize, fontLocation.c_str());
+    texture_font_load_glyphs(font, text.c_str());
+    
     setText(textBuffer, text);
     texture_font_delete(font);
 
@@ -77,9 +76,7 @@ void pGraphics::pText::draw() {
 
     glBindTexture(GL_TEXTURE_2D, atlas->id);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-    glColor4f( 0, 0, 0, 1 );
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
     mat4_set_identity(&screen.model);
@@ -96,4 +93,8 @@ void pGraphics::pText::draw() {
     
     glDisable(GL_TEXTURE_2D);
     glUseProgram(0);
+}
+
+std::pair<int, int> pGraphics::pText::getTextSize() {
+    return size;
 }

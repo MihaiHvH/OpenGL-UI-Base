@@ -5,8 +5,6 @@ class pGraphics {
     pGraphics();
     ~pGraphics();
 
-    std::unordered_map<std::string, texture_font_t*> fontCache;
-
     class pText;
     class pButton;
     class pTextBox;
@@ -29,6 +27,6 @@ class pGraphics {
 
     pColor createNewColor(int r, int g, int b, int a = 255);
 
-    void onResize(int newWidth, int newHeight);
-    void init();
+    static void onResize(int newWidth, int newHeight);
+    static void init();
 };

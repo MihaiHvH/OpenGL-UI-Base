@@ -3,7 +3,7 @@
 pScreen screen;
 pInterface interface;
 
-pGraphics::pButton Button({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, GLUT_BITMAP_TIMES_ROMAN_24, interface.graphics.black, "Button", [](int state) {
+pGraphics::pButton Button({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, "include/freetype-gl/fonts/Vera.ttf", 24, interface.graphics.black, "Button", [](int state) {
     /*
         OnStateChange
     */
@@ -17,7 +17,7 @@ pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, GLUT_BITMAP_TIMES_ROMA
     printf("TextBox text: %s\n", text.c_str());
 });
 
-pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, GLUT_BITMAP_TIMES_ROMAN_24, "Check #1", true, interface.graphics.black, interface.graphics.blue, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
+pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, "include/freetype-gl/fonts/Vera.ttf", 24, "Check #1", true, interface.graphics.black, interface.graphics.blue, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
     /*
         OnStateChange
     */
@@ -34,7 +34,10 @@ pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, G
     printf("Slider value: %f\n", value);
 });
 
-pGraphics::pText text({100, 100}, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.yellow);
+pGraphics::pText text({100, 100}, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.black);
+
+pGraphics::pText REALtext({100, 200}, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello REALWorld", interface.graphics.red);
+
 
 void render() {
     glDisable(GL_TEXTURE_2D);
@@ -49,6 +52,7 @@ void render() {
     image.draw();
     imageALT.draw();
     text.draw();
+    REALtext.draw();
 
     glfwSwapBuffers(screen.window);
     glfwPollEvents();
@@ -146,7 +150,11 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    Button.init();
+    checkBox.init();
+
     text.load();
+    REALtext.load();
 
     interface.graphics.init();
 

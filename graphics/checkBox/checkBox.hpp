@@ -8,17 +8,22 @@ class pGraphics::pCheckBox : public pGraphics {
     
     std::pair<double, double> pos;
     std::pair<double, double> size;
-    void* font;
+    std::string fontLocation;
+    int fontSize;
     std::string text;
     bool textOrientation;
     pColor textColor;
     pColor outlineColor;
     std::vector<pColor> colors;
     void(*onChangeState)(int);
+    pGraphics::pText *textObj;
+    bool isTextLoaded = false;
 
     public:
-    pCheckBox(std::pair<double, double> pPos, std::pair<double, double> pSize, void* pFont, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, std::vector<pColor> colors, void(*pOnStateChange)(int));
+    pCheckBox(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, int pFontSize, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, std::vector<pColor> colors, void(*pOnStateChange)(int));
     ~pCheckBox();
+
+    void init();
 
     void checkClick();
     void draw();

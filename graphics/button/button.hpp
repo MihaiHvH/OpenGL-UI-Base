@@ -10,14 +10,18 @@ class pGraphics::pButton : public pGraphics {
     std::pair<double, double> pos;
     std::pair<double, double> size;
     std::vector<pColor> colors;
-    void* font;
+    std::string fontLocation;
+    int fontSize;
     pColor textColor;
     std::string text;
     void(*onChangeState)(int);
+    pGraphics::pText *textObj;
+    bool isTextLoaded = false;
 
     public:
-    pButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, void* font, pColor textColor, std::string text, void(*onChangeState)(int));
+    pButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, std::string pFontLocation, int pFontSize, pColor textColor, std::string text, void(*onChangeState)(int));
     ~pButton();
+    void init();
     void draw();
     void checkClick();
     

@@ -7,6 +7,7 @@
 class pGraphics::pText : public pGraphics {
     private:
         std::pair<double, double> pos;
+        std::pair<int, int> size = { 0, 0 };
         std::string fontLocation;
         int fontSize;
         std::string text;
@@ -28,17 +29,13 @@ class pGraphics::pText : public pGraphics {
         ~pText();
 
         void draw();
-        
         void load();
 
         void setText(vertex_buffer_t* buffer, std::string text);
                
-        std::string& getText() { return text; }
-        std::pair<double, double>& getPos() { return pos; }
-        std::string& getFontLocation() { return fontLocation; }
-        pColor& getColor() { return color; }
-        
-        void setText(const std::string& newText) { text = newText; }
-        void setPos(const std::pair<double, double>& newPos) { pos = newPos; }
-        void setColor(const pColor& newColor) { color = newColor; }
+        std::pair<int, int> getTextSize();
+
+        void setText(std::string newText) { text = newText; }
+        void setPos(std::pair<double, double> newPos) { pos = newPos; }
+        void setColor(pColor newColor) { color = newColor; }
 };

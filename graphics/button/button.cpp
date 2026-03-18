@@ -4,14 +4,17 @@ pGraphics::pButton::~pButton() {
 
 }
 
-pGraphics::pButton::pButton(std::pair<double, double> pPos, std::pair<double, double> pSize, std::vector<pColor> pColors, void* pFont, pColor pTextColor, std::string pText, void(*pOnChangeState)(int)) {
+pGraphics::pButton::pButton(std::pair<double, double> pPos, std::pair<double, double> pSize, std::vector<pColor> pColors, std::string pFontLocation, int pFontSize, pColor pTextColor, std::string pText, void(*pOnChangeState)(int)) {
     pos = pPos;
     size = pSize;
     colors = pColors;
-    font = pFont;
+    fontLocation = pFontLocation;
+    fontSize = pFontSize;
     textColor = pTextColor;
     text = pText;
     onChangeState = pOnChangeState;
+
+    textObj = new pGraphics::pText({ 10, 10 }, fontLocation, fontSize, text, textColor);
 }
 
 void pGraphics::pButton::checkClick() {
@@ -24,9 +27,19 @@ void pGraphics::pButton::checkClick() {
 
 void pGraphics::pButton::draw() {
     if (colors.empty()) return;
-    std::pair<int, int> textSize = this->getTextSize(text, font);
     this->drawRectangle(pos, size, colors.at(state));
-    this->drawText({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 }, font, text, textColor);   
+    if (!isTextLoaded) return;
+    std::pair<int, int> textSize = textObj->getTextSize();
+    textObj->setPos({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 });
+    textObj->draw();
+    //this->drawText({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 }, font, text, textColor);   
+}
+
+void pGraphics::pButton::init() {
+    isTextLoaded = true;
+    std::pair<int, int> textSize = textObj->getTextSize();
+    textObj->setPos({ pos.first + ((size.first - textSize.first) / 2), pos.second + (size.second / 2) + textSize.second / 2 });
+    textObj->load();
 }
 
 void pGraphics::pButton::setPos(std::pair<double, double> newPos) {
@@ -44,7 +57,7 @@ void pGraphics::pButton::setColors(std::vector<pColor> newColors) {
 }
 
 void pGraphics::pButton::setFont(void* newFont) {
-    font = newFont;
+    // TO DO
 }
 
 void pGraphics::pButton::setText(std::string newText) {
