@@ -34,7 +34,7 @@ pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, G
     printf("Slider value: %f\n", value);
 });
 
-pGraphics::pText text({100, 100}, "include/freetype-gl/fonts/Vera.ttf", "Hello World", interface.graphics.black);
+pGraphics::pText text({100, 100}, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.yellow);
 
 void render() {
     glDisable(GL_TEXTURE_2D);
@@ -57,7 +57,7 @@ void render() {
 void resize(GLFWwindow *window, int newWidth, int newHeight) {
     screen.size = { newWidth, newHeight };
     
-    text.onResize(newWidth, newHeight);
+    interface.graphics.onResize(newWidth, newHeight);
     
     glViewport(0, 0, newWidth, newHeight);
     glMatrixMode(GL_PROJECTION);
@@ -146,7 +146,9 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    text.init(screen.initialSize.first, screen.initialSize.second);
+    text.load();
+
+    interface.graphics.init();
 
     /*image loading --start--*/
 
@@ -163,8 +165,6 @@ int main(int argc, char **argv) {
 
     while (!glfwWindowShouldClose(window))
         render();
-
-    text.cleanup();
 
     glfwDestroyWindow(window);
     glfwTerminate();

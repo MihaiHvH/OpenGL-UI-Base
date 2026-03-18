@@ -152,3 +152,14 @@ void pGraphics::drawOutlinedEllipse(std::pair<double, double> pos, std::pair<dou
     }
     glEnd();
 }
+
+void pGraphics::onResize(int newWidth, int newHeight) {
+    mat4_set_orthographic(&screen.projection, 0, newWidth, newHeight, 0, -1, 1);
+}
+
+void pGraphics::init() {
+    mat4_set_identity(&screen.projection);
+    mat4_set_identity(&screen.model);
+    mat4_set_identity(&screen.view);
+    onResize(screen.initialSize.first, screen.initialSize.second);
+}

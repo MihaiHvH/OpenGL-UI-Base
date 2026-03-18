@@ -8,14 +8,15 @@ class pGraphics::pText : public pGraphics {
     private:
         std::pair<double, double> pos;
         std::string fontLocation;
+        int fontSize;
         std::string text;
         pColor color;
-        
-        texture_font_t* getFont(const std::string& fontPath, int fontSize);
+        texture_font_t *font;
 
-        GLuint text_shader;
-        vertex_buffer_t* text_buffer;
-        mat4 projection, view, model;
+        GLuint textShader;
+        vertex_buffer_t* textBuffer;
+        
+        texture_atlas_t* atlas;
         typedef struct {
             float x, y, z;
             float u, v;
@@ -23,17 +24,14 @@ class pGraphics::pText : public pGraphics {
             float shift, gamma;
         } vertex_t;
     public:
-        pText(std::pair<double, double> pPos, std::string pFontLocation, std::string pText, pColor pTextColor);
+        pText(std::pair<double, double> pPos, std::string pFontLocation, int pFontSize, std::string pText, pColor pTextColor);
         ~pText();
 
         void draw();
         
-        void init(int width = 512, int height = 512);
-        void cleanup();
-        void onResize(int width, int height);
+        void load();
 
-        void add_text( vertex_buffer_t * buffer, texture_font_t * font,
-               char * text, vec4 * color, vec2 * pen );
+        void setText(vertex_buffer_t* buffer, std::string text);
                
         std::string& getText() { return text; }
         std::pair<double, double>& getPos() { return pos; }

@@ -5,6 +5,8 @@ class pGraphics {
     pGraphics();
     ~pGraphics();
 
+    std::unordered_map<std::string, texture_font_t*> fontCache;
+
     class pText;
     class pButton;
     class pTextBox;
@@ -26,4 +28,7 @@ class pGraphics {
     bool mouseInRegion(std::pair<double, double> pos, std::pair<double, double> size);
 
     pColor createNewColor(int r, int g, int b, int a = 255);
+
+    void onResize(int newWidth, int newHeight);
+    void init();
 };

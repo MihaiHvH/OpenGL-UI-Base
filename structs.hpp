@@ -20,6 +20,8 @@ struct pScreen {
 
     GLFWwindow *window;
     void(*render)(void) = nullptr;
+
+    mat4 projection, view, model;
 };
 
 extern pScreen screen;
