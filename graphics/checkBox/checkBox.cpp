@@ -4,26 +4,22 @@ pGraphics::pCheckBox::~pCheckBox() {
 
 }
 
-pGraphics::pCheckBox::pCheckBox(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, int pFontSize, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, std::vector<pColor> pColors, void(*pOnStateChange)(int)) {
+pGraphics::pCheckBox::pCheckBox(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, int pFontSize, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, std::vector<pColor> pColors, void(*pFunction)(int)) {
     pos = pPos;
     size = pSize;
-    fontLocation = pFontLocation;
-    fontSize = pFontSize;
-    text = pText;
     textOrientation = pTextOrientation;
-    textColor = pTextColor;
     outlineColor = pOutlineColor;
     colors = pColors;
-    onChangeState = pOnStateChange;
+    function = pFunction;
 
-    textObj = new pGraphics::pText({ 0, 0 }, fontLocation, fontSize, text, textColor);
+    textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, pFontSize, pText, pTextColor);
 }
 
 void pGraphics::pCheckBox::checkClick() {
     if (this->mouseInRegion(pos, size)) {
         if (++state >= colors.size()) state = 0;
         screen.render();
-        onChangeState(state);
+        function(state);
     }
 }
 
@@ -45,49 +41,13 @@ void pGraphics::pCheckBox::draw() {
     textObj->draw();
 }
 
-void pGraphics::pCheckBox::setPos(std::pair<double, double> newPos) {
-    pos = newPos;
-}
-
-void pGraphics::pCheckBox::setSize(std::pair<double, double> newSize) {
-    size = newSize;
-}
-
-void pGraphics::pCheckBox::setFont(void* newFont) {
-    // TO DO
-}
-
-void pGraphics::pCheckBox::setText(std::string newText) {
-    text = newText;
-}
-
-void pGraphics::pCheckBox::setTextOrientation(bool newTextOrientation) {
-    textOrientation = newTextOrientation;
-}
-
-void pGraphics::pCheckBox::setTextColor(pColor newTextColor) {
-    textColor = newTextColor;
-}
-
-void pGraphics::pCheckBox::setOutlineColor(pColor newOutlineColor) {
-    outlineColor = newOutlineColor;
-}
-
 void pGraphics::pCheckBox::setColors(std::vector<pColor> newColors) {
     if (newColors.empty()) return;
     colors = newColors;
     if (state >= colors.size()) state = 0;
 }
 
-void pGraphics::pCheckBox::setFunction(void(*newOnChangeState)(int)) {
-    onChangeState = newOnChangeState;
-}
-
 void pGraphics::pCheckBox::setState(int newState) {
     if (newState >= 0 && newState < colors.size())
         state = newState;
-}
-
-int pGraphics::pCheckBox::getState() {
-    return state;
 }

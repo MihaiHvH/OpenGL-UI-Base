@@ -26,7 +26,6 @@ void pGraphics::pText::addText(vertex_buffer_t* buffer, std::string text) {
     for (int i = 0; i < text.size(); ++i) {
         texture_glyph_t *glyph = texture_font_get_glyph(font, std::string({ text.c_str()[i] }).c_str());
         if (glyph != NULL) {
-            //size.second = std::max(size.second, (double)glyph->height);
             if (i == text.size() - 1) size.first += glyph->offset_x + glyph->width;
             else size.first += glyph->advance_x;
             float kerning = 0.0f;
@@ -62,16 +61,7 @@ void pGraphics::pText::load() {
     textBuffer = vertex_buffer_new("vertex:3f,tex_coord:2f,color:4f,ashift:1f,agamma:1f");
     this->atlas = globalAtlas;
 
-    std::string cacheKey = fontLocation + "@" + std::to_string(fontSize);
-
-    if (fontCache.find(cacheKey) == fontCache.end()) {
-        fontCache[cacheKey] = texture_font_new_from_file(atlas, fontSize, fontLocation.c_str());
-        texture_font_load_glyphs(fontCache[cacheKey], textCache);
-    }
-
-    font = fontCache[cacheKey];
-
-    addText(textBuffer, text);
+    setFont(fontLocation, fontSize);
 
     glBindTexture(GL_TEXTURE_2D, atlas->id);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -82,6 +72,19 @@ void pGraphics::pText::load() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, atlas->width, atlas->height, 0, GL_RGB, GL_UNSIGNED_BYTE, atlas->data);
 
     textShader = shader_load("include/freetype-gl/shaders/text.vert", "include/freetype-gl/shaders/text.frag");
+}
+
+void pGraphics::pText::setFont(std::string newFontLocation, int newFontSize) {
+    std::string cacheKey = newFontLocation + "@" + std::to_string(newFontSize);
+
+    if (fontCache.find(cacheKey) == fontCache.end()) {
+        fontCache[cacheKey] = texture_font_new_from_file(atlas, newFontSize, newFontLocation.c_str());
+        texture_font_load_glyphs(fontCache[cacheKey], textCache);
+    }
+
+    font = fontCache[cacheKey];
+
+    setText(text);
 }
 
 void pGraphics::pText::setText(std::string newText) {

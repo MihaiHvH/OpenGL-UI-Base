@@ -8,19 +8,14 @@ class pGraphics::pCheckBox : public pGraphics {
     
     std::pair<double, double> pos;
     std::pair<double, double> size;
-    std::string fontLocation;
-    int fontSize;
-    std::string text;
     bool textOrientation;
-    pColor textColor;
     pColor outlineColor;
     std::vector<pColor> colors;
-    void(*onChangeState)(int);
+    void(*function)(int);
     pGraphics::pText *textObj;
-    bool isTextLoaded = false;
 
     public:
-    pCheckBox(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, int pFontSize, std::string pText, bool pTextOrientation, pColor pTextColor, pColor pOutlineColor, std::vector<pColor> colors, void(*pOnStateChange)(int));
+    pCheckBox(std::pair<double, double> pos, std::pair<double, double> size, std::string fontLocation, int fontSize, std::string text, bool textOrientation, pColor textColor, pColor outlineColor, std::vector<pColor> colors, void(*function)(int));
     ~pCheckBox();
 
     void init();
@@ -28,15 +23,16 @@ class pGraphics::pCheckBox : public pGraphics {
     void checkClick();
     void draw();
 
-    void setPos(std::pair<double, double> newPos);
-    void setSize(std::pair<double, double> newSize);
-    void setFont(void* newFont);
-    void setText(std::string newText);
-    void setTextOrientation(bool newTextOrientation);
-    void setTextColor(pColor newTextColor);
-    void setOutlineColor(pColor newOutlineColor);
+    void setPos(std::pair<double, double> newPos) { pos = newPos; };
+    void setSize(std::pair<double, double> newSize) { size = newSize; };
+    void setTextOrientation(bool newTextOrientation) { textOrientation = newTextOrientation; };
+    void setOutlineColor(pColor newOutlineColor) { outlineColor = newOutlineColor; };
     void setColors(std::vector<pColor> newColors);
-    void setFunction(void(*newOnChangeState)(int));
+    void setFunction(void(*newFunction)(int)) { function = newFunction; };
     void setState(int newState);
-    int getState();
+
+    std::pair<double, double> getPos() { return pos; };
+    std::pair<double, double> getSize() { return size; };
+    int getState() { return state; };
+    pGraphics::pText* getTextObj() { return textObj; };
 };

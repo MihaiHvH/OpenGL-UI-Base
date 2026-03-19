@@ -5,32 +5,30 @@
 class pGraphics::pButton : public pGraphics {
     private:
     int state = 0;
-    /*BUTTON VARS*/
 
     std::pair<double, double> pos;
     std::pair<double, double> size;
     std::vector<pColor> colors;
-    std::string fontLocation;
-    int fontSize;
-    pColor textColor;
-    std::string text;
-    void(*onChangeState)(int);
+    void(*function)(int);
+    
     pGraphics::pText *textObj;
 
     public:
-    pButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, std::string pFontLocation, int pFontSize, pColor textColor, std::string text, void(*onChangeState)(int));
+    pButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, std::string fontLocation, int fontSize, pColor textColor, std::string text, void(*function)(int));
     ~pButton();
+
     void init();
     void draw();
     void checkClick();
     
-    void setPos(std::pair<double, double> newPos);
-    void setSize(std::pair<double, double> newSize);
+    void setPos(std::pair<double, double> newPos) { pos = newPos; };
+    void setSize(std::pair<double, double> newSize) { size = newSize; };
     void setColors(std::vector<pColor> newColors);
-    void setFont(void* newFont);
-    void setText(std::string newText);
-    void setTextColor(pColor newTextColor);
-    void setFunction(void(*newOnChangeState)(int));
+    void setFunction(void(*newFunction)(int)) { function = newFunction; };
     void setState(int newState);
-    int getState();
+    
+    std::pair<double, double> getPos() { return pos; };
+    std::pair<double, double> getSize() { return size; };
+    int getState() {return state; };
+    pGraphics::pText *getTextObj() { return textObj; };
 };

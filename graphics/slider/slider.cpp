@@ -4,23 +4,18 @@ pGraphics::pSlider::~pSlider() {
     
 }
 
-pGraphics::pSlider::pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pPrecision, bool pReal, std::string pFontLocation, int pTextSize, int pValueTextSize, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*pOnValueChange)(double value)) {
+pGraphics::pSlider::pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pPrecision, bool pReal, std::string pFontLocation, int pTextSize, int pValueTextSize, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*pFunction)(double value)) {
     pos = pPos;
     size = pSize;
     minMax = pMinMax;
     precision = pPrecision;
     real = pReal;
-    fontLocation = pFontLocation;
-    textSize = pTextSize;
     valueTextSize = pValueTextSize;
     textPos = pTextPos;
-    text = pText;
     onColor = pOnColor;
     offColor = pOffColor;
     outlineColor = pOutlineColor;
-    valueTextColor = pValueTextColor;
-    textColor = pTextColor;
-    onValueChange = pOnValueChange;
+    function = pFunction;
 
     value = minMax.first;
     pxOn = 0;
@@ -47,8 +42,8 @@ pGraphics::pSlider::pSlider(std::pair<double, double> pPos, std::pair<double, do
         value = std::ceil(value * multiplier) / multiplier;
     }
 
-    textObj = new pGraphics::pText({ 0, 0 }, fontLocation, textSize, text, textColor);
-    valueTextObj = new pGraphics::pText({ 0, 0 }, fontLocation, valueTextSize, valueText, valueTextColor);
+    textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, pTextSize, pText, pTextColor);
+    valueTextObj = new pGraphics::pText({ 0, 0 }, pFontLocation, valueTextSize, valueText, pValueTextColor);
 }
 
 void pGraphics::pSlider::init() {
@@ -58,23 +53,20 @@ void pGraphics::pSlider::init() {
 
 void pGraphics::pSlider::draw() {
     this->drawRectangle(pos, size, outlineColor);
-    this->drawRectangle({ pos.first + 2, pos.second + 2}, { (int)pxOn, size.second - 4 }, onColor);
-    this->drawRectangle({ pos.first + (int)pxOn + 2, pos.second + 2 }, { (int)pxOff, size.second - 4 }, offColor);
+    this->drawRectangle({ pos.first + 2, pos.second + 2}, { pxOn, size.second - 4 }, onColor);
+    this->drawRectangle({ pos.first + pxOn + 2, pos.second + 2 }, { pxOff, size.second - 4 }, offColor);
 
     std::pair<double, double> textSize = valueTextObj->getTextSize();
     valueTextObj->setText(valueText);
-    valueTextObj->setPos({ pos.first + 2 + (int)pxOn - textSize.first / 2, pos.second + textSize.second / 2 + size.second / 2 });
+    valueTextObj->setPos({ pos.first + 2 + pxOn - textSize.first / 2, pos.second + (size.second + textSize.second) / 2 });
     valueTextObj->draw();
-    //this->drawText({ pos.first + 2 + (int)pxOn - sz.first / 2, pos.second + sz.second / 2 + size.second / 2 }, font, valueText, valueTextColor);
 
     textSize = textObj->getTextSize();
 
-    if (textPos) //right
-        textObj->setPos({ pos.first + size.first + 10, pos.second + size.second / 2 + textSize.second / 2 });
-        //this->drawText({ pos.first + size.first + 10, pos.second + size.second / 2 + sz.second / 2 }, font, text, textColor);
-    else //left
-        textObj->setPos({ pos.first - textSize.first - 10, pos.second + size.second / 2 + textSize.second / 2 });
-        //this->drawText({ pos.first - sz.first - 10, pos.second + size.second / 2 + sz.second / 2 }, font, text, textColor);
+    if (textPos) // Right
+        textObj->setPos({ pos.first + size.first + 10, pos.second + (size.second + textSize.second) / 2 });
+    else // Left
+        textObj->setPos({ pos.first - textSize.first - 10, pos.second + (size.second + textSize.second) / 2 });
     textObj->draw();
 }
 
@@ -107,7 +99,7 @@ void pGraphics::pSlider::handleMouse() {
             value = std::ceil(value * multiplier) / multiplier;
         }
         if (oldValueText != valueText) {
-            onValueChange(value);
+            function(value);
             screen.render();
         }
     }
@@ -115,6 +107,16 @@ void pGraphics::pSlider::handleMouse() {
 
 void pGraphics::pSlider::setPos(std::pair<double, double> newPos) {
     pos = newPos;
+    std::pair<double, double> valTextSize = valueTextObj->getTextSize();
+    valueTextObj->setPos({ 
+        pos.first + 2 + pxOn - valTextSize.first / 2, 
+        pos.second + (valTextSize.second + size.second) / 2
+    });
+    std::pair<double, double> textSize = textObj->getTextSize();
+    if (textPos) // Right
+        textObj->setPos({ pos.first + size.first + 10, pos.second + (size.second + textSize.second) / 2 });
+    else // Left
+        textObj->setPos({ pos.first - textSize.first - 10, pos.second + (size.second + textSize.second) / 2 });
 }
 
 void pGraphics::pSlider::setSize(std::pair<double, double> newSize) {
@@ -179,42 +181,6 @@ void pGraphics::pSlider::setReal(bool newReal) {
     }
 }
 
-void pGraphics::pSlider::setFont(void *newFont) {
-    // TO DO
-}
-
-void pGraphics::pSlider::setTextPos(bool newTextPos) {
-    textPos = newTextPos;
-}
-
-void pGraphics::pSlider::setText(std::string newText) {
-    text = newText;
-}
-
-void pGraphics::pSlider::setOnColor(pColor newOnColor) {
-    onColor = newOnColor;
-}
-
-void pGraphics::pSlider::setOffColor(pColor newOffColor) {
-    offColor = newOffColor;
-}
-
-void pGraphics::pSlider::setOutlineColor(pColor newOutlineColor) {
-    outlineColor = newOutlineColor;
-}
-
-void pGraphics::pSlider::setValueTextColor(pColor newValueTextColor) {
-    valueTextColor = newValueTextColor;
-}
-
-void pGraphics::pSlider::setTextColor(pColor newTextColor) {
-    textColor = newTextColor;
-}
-
-void pGraphics::pSlider::setFunction(void(*newOnValueChange)(double)) {
-    onValueChange = newOnValueChange;
-}
-
 void pGraphics::pSlider::setValue(double newValue) {
     if (newValue < minMax.first) newValue = minMax.first;
     if (newValue > minMax.second) newValue = minMax.second;
@@ -241,8 +207,4 @@ void pGraphics::pSlider::setValue(double newValue) {
                 valueText = valueText.substr(0, valueText.size() - 1);
         }
     }
-}
-
-double pGraphics::pSlider::getValue() {
-    return value;
 }

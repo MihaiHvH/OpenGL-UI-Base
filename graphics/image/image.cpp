@@ -8,20 +8,20 @@ pGraphics::pImage::~pImage() {
 pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation) {
     pos = pPos;
     size = pSize;
-    fontLocation = pFontLocation;
-    altText = pAltText;
     imageLocation = pImageLocation;
 
-    textObj = new pGraphics::pText({ 0, 0 }, fontLocation, 14, altText, this->red);
+    textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, 14, pAltText, this->red);
 }
 
 void pGraphics::pImage::load() {
-    textObj->load();
+    if (!loaded)
+        textObj->load();
 
     if (textureID != 0) {
         glDeleteTextures(1, &textureID);
         textureID = 0;
     }
+
     loaded = false;
     
     ILuint image = ilLoadImage(imageLocation.c_str());
@@ -65,27 +65,7 @@ void pGraphics::pImage::draw(int alpha) {
     }
 }
 
-void pGraphics::pImage::setPos(std::pair<double, double> newPos) {
-    pos = newPos;
-}
-
-void pGraphics::pImage::setSize(std::pair<double, double> newSize) {
-    size = newSize;
-}
-
-void pGraphics::pImage::setAltText(std::string newAltText) {
-    altText = newAltText;
-}
-
 void pGraphics::pImage::setImage(std::string newImageLocation) {
     imageLocation = newImageLocation;
     load();
-}
-
-std::string pGraphics::pImage::getImage() {
-    return imageLocation;
-}
-
-bool pGraphics::pImage::isImageLoaded() {
-    return loaded;
 }

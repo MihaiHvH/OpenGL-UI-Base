@@ -4,23 +4,14 @@ pScreen screen;
 pInterface interface;
 
 pGraphics::pButton Button({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, "include/freetype-gl/fonts/Vera.ttf", 24, interface.graphics.black, "Button", [](int state) {
-    /*
-        OnStateChange
-    */
     printf("Button state: %d\n", state);
 });
 
 pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, "include/freetype-gl/fonts/Vera.ttf", 20, interface.graphics.black, interface.graphics.blue, interface.graphics.purple, interface.graphics.black, [](std::string text) {
-    /*
-        OnEnterFunction
-    */
     printf("TextBox text: %s\n", text.c_str());
 });
 
 pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, "include/freetype-gl/fonts/Vera.ttf", 24, "Check #1", true, interface.graphics.black, interface.graphics.blue, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
-    /*
-        OnStateChange
-    */
     printf("CheckBox state: %d\n", state);
 });
 
@@ -28,13 +19,10 @@ pGraphics::pImage imageALT({ 10, 200 }, { 100, 100 }, "include/freetype-gl/fonts
 pGraphics::pImage image({ 150, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/image.png");
 
 pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, "include/freetype-gl/fonts/Vera.ttf", 24, 16, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.black, interface.graphics.red, [](double value) {
-    /*
-        OnValueChange
-    */
     printf("Slider value: %f\n", value);
 });
 
-pGraphics::pText text({100, 100}, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.black);
+pGraphics::pText text({ 260, 100 }, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.black);
 
 void render() {
     glDisable(GL_TEXTURE_2D);
@@ -109,7 +97,7 @@ void handleMouseMovement(GLFWwindow *window, double x, double y) {
 }
 
 void errorCallback(int error, const char* description) {
-	printf("An error has occurred: %s", description);
+	printf("An error has occurred: %s.", description);
 }
 
 int main(int argc, char **argv) {
@@ -150,7 +138,7 @@ int main(int argc, char **argv) {
     textBox.init();
     text.load();
 
-    /*image loading --start--*/
+    /* Image loading */
 
     ilInit();
 

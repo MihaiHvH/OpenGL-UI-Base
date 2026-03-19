@@ -41,6 +41,7 @@ class pGraphics::pText : public pGraphics {
         std::pair<double, double> getTextSize(std::string pText = "");
 
         void setText(std::string newText);
+        void setFont(std::string newFontLocation, int newFontSize);
         void setPos(std::pair<double, double> newPos) { pos = newPos; }
         void setColor(pColor newColor) { color = newColor; }
 };
