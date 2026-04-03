@@ -11,10 +11,10 @@ class pGraphics::pImage : public pGraphics {
     GLuint textureID = 0;
     bool loaded = false;
 
-    pGraphics::pText* textObj;
+    pGraphics::pText* textObj = nullptr;
 
     public:
-    pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation);
+    pImage(std::pair<double, double> pos, std::pair<double, double> size, std::string imageLocation, std::string altText, std::string fontLocation);
     ~pImage();
     
     void load();

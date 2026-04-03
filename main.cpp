@@ -3,22 +3,22 @@
 pScreen screen;
 pInterface interface;
 
-pGraphics::pButton Button({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, "include/freetype-gl/fonts/Vera.ttf", 24, interface.graphics.black, "Button", [](int state) {
+pGraphics::pButton Button({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, [](int state) {
     printf("Button state: %d\n", state);
 });
 
-pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, "include/freetype-gl/fonts/Vera.ttf", 20, interface.graphics.black, interface.graphics.blue, interface.graphics.purple, interface.graphics.black, [](std::string text) {
+pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, "include/freetype-gl/fonts/Vera.ttf", 20, interface.graphics.gray, interface.graphics.purple, interface.graphics.black, [](std::string text) {
     printf("TextBox text: %s\n", text.c_str());
 });
 
-pGraphics::pCheckBox checkBox({ 260, 10 }, { 30, 30 }, "include/freetype-gl/fonts/Vera.ttf", 24, "Check #1", true, interface.graphics.black, interface.graphics.blue, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
+pGraphics::pButton checkBox({ 260, 10 }, { 30, 30 }, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
     printf("CheckBox state: %d\n", state);
 });
 
 pGraphics::pImage imageALT({ 10, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/imagep.png");
 pGraphics::pImage image({ 150, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/image.png");
 
-pGraphics::pSlider slider({ 260, 50 }, { 100, 50 }, { 0.f, 100.f }, -1, false, "include/freetype-gl/fonts/Vera.ttf", 24, 16, false, "Slider", interface.graphics.blue, interface.graphics.yellow, interface.graphics.black, interface.graphics.black, interface.graphics.red, [](double value) {
+pGraphics::pSlider slider({ 260, 50 }, { 120, 50 }, { 0.f, 100.f }, 2, "include/freetype-gl/fonts/Vera.ttf", 16, interface.graphics.blue, interface.graphics.yellow, interface.graphics.red, [](double value) {
     printf("Slider value: %f\n", value);
 });
 
@@ -132,12 +132,10 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    Button.init();
-    checkBox.init();
     slider.init();
     textBox.init();
     text.load();
-
+    
     /* Image loading */
 
     ilInit();

@@ -10,14 +10,11 @@ class pGraphics::pButton : public pGraphics {
     std::pair<double, double> size;
     std::vector<pColor> colors;
     void(*function)(int);
-    
-    pGraphics::pText *textObj;
 
     public:
-    pButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, std::string fontLocation, int fontSize, pColor textColor, std::string text, void(*function)(int));
+    pButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, void(*function)(int));
     ~pButton();
 
-    void init();
     void draw();
     void checkClick();
     
@@ -29,6 +26,5 @@ class pGraphics::pButton : public pGraphics {
     
     std::pair<double, double> getPos() { return pos; };
     std::pair<double, double> getSize() { return size; };
-    int getState() {return state; };
-    pGraphics::pText *getTextObj() { return textObj; };
+    int getState() { return state; };
 };

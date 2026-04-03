@@ -8,11 +8,10 @@ class pGraphics {
     class pText;
     class pButton;
     class pTextBox;
-    class pCheckBox;
     class pImage;
     class pSlider;
 
-    pColor white, black, red, green, blue, yellow, cyan, purple;
+    pColor white, black, gray, red, green, blue, yellow, cyan, purple;
     
     void drawPolygon(std::vector<std::pair<double, double>> points, pColor color);
     void drawRectangle(std::pair<double, double> pos, std::pair<double, double> size, pColor color);
@@ -25,6 +24,6 @@ class pGraphics {
 
     pColor createNewColor(int r, int g, int b, int a = 255);
 
-    static void onResize(int newWidth, int newHeight);
-    static void init();
+    void onResize(int newWidth, int newHeight);
+    void init();
 };

@@ -10,7 +10,6 @@ class pGraphics::pTextBox : public pGraphics {
     std::pair<double, double> pos;
     std::pair<double, double> size;
     int maxChr;
-    pColor outlineColor;
     pColor insideColor;
     pColor barColor;
     void(*function)(std::string text);
@@ -22,7 +21,7 @@ class pGraphics::pTextBox : public pGraphics {
 
     public:
     //if pMaxChr == -1 => auto
-    pTextBox(std::pair<double, double> pos, std::pair<double, double> size, int maxChr, std::string fontLocation, int fontSize, pColor outlineColor, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string));
+    pTextBox(std::pair<double, double> pos, std::pair<double, double> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string));
     ~pTextBox();
 
     void init();
@@ -34,7 +33,6 @@ class pGraphics::pTextBox : public pGraphics {
     void setPos(std::pair<double, double> newPos);
     void setSize(std::pair<double, double> newSize);
     void setMaxChr(int newMaxChr) { maxChr = newMaxChr; };
-    void setOutlineColor(pColor newOutlineColor) { outlineColor = newOutlineColor; };
     void setInsideColor(pColor newInsideColor) { insideColor = newInsideColor; };
     void setBarColor(pColor newBarColor) { barColor = newBarColor; };
     void setFunction(void(*newFunction)(std::string)) { function = newFunction; };

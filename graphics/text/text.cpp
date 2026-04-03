@@ -123,11 +123,12 @@ std::pair<double, double> pGraphics::pText::getTextSize(std::string pText) {
     if (pText.empty())
         return size;
     std::pair<double, double> textSize = { 0, texture_font_get_glyph(font, "H")->height };
-    for (int i = 0; i < pText.size(); ++i) {
-        texture_glyph_t *glyph = texture_font_get_glyph(font, std::string({ pText.c_str()[i] }).c_str());
+    for (int i = 0; i < pText.size(); i++) {
+        texture_glyph_t* glyph = texture_font_get_glyph(font, std::string({ pText.c_str()[i] }).c_str());
         if (glyph != NULL) {
-            if (i == pText.size() - 1) textSize.first += glyph->offset_x + glyph->width;
-            else textSize.first += glyph->advance_x;
+            if (i > 0)
+                textSize.first += texture_glyph_get_kerning(glyph, &pText.c_str()[i]);
+            textSize.first += glyph->advance_x;
         }
     }
     return textSize;

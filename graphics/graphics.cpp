@@ -3,6 +3,7 @@
 pGraphics::pGraphics() {
     black =  createNewColor(0, 0, 0);
     white =  createNewColor(255, 255,255);
+    gray =   createNewColor(128, 128, 128);
     red =    createNewColor(255, 0, 0);
     green =  createNewColor(0, 255, 0);
     blue =   createNewColor(0, 0, 255);

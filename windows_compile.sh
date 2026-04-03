@@ -7,7 +7,7 @@ fi
 
 INCLUDES="-I./include"
 FLAGS="-g -static -DGLEW_STATIC"
-LIBS="-lglew32 -lglfw3 -lfreeglut -lDevIL -lopengl32 -lfreetype -lgdi32"
+LIBS="-lglew32 -lglfw3 -lDevIL -lopengl32 -lfreetype -lgdi32"
 
 C_FILES=$(find ./include/freetype-gl -maxdepth 1 -name "*.c")
 

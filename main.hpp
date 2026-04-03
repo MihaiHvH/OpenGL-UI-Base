@@ -39,7 +39,6 @@
 #include "graphics/text/text.hpp"
 #include "graphics/button/button.hpp"
 #include "graphics/textBox/textBox.hpp"
-#include "graphics/checkBox/checkBox.hpp"
 #include "graphics/image/image.hpp"
 #include "graphics/slider/slider.hpp"
 #include "interface/interface.hpp"

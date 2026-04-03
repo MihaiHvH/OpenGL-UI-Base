@@ -3,30 +3,28 @@
 #include <string>
 
 pGraphics::pTextBox::~pTextBox() {
-    
+    delete textObj;
 }
 
-pGraphics::pTextBox::pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pFunction)(std::string text)) {
+pGraphics::pTextBox::pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pFunction)(std::string text)) {
     pos = pPos;
     size = pSize;
     maxChr = pMaxChr;
-    outlineColor = pOutlineColor;
     insideColor = pInsideColor;
     barColor = pBarColor;
     function = pFunction;
 
-    barPos = { 6 + pPos.first, 4 + pPos.second };
+    barPos = { 4 + pPos.first, 4 + pPos.second };
     barSize = { 2, pSize.second - 8 };
 
     textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, pFontSize, text, pTextColor);
 }
 
 void pGraphics::pTextBox::draw() {
-    this->drawRectangle(pos, size, outlineColor);
-    this->drawRectangle({ pos.first + 2, pos.second + 2 }, { size.first - 4, size.second - 4 }, insideColor);
+    this->drawRectangle(pos, size, insideColor);
     
     double textHeight = textObj->getTextSize().second;
-    textObj->setPos({ pos.first + 6, pos.second + (size.second / 2) + textHeight / 2 + 2 });
+    textObj->setPos({ pos.first + 4, pos.second + (size.second / 2) + textHeight / 2 });
     textObj->setText(text);
     textObj->draw();
 
@@ -41,15 +39,15 @@ void pGraphics::pTextBox::onKeyPress(unsigned int key) {
     if (!selected) return;
     if (maxBarAltPos + 2 <= maxChr && maxChr != -1) {
         text.insert(text.begin() + barAltPos + 1, (char)key);
-        barPos.first = 6 + pos.first + textObj->getTextSize(text.c_str()).first;
+        barPos.first = 4 + pos.first + textObj->getTextSize(text.c_str()).first;
         ++barAltPos;
         ++maxBarAltPos;
     }
     else if (maxChr == -1) {
         int sz = textObj->getTextSize(text + std::string({ (char)key })).first;
-        if (sz + 8 <= size.first) {
+        if (sz + 4 <= size.first) {
             text.insert(text.begin() + barAltPos + 1, (char)key);
-            barPos.first = 6 + pos.first + sz;
+            barPos.first = 4 + pos.first + sz;
             ++barAltPos;
             ++maxBarAltPos;
         }
@@ -107,7 +105,7 @@ void pGraphics::pTextBox::setSize(std::pair<double, double> newSize) {
 }
 
 void pGraphics::pTextBox::setText(std::string newText) {
-    barPos = { 6 + pos.first, 4 + pos.second };
+    barPos = { 4 + pos.first, 4 + pos.second };
     barSize = { 2, size.second - 8 };
     barAltPos = maxBarAltPos = -1;
     text = newText;
