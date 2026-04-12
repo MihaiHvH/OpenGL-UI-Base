@@ -4,7 +4,8 @@ pGraphics::pButton::~pButton() {
     
 }
 
-pGraphics::pButton::pButton(std::pair<double, double> pPos, std::pair<double, double> pSize, std::vector<pColor> pColors, void(*pFunction)(int)) {
+pGraphics::pButton::pButton(pGraphics* pGfx, std::pair<double, double> pPos, std::pair<double, double> pSize, std::vector<pColor> pColors, void(*pFunction)(int)) {
+    this->gfx = pGfx;
     pos = pPos;
     size = pSize;
     colors = pColors;
@@ -12,7 +13,7 @@ pGraphics::pButton::pButton(std::pair<double, double> pPos, std::pair<double, do
 }
 
 void pGraphics::pButton::checkClick() {
-    if (this->mouseInRegion(pos, size)) {
+    if (gfx->mouseInRegion(pos, size)) {
         if (++state >= colors.size()) state = 0;
         function(state);
         screen.render();
@@ -21,7 +22,9 @@ void pGraphics::pButton::checkClick() {
 
 void pGraphics::pButton::draw() {
     if (colors.empty()) return;
-    this->drawRectangle(pos, size, colors.at(state));
+    if (this->borderSize != 0)
+        gfx->drawRectangle({ pos.first - this->borderSize, pos.second - this->borderSize }, { size.first + 2 * this->borderSize, size.second + 2 * this->borderSize }, this->borderColor);
+    gfx->drawRectangle(pos, size, colors.at(state));
 }
 
 void pGraphics::pButton::setColors(std::vector<pColor> newColors) {

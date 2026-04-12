@@ -3,40 +3,42 @@
 pScreen screen;
 pInterface interface;
 
-pGraphics::pButton Button({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, [](int state) {
+pGraphics::pButton* Button = interface.graphics.createButton({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, [](int state) {
     printf("Button state: %d\n", state);
 });
 
-pGraphics::pTextBox textBox({ 130, 10 }, { 100, 40 }, -1, "include/freetype-gl/fonts/Vera.ttf", 20, interface.graphics.gray, interface.graphics.purple, interface.graphics.black, [](std::string text) {
+pGraphics::pTextBox* textBox = interface.graphics.createTextBox({ 130, 10 }, { 100, 40 }, -1, "include/freetype-gl/fonts/Vera.ttf", 20, interface.graphics.gray, interface.graphics.purple, interface.graphics.black, [](std::string text) {
     printf("TextBox text: %s\n", text.c_str());
 });
 
-pGraphics::pButton checkBox({ 260, 10 }, { 30, 30 }, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
+pGraphics::pButton* checkBox = interface.graphics.createButton({ 260, 10 }, { 30, 30 }, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
     printf("CheckBox state: %d\n", state);
 });
 
-pGraphics::pImage imageALT({ 10, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/imagep.png");
-pGraphics::pImage image({ 150, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/image.png");
+pGraphics::pImage* imageALT = interface.graphics.createImage({ 10, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/imagep.png");
+pGraphics::pImage* image = interface.graphics.createImage({ 150, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/image.png");
 
-pGraphics::pSlider slider({ 260, 50 }, { 120, 50 }, { 0.f, 100.f }, 2, "include/freetype-gl/fonts/Vera.ttf", 16, interface.graphics.blue, interface.graphics.yellow, interface.graphics.red, [](double value) {
+pGraphics::pSlider* slider = interface.graphics.createSlider({ 260, 50 }, { 120, 50 }, { 0.f, 100.f }, 2, "include/freetype-gl/fonts/Vera.ttf", 16, interface.graphics.blue, interface.graphics.yellow, interface.graphics.red, [](double value) {
     printf("Slider value: %f\n", value);
 });
 
-pGraphics::pText text({ 260, 100 }, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.black);
+pGraphics::pText* text = interface.graphics.createText({ 260, 100 }, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.black);
 
 void render() {
     glDisable(GL_TEXTURE_2D);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     /* RENDERING CODE */
-    
-    Button.draw();
-    textBox.draw();
-    checkBox.draw();
-    slider.draw();
-    image.draw();
-    imageALT.draw();
-    text.draw();
+
+    Button->draw();
+    textBox->draw();
+    checkBox->draw();
+    slider->draw();
+    image->draw();
+    imageALT->draw();
+    text->draw();
+
+    //Button.addBorder()
 
     glfwSwapBuffers(screen.window);
     glfwPollEvents();
@@ -54,11 +56,11 @@ void resize(GLFWwindow *window, int newWidth, int newHeight) {
 }
 
 void processSpecialInput(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    textBox.onSpeciaKeyPress(key, action);
+    textBox->onSpeciaKeyPress(key, action);
 }
 
 void processInput(GLFWwindow *window, unsigned int key) {
-    textBox.onKeyPress(key);
+    textBox->onKeyPress(key);
 }
 
 void handleMouseKeys(GLFWwindow *window, int button, int action, int mods) {
@@ -69,10 +71,10 @@ void handleMouseKeys(GLFWwindow *window, int button, int action, int mods) {
             if (screen.leftClick != GLFW_PRESS)
                 break;
 
-            Button.checkClick();
-            textBox.checkClick();
-            checkBox.checkClick();
-            slider.handleMouse();
+            Button->checkClick();
+            textBox->checkClick();
+            checkBox->checkClick();
+            slider->handleMouse();
 
             break;
         }
@@ -88,7 +90,7 @@ void handleMouseKeys(GLFWwindow *window, int button, int action, int mods) {
 }
 
 void handleMouseDrag(int x, int y) { 
-    slider.handleMouse();
+    slider->handleMouse();
 }
 
 void handleMouseMovement(GLFWwindow *window, double x, double y) {
@@ -132,16 +134,16 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    slider.init();
-    textBox.init();
-    text.load();
+    slider->init();
+    textBox->init();
+    text->load();
     
     /* Image loading */
 
     ilInit();
 
-    image.load();
-    imageALT.load();
+    image->load();
+    imageALT->load();
 
     interface.graphics.init();
 

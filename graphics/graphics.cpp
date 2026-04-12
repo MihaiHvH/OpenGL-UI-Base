@@ -142,3 +142,24 @@ void pGraphics::init() {
     mat4_set_identity(&screen.view);
     onResize(screen.initialSize.first, screen.initialSize.second);
 }
+
+
+pGraphics::pButton* pGraphics::createButton(std::pair<double, double> pos, std::pair<double, double> size, std::vector<pColor> colors, void(*function)(int)) {
+    return new pGraphics::pButton(this, pos, size, colors, function);
+}
+
+pGraphics::pImage* pGraphics::createImage(std::pair<double, double> pos, std::pair<double, double> size, std::string imageLocation, std::string altText, std::string fontLocation) {
+    return new pGraphics::pImage(this, pos, size, imageLocation, altText, fontLocation);
+}
+
+pGraphics::pSlider* pGraphics::createSlider(std::pair<double, double> pos, std::pair<double, double> size, std::pair<double, double> minMax, int decimals, std::string fontLocation, int valueTextSize, pColor onColor, pColor offColor, pColor valueTextColor, void(*function)(double)) {
+    return new pGraphics::pSlider(this, pos, size, minMax, decimals, fontLocation, valueTextSize, onColor, offColor, valueTextColor, function);
+}
+
+pGraphics::pText* pGraphics::createText(std::pair<double, double> pos, std::string fontLocation, int fontSize, std::string text, pColor textColor) {
+    return new pGraphics::pText(pos, fontLocation, fontSize, text, textColor);
+}
+
+pGraphics::pTextBox* pGraphics::createTextBox(std::pair<double, double> pos, std::pair<double, double> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string)) {
+    return new pGraphics::pTextBox(this, pos, size, maxChr, fontLocation, fontSize, insideColor, barColor, textColor, function);
+}

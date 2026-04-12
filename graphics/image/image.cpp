@@ -7,13 +7,14 @@ pGraphics::pImage::~pImage() {
         delete textObj;
 }
 
-pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation) {
+pGraphics::pImage::pImage(pGraphics* pGfx, std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation) {
+    this->gfx = pGfx;
     pos = pPos;
     size = pSize;
     imageLocation = pImageLocation;
 
     if (!pFontLocation.empty() && !pAltText.empty())
-        textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, 14, pAltText, this->red);
+        textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, 14, pAltText, gfx->red);
 }
 
 void pGraphics::pImage::load() {
@@ -44,6 +45,9 @@ void pGraphics::pImage::load() {
 }
 
 void pGraphics::pImage::draw(int alpha) {
+    if (this->borderSize != 0)
+        gfx->drawRectangle({ pos.first - this->borderSize, pos.second - this->borderSize }, { size.first + 2 * this->borderSize, size.second + 2 * this->borderSize }, this->borderColor);
+
     if (loaded && textureID != 0) {
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
@@ -61,7 +65,7 @@ void pGraphics::pImage::draw(int alpha) {
         glDisable(GL_TEXTURE_2D);
     }
     else {
-        this->drawRectangle(pos, size, this->black);
+        gfx->drawRectangle(pos, size, gfx->black);
         if (textObj != nullptr) {
             std::pair<double, double> textSize = textObj->getTextSize();
             textObj->setPos({ pos.first + (size.first - textSize.first) / 2, pos.second + (size.second + textSize.second) / 2 });

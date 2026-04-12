@@ -96,6 +96,9 @@ void pGraphics::pText::setText(std::string newText) {
 }
 
 void pGraphics::pText::draw() {
+    if (this->borderSize != 0)
+        gfx->drawRectangle({ pos.first - this->borderSize, pos.second - this->borderSize }, { size.first + 2 * this->borderSize, size.second + 2 * this->borderSize }, this->borderColor);
+
     glEnable(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, atlas->id);

@@ -6,7 +6,8 @@ pGraphics::pTextBox::~pTextBox() {
     delete textObj;
 }
 
-pGraphics::pTextBox::pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pFunction)(std::string text)) {
+pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pFunction)(std::string text)) {
+    this->gfx = pGfx;
     pos = pPos;
     size = pSize;
     maxChr = pMaxChr;
@@ -21,14 +22,17 @@ pGraphics::pTextBox::pTextBox(std::pair<double, double> pPos, std::pair<double, 
 }
 
 void pGraphics::pTextBox::draw() {
-    this->drawRectangle(pos, size, insideColor);
+    if (this->borderSize != 0)
+        gfx->drawRectangle({ pos.first - this->borderSize, pos.second - this->borderSize }, { size.first + 2 * this->borderSize, size.second + 2 * this->borderSize }, this->borderColor);
+    
+    gfx->drawRectangle(pos, size, insideColor);
     
     double textHeight = textObj->getTextSize().second;
     textObj->setPos({ pos.first + 4, pos.second + (size.second / 2) + textHeight / 2 });
     textObj->setText(text);
     textObj->draw();
 
-    if (selected) this->drawRectangle(barPos, barSize, barColor);
+    if (selected) gfx->drawRectangle(barPos, barSize, barColor);
 }
 
 void pGraphics::pTextBox::init() {
@@ -56,7 +60,7 @@ void pGraphics::pTextBox::onKeyPress(unsigned int key) {
 }
 
 void pGraphics::pTextBox::checkClick() {
-    if (this->mouseInRegion(pos, size)) {
+    if (gfx->mouseInRegion(pos, size)) {
         selected = !selected;
         screen.render();
         if (!selected)

@@ -4,7 +4,8 @@ pGraphics::pSlider::~pSlider() {
     delete valueTextObj;
 }
 
-pGraphics::pSlider::pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pDecimals, std::string pFontLocation, int pValueTextSize, pColor pOnColor, pColor pOffColor, pColor pValueTextColor, void(*pFunction)(double value)) {
+pGraphics::pSlider::pSlider(pGraphics* pGfx, std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pDecimals, std::string pFontLocation, int pValueTextSize, pColor pOnColor, pColor pOffColor, pColor pValueTextColor, void(*pFunction)(double value)) {
+    this->gfx = pGfx;
     pos = pPos;
     size = pSize;
     minMax = pMinMax;
@@ -46,8 +47,8 @@ void pGraphics::pSlider::init() {
 }
 
 void pGraphics::pSlider::draw() {
-    this->drawRectangle(pos, { pxOn, size.second }, onColor);
-    this->drawRectangle({ pos.first + pxOn, pos.second }, { pxOff, size.second }, offColor);
+    gfx->drawRectangle(pos, { pxOn, size.second }, onColor);
+    gfx->drawRectangle({ pos.first + pxOn, pos.second }, { pxOff, size.second }, offColor);
 
     std::pair<double, double> textSize = valueTextObj->getTextSize();
     valueTextObj->setText(valueText);
@@ -56,7 +57,7 @@ void pGraphics::pSlider::draw() {
 }
 
 void pGraphics::pSlider::handleMouse() {
-    if (this->mouseInRegion(pos, size)) {
+    if (gfx->mouseInRegion(pos, size)) {
         pxOn = screen.mousePointer.first - pos.first;
         pxOff = size.first - pxOn;
         value = (((pxOn * (minMax.second - minMax.first)) / size.first) + minMax.first);

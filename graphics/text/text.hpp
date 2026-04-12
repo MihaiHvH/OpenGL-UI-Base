@@ -10,10 +10,8 @@ inline const char* textCache = " !\"#$%&'()*+,-./0123456789:;<=>?"
                          "`abcdefghijklmnopqrstuvwxyz{|}~";
 inline texture_atlas_t* globalAtlas = nullptr;
 
-class pGraphics::pText : public pGraphics {
+class pGraphics::pText : public pGraphics::pElement {
     private:
-        std::pair<double, double> pos;
-        std::pair<double, double> size = { 0, 0 };
         std::string fontLocation;
         int fontSize;
         std::string text;
@@ -23,16 +21,16 @@ class pGraphics::pText : public pGraphics {
         GLuint textShader;
         texture_atlas_t* atlas;
         vertex_buffer_t* textBuffer;
-        typedef struct {
+        struct vertex_t {
             float x, y, z;
             float u, v;
             float r, g, b, a;
             float shift, gamma;
-        } vertex_t;
+        };
 
         void addText(vertex_buffer_t* buffer, std::string text);
     public:
-        pText(std::pair<double, double> pPos, std::string pFontLocation, int pFontSize, std::string pText, pColor pTextColor);
+        pText(std::pair<double, double> pos, std::string fontLocation, int fontSize, std::string text, pColor textColor);
         ~pText();
 
         void draw();
@@ -42,6 +40,6 @@ class pGraphics::pText : public pGraphics {
 
         void setText(std::string newText);
         void setFont(std::string newFontLocation, int newFontSize);
-        void setPos(std::pair<double, double> newPos) { pos = newPos; }
+        void setPos(std::pair<double, double> newPos) { this->pos = newPos; }
         void setColor(pColor newColor) { color = newColor; }
 };
