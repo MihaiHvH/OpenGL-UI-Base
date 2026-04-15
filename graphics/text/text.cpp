@@ -1,6 +1,6 @@
 #include "text.hpp"
 
-pGraphics::pText::pText(std::pair<double, double> pPos, std::string pFontLocation, int pFontSize, std::string pText, pColor pTextColor) {
+pGraphics::pText::pText(std::pair<float, float> pPos, std::string pFontLocation, int pFontSize, std::string pText, pColor pTextColor) {
     pos = pPos;
     fontLocation = pFontLocation;
     fontSize = pFontSize;
@@ -122,10 +122,10 @@ void pGraphics::pText::draw() {
     glUseProgram(0);
 }
 
-std::pair<double, double> pGraphics::pText::getTextSize(std::string pText) {
+std::pair<float, float> pGraphics::pText::getTextSize(std::string pText) {
     if (pText.empty())
         return size;
-    std::pair<double, double> textSize = { 0, texture_font_get_glyph(font, "H")->height };
+    std::pair<float, float> textSize = { 0, texture_font_get_glyph(font, "H")->height };
     for (int i = 0; i < pText.size(); i++) {
         texture_glyph_t* glyph = texture_font_get_glyph(font, std::string({ pText.c_str()[i] }).c_str());
         if (glyph != NULL) {

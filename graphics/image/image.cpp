@@ -7,7 +7,7 @@ pGraphics::pImage::~pImage() {
         delete textObj;
 }
 
-pGraphics::pImage::pImage(pGraphics* pGfx, std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation) {
+pGraphics::pImage::pImage(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation) {
     this->gfx = pGfx;
     pos = pPos;
     size = pSize;
@@ -67,7 +67,7 @@ void pGraphics::pImage::draw(int alpha) {
     else {
         gfx->drawRectangle(pos, size, gfx->black);
         if (textObj != nullptr) {
-            std::pair<double, double> textSize = textObj->getTextSize();
+            std::pair<float, float> textSize = textObj->getTextSize();
             textObj->setPos({ pos.first + (size.first - textSize.first) / 2, pos.second + (size.second + textSize.second) / 2 });
             textObj->draw();
         }

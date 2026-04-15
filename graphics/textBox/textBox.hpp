@@ -5,8 +5,8 @@
 class pGraphics::pTextBox : public pGraphics::pElement {
     private: 
         bool selected = false;
-        std::pair<double, double> barPos;
-        std::pair<double, double> barSize;
+        std::pair<float, float> barPos;
+        std::pair<float, float> barSize;
         int maxChr;
         pColor insideColor;
         pColor barColor;
@@ -19,7 +19,7 @@ class pGraphics::pTextBox : public pGraphics::pElement {
 
     public:
         //if pMaxChr == -1 => auto
-        pTextBox(pGraphics* gfx, std::pair<double, double> pos, std::pair<double, double> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string));
+        pTextBox(pGraphics* gfx, std::pair<float, float> pos, std::pair<float, float> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string));
         ~pTextBox();
 
         void init();
@@ -28,8 +28,8 @@ class pGraphics::pTextBox : public pGraphics::pElement {
         void onKeyPress(unsigned int key);
         void onSpeciaKeyPress(int key, int action);
 
-        void setPos(std::pair<double, double> newPos);
-        void setSize(std::pair<double, double> newSize);
+        void setPos(std::pair<float, float> newPos);
+        void setSize(std::pair<float, float> newSize);
         void setMaxChr(int newMaxChr) { maxChr = newMaxChr; };
         void setInsideColor(pColor newInsideColor) { insideColor = newInsideColor; };
         void setBarColor(pColor newBarColor) { barColor = newBarColor; };

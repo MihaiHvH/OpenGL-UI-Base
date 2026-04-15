@@ -4,7 +4,7 @@ pGraphics::pButton::~pButton() {
     
 }
 
-pGraphics::pButton::pButton(pGraphics* pGfx, std::pair<double, double> pPos, std::pair<double, double> pSize, std::vector<pColor> pColors, void(*pFunction)(int)) {
+pGraphics::pButton::pButton(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::vector<pColor> pColors, void(*pFunction)(int)) {
     this->gfx = pGfx;
     pos = pPos;
     size = pSize;

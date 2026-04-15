@@ -4,7 +4,7 @@ pGraphics::pSlider::~pSlider() {
     delete valueTextObj;
 }
 
-pGraphics::pSlider::pSlider(pGraphics* pGfx, std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pDecimals, std::string pFontLocation, int pValueTextSize, pColor pOnColor, pColor pOffColor, pColor pValueTextColor, void(*pFunction)(double value)) {
+pGraphics::pSlider::pSlider(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::pair<float, float> pMinMax, int pDecimals, std::string pFontLocation, int pValueTextSize, pColor pOnColor, pColor pOffColor, pColor pValueTextColor, void(*pFunction)(float value)) {
     this->gfx = pGfx;
     pos = pPos;
     size = pSize;
@@ -29,7 +29,7 @@ pGraphics::pSlider::pSlider(pGraphics* pGfx, std::pair<double, double> pPos, std
         valueText = str;
     }
     else {
-        const double multiplier = std::pow(10.0, decimals);
+        const float multiplier = std::pow(10.0, decimals);
         valueText = std::to_string(std::ceil(value * multiplier) / multiplier);
         if(valueText.find('.') != std::string::npos) {
             valueText = valueText.substr(0, valueText.find_last_not_of('0') + 1);
@@ -50,7 +50,7 @@ void pGraphics::pSlider::draw() {
     gfx->drawRectangle(pos, { pxOn, size.second }, onColor);
     gfx->drawRectangle({ pos.first + pxOn, pos.second }, { pxOff, size.second }, offColor);
 
-    std::pair<double, double> textSize = valueTextObj->getTextSize();
+    std::pair<float, float> textSize = valueTextObj->getTextSize();
     valueTextObj->setText(valueText);
     valueTextObj->setPos({ pos.first + pxOn - textSize.first / 2, pos.second + (size.second + textSize.second) / 2 });
     valueTextObj->draw();
@@ -73,7 +73,7 @@ void pGraphics::pSlider::handleMouse() {
             valueText = str;
         }
         else {
-            const double multiplier = std::pow(10.0, decimals);
+            const float multiplier = std::pow(10.0, decimals);
             valueText = std::to_string(std::ceil(value * multiplier) / multiplier);
             if(valueText.find('.') != std::string::npos) {
                 valueText = valueText.substr(0, valueText.find_last_not_of('0') + 1);
@@ -89,24 +89,24 @@ void pGraphics::pSlider::handleMouse() {
     }
 }
 
-void pGraphics::pSlider::setPos(std::pair<double, double> newPos) {
+void pGraphics::pSlider::setPos(std::pair<float, float> newPos) {
     pos = newPos;
-    std::pair<double, double> valTextSize = valueTextObj->getTextSize();
+    std::pair<float, float> valTextSize = valueTextObj->getTextSize();
     valueTextObj->setPos({ 
         pos.first + pxOn - valTextSize.first / 2, 
         pos.second + (valTextSize.second + size.second) / 2
     });
 }
 
-void pGraphics::pSlider::setSize(std::pair<double, double> newSize) {
+void pGraphics::pSlider::setSize(std::pair<float, float> newSize) {
     size = newSize;
-    double maxPxOn = size.first;
+    float maxPxOn = size.first;
     if (pxOn > maxPxOn) pxOn = maxPxOn;
     if (pxOn < 0) pxOn = 0;
     pxOff = size.first - pxOn;
 }
 
-void pGraphics::pSlider::setMinMax(std::pair<double, double> newMinMax) {
+void pGraphics::pSlider::setMinMax(std::pair<float, float> newMinMax) {
     minMax = newMinMax;
     if (value < minMax.first) value = minMax.first;
     if (value > minMax.second) value = minMax.second;
@@ -127,7 +127,7 @@ void pGraphics::pSlider::setDecimals(int newDecimals) {
         valueText = str;
     }
     else {
-        const double multiplier = std::pow(10.0, decimals);
+        const float multiplier = std::pow(10.0, decimals);
         valueText = std::to_string(std::ceil(value * multiplier) / multiplier);
         if(valueText.find('.') != std::string::npos) {
             valueText = valueText.substr(0, valueText.find_last_not_of('0') + 1);
@@ -137,7 +137,7 @@ void pGraphics::pSlider::setDecimals(int newDecimals) {
     }
 }
 
-void pGraphics::pSlider::setValue(double newValue) {
+void pGraphics::pSlider::setValue(float newValue) {
     if (newValue < minMax.first) newValue = minMax.first;
     if (newValue > minMax.second) newValue = minMax.second;
     value = newValue;
@@ -153,8 +153,8 @@ void pGraphics::pSlider::setValue(double newValue) {
         valueText = str;
     }
     else {
-        const double multiplier = std::pow(10.0, decimals);
-        double tempValue = std::ceil(value * multiplier) / multiplier;
+        const float multiplier = std::pow(10.0, decimals);
+        float tempValue = std::ceil(value * multiplier) / multiplier;
         valueText = std::to_string(tempValue);
         if(valueText.find('.') != std::string::npos) {
             valueText = valueText.substr(0, valueText.find_last_not_of('0') + 1);

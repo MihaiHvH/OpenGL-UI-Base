@@ -13,7 +13,6 @@ struct pColor {
 struct pScreen {
     std::string windowName = "OpenGL-UI-Base";
     std::pair<int, int> size = { 640, 640 };
-    std::pair<int, int> initialSize = { 640, 640 };
     std::pair<double, double> mousePointer;
     bool leftClick = false;
     bool rightClick = false;

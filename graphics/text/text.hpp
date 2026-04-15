@@ -30,16 +30,16 @@ class pGraphics::pText : public pGraphics::pElement {
 
         void addText(vertex_buffer_t* buffer, std::string text);
     public:
-        pText(std::pair<double, double> pos, std::string fontLocation, int fontSize, std::string text, pColor textColor);
+        pText(std::pair<float, float> pos, std::string fontLocation, int fontSize, std::string text, pColor textColor);
         ~pText();
 
         void draw();
         void load();
                
-        std::pair<double, double> getTextSize(std::string pText = "");
+        std::pair<float, float> getTextSize(std::string pText = "");
 
         void setText(std::string newText);
         void setFont(std::string newFontLocation, int newFontSize);
-        void setPos(std::pair<double, double> newPos) { this->pos = newPos; }
+        void setPos(std::pair<float, float> newPos) { this->pos = newPos; }
         void setColor(pColor newColor) { color = newColor; }
 };

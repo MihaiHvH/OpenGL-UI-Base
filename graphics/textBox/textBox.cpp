@@ -6,7 +6,7 @@ pGraphics::pTextBox::~pTextBox() {
     delete textObj;
 }
 
-pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pFunction)(std::string text)) {
+pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pFunction)(std::string text)) {
     this->gfx = pGfx;
     pos = pPos;
     size = pSize;
@@ -27,7 +27,7 @@ void pGraphics::pTextBox::draw() {
     
     gfx->drawRectangle(pos, size, insideColor);
     
-    double textHeight = textObj->getTextSize().second;
+    float textHeight = textObj->getTextSize().second;
     textObj->setPos({ pos.first + 4, pos.second + (size.second / 2) + textHeight / 2 });
     textObj->setText(text);
     textObj->draw();
@@ -97,12 +97,12 @@ void pGraphics::pTextBox::onSpeciaKeyPress(int key, int action) {
     if (oBarPos != barPos.first) screen.render();
 }
 
-void pGraphics::pTextBox::setPos(std::pair<double, double> newPos) {
+void pGraphics::pTextBox::setPos(std::pair<float, float> newPos) {
     pos = newPos;
     setText(text);
 }
 
-void pGraphics::pTextBox::setSize(std::pair<double, double> newSize) {
+void pGraphics::pTextBox::setSize(std::pair<float, float> newSize) {
     size = newSize;
     barSize = { 2, size.second - 8 };
     setText(text);

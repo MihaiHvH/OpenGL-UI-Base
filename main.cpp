@@ -18,7 +18,7 @@ pGraphics::pButton* checkBox = interface.graphics.createButton({ 260, 10 }, { 30
 pGraphics::pImage* imageALT = interface.graphics.createImage({ 10, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/imagep.png");
 pGraphics::pImage* image = interface.graphics.createImage({ 150, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/image.png");
 
-pGraphics::pSlider* slider = interface.graphics.createSlider({ 260, 50 }, { 120, 50 }, { 0.f, 100.f }, 2, "include/freetype-gl/fonts/Vera.ttf", 16, interface.graphics.blue, interface.graphics.yellow, interface.graphics.red, [](double value) {
+pGraphics::pSlider* slider = interface.graphics.createSlider({ 260, 50 }, { 120, 50 }, { 0.f, 100.f }, 2, "include/freetype-gl/fonts/Vera.ttf", 16, interface.graphics.blue, interface.graphics.yellow, interface.graphics.red, [](float value) {
     printf("Slider value: %f\n", value);
 });
 
@@ -37,8 +37,6 @@ void render() {
     image->draw();
     imageALT->draw();
     text->draw();
-
-    //Button.addBorder()
 
     glfwSwapBuffers(screen.window);
     glfwPollEvents();
@@ -110,7 +108,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    GLFWwindow *window = glfwCreateWindow(screen.initialSize.first, screen.initialSize.second, screen.windowName.c_str(), NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(screen.size.first, screen.size.second, screen.windowName.c_str(), NULL, NULL);
 
     if (!window) {
         glfwTerminate();
@@ -121,7 +119,7 @@ int main(int argc, char **argv) {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, screen.initialSize.first, screen.initialSize.second, 0, -1, 1);
+    glOrtho(0, screen.size.first, screen.size.second, 0, -1, 1);
     glClearColor(1, 1, 1, 1);
     
     screen.window = window;
