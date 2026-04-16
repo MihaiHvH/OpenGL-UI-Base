@@ -15,14 +15,15 @@ class pGraphics::pButton : public pGraphics::pElement {
         void draw();
         void checkClick();
         
-        void setPos(std::pair<float, float> newPos) { this->pos = newPos; };
-        void setSize(std::pair<float, float> newSize) { this->size = newSize; };
+        void setPos(std::pair<float, float> newPos) { pos = newPos; };
+        void setSize(std::pair<float, float> newSize) { size = newSize; };
         void setColors(std::vector<pColor> newColors);
         void setFunction(void(*newFunction)(int)) { function = newFunction; };
         void setState(int newState);
         
-        std::pair<float, float> getPos() { return this->pos; };
-        std::pair<float, float> getSize() { return this->size; };
+        std::pair<float, float> getPos() { return pos; };
+        std::pair<float, float> getSize() { return size; };
         std::vector<pColor> getColors() { return colors; };
+        void triggerFunction(int state) { function(state); };
         int getState() { return state; };
 };

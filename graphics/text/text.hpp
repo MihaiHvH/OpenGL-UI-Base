@@ -16,7 +16,7 @@ class pGraphics::pText : public pGraphics::pElement {
         int fontSize;
         std::string text;
         pColor color;
-        texture_font_t *font;
+        texture_font_t* font;
 
         GLuint textShader;
         texture_atlas_t* atlas;
@@ -36,10 +36,14 @@ class pGraphics::pText : public pGraphics::pElement {
         void draw();
         void load();
                
-        std::pair<float, float> getTextSize(std::string pText = "");
-
         void setText(std::string newText);
         void setFont(std::string newFontLocation, int newFontSize);
-        void setPos(std::pair<float, float> newPos) { this->pos = newPos; }
+        void setPos(std::pair<float, float> newPos) { pos = newPos; }
         void setColor(pColor newColor) { color = newColor; }
+        
+        std::pair<float, float> getTextSize(std::string pText = "");
+        std::pair<float, float> getPos() { return pos; };
+        std::string getText() { return text; };
+        std::pair<std::string, int> getFont() { return { fontLocation, fontSize }; };
+        pColor getColor() { return color; };
 };

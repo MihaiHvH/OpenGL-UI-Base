@@ -5,7 +5,7 @@ pGraphics::pSlider::~pSlider() {
 }
 
 pGraphics::pSlider::pSlider(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::pair<float, float> pMinMax, int pDecimals, std::string pFontLocation, int pValueTextSize, pColor pOnColor, pColor pOffColor, pColor pValueTextColor, void(*pFunction)(float value)) {
-    this->gfx = pGfx;
+    gfx = pGfx;
     pos = pPos;
     size = pSize;
     minMax = pMinMax;

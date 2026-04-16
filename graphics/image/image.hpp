@@ -20,12 +20,12 @@ class pGraphics::pImage : public pGraphics::pElement {
     void load();
     void draw(int alpha = 255);
 
-    void setPos(std::pair<float, float> newPos) { this->pos = newPos; };
-    void setSize(std::pair<float, float> newSize) { this->size = newSize; };
+    void setPos(std::pair<float, float> newPos) { pos = newPos; };
+    void setSize(std::pair<float, float> newSize) { size = newSize; };
     void setImage(std::string newImageLocation);
     
-    std::pair<float, float> getPos() { return this->pos; };
-    std::pair<float, float> getSize() { return this->size; };
+    std::pair<float, float> getPos() { return pos; };
+    std::pair<float, float> getSize() { return size; };
     std::string getImage() { return imageLocation; };
     bool isImageLoaded() { return loaded; };
     pGraphics::pText* getTextObj() { return textObj; };

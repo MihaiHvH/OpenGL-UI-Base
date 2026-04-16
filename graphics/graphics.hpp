@@ -29,6 +29,10 @@ class pGraphics {
                     borderSize = 0;
                 }
 
+                std::pair<float, float> getCenter() {
+                    return { pos.first + size.first / 2.f, pos.second + size.second / 2.f };
+                }
+
                 virtual ~pElement() = default;
         };
 

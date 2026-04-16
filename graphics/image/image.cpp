@@ -8,7 +8,7 @@ pGraphics::pImage::~pImage() {
 }
 
 pGraphics::pImage::pImage(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation) {
-    this->gfx = pGfx;
+    gfx = pGfx;
     pos = pPos;
     size = pSize;
     imageLocation = pImageLocation;
@@ -45,8 +45,8 @@ void pGraphics::pImage::load() {
 }
 
 void pGraphics::pImage::draw(int alpha) {
-    if (this->borderSize != 0)
-        gfx->drawRectangle({ pos.first - this->borderSize, pos.second - this->borderSize }, { size.first + 2 * this->borderSize, size.second + 2 * this->borderSize }, this->borderColor);
+    if (borderSize != 0)
+        gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
 
     if (loaded && textureID != 0) {
         glEnable(GL_TEXTURE_2D);

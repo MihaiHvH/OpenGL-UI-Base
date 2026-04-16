@@ -7,7 +7,7 @@ pGraphics::pTextBox::~pTextBox() {
 }
 
 pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pFunction)(std::string text)) {
-    this->gfx = pGfx;
+    gfx = pGfx;
     pos = pPos;
     size = pSize;
     maxChr = pMaxChr;
@@ -22,8 +22,8 @@ pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<float, float> pPos, std
 }
 
 void pGraphics::pTextBox::draw() {
-    if (this->borderSize != 0)
-        gfx->drawRectangle({ pos.first - this->borderSize, pos.second - this->borderSize }, { size.first + 2 * this->borderSize, size.second + 2 * this->borderSize }, this->borderColor);
+    if (borderSize != 0)
+        gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
     
     gfx->drawRectangle(pos, size, insideColor);
     

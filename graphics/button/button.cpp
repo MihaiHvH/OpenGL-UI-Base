@@ -5,7 +5,7 @@ pGraphics::pButton::~pButton() {
 }
 
 pGraphics::pButton::pButton(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::vector<pColor> pColors, void(*pFunction)(int)) {
-    this->gfx = pGfx;
+    gfx = pGfx;
     pos = pPos;
     size = pSize;
     colors = pColors;
@@ -22,8 +22,8 @@ void pGraphics::pButton::checkClick() {
 
 void pGraphics::pButton::draw() {
     if (colors.empty()) return;
-    if (this->borderSize != 0)
-        gfx->drawRectangle({ pos.first - this->borderSize, pos.second - this->borderSize }, { size.first + 2 * this->borderSize, size.second + 2 * this->borderSize }, this->borderColor);
+    if (borderSize != 0)
+        gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
     gfx->drawRectangle(pos, size, colors.at(state));
 }
 

@@ -35,8 +35,13 @@ class pGraphics::pSlider : public pGraphics::pElement {
         void setFunction(void(*newFunction)(float)) { function = newFunction; };
         void setValue(float newValue);
         
-        std::pair<float, float> getPos() { return this->pos; };
-        std::pair<float, float> getSize() { return this->size; };
+        std::pair<float, float> getPos() { return pos; };
+        std::pair<float, float> getSize() { return size; };
+        std::pair<float, float> getMinMax();
+        int getDecimals() { return decimals; };
+        pColor getOnColor() { return onColor; };
+        pColor getOffColor() { return offColor; };
+        void triggerFunction(float value) { function(value); };
         pGraphics::pText* getValueTextObj() { return valueTextObj; };
         float getValue() { return value; };
 };

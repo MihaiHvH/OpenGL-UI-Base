@@ -24,7 +24,7 @@ void pGraphics::pText::addText(vertex_buffer_t* buffer, std::string text) {
     size.first = 0;
     size.second = texture_font_get_glyph(font, "H")->height;
     for (int i = 0; i < text.size(); ++i) {
-        texture_glyph_t *glyph = texture_font_get_glyph(font, std::string({ text.c_str()[i] }).c_str());
+        texture_glyph_t* glyph = texture_font_get_glyph(font, std::string({ text.c_str()[i] }).c_str());
         if (glyph != NULL) {
             if (i == text.size() - 1) size.first += glyph->offset_x + glyph->width;
             else size.first += glyph->advance_x;
@@ -59,7 +59,7 @@ void pGraphics::pText::load() {
         glGenTextures(1, &globalAtlas->id);
     }
     textBuffer = vertex_buffer_new("vertex:3f,tex_coord:2f,color:4f,ashift:1f,agamma:1f");
-    this->atlas = globalAtlas;
+    atlas = globalAtlas;
 
     setFont(fontLocation, fontSize);
 
@@ -96,8 +96,8 @@ void pGraphics::pText::setText(std::string newText) {
 }
 
 void pGraphics::pText::draw() {
-    if (this->borderSize != 0)
-        gfx->drawRectangle({ pos.first - this->borderSize, pos.second - this->borderSize }, { size.first + 2 * this->borderSize, size.second + 2 * this->borderSize }, this->borderColor);
+    if (borderSize != 0)
+        gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
 
     glEnable(GL_TEXTURE_2D);
 
@@ -125,6 +125,7 @@ void pGraphics::pText::draw() {
 std::pair<float, float> pGraphics::pText::getTextSize(std::string pText) {
     if (pText.empty())
         return size;
+
     std::pair<float, float> textSize = { 0, texture_font_get_glyph(font, "H")->height };
     for (int i = 0; i < pText.size(); i++) {
         texture_glyph_t* glyph = texture_font_get_glyph(font, std::string({ pText.c_str()[i] }).c_str());

@@ -38,15 +38,7 @@ void pGraphics::drawPolygon(std::vector<std::pair<float, float>> points, pColor 
 }
 
 void pGraphics::drawRectangle(std::pair<float, float> pos, std::pair<float, float> size, pColor color) {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
-    glBegin(GL_POLYGON);
-    glVertex2d(pos.first, pos.second); //corner down
-    glVertex2d(pos.first + size.first, pos.second); //right down corner
-    glVertex2d(pos.first + size.first, pos.second + size.second); //right up corner
-    glVertex2d(pos.first, pos.second + size.second); //corner up
-    glEnd();
+    drawPolygon({ { pos.first, pos.second }, { pos.first + size.first, pos.second }, { pos.first + size.first, pos.second + size.second}, { pos.first, pos.second + size.second } }, color);
 }
 
 void pGraphics::drawFilledCircle(std::pair<float, float> centrePos, float r, pColor color) {
@@ -80,14 +72,7 @@ void pGraphics::drawOutlinedCircle(std::pair<float, float> centrePos, float r, f
 }
 
 void pGraphics::drawTriangle(std::pair<float, float> points[3], pColor color) {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
-    glBegin(GL_TRIANGLES);
-    glVertex2d(points[0].first, points[0].second);
-    glVertex2d(points[1].first, points[1].second);
-    glVertex2d(points[2].first, points[2].second);
-    glEnd();
+    drawPolygon({ points[0], points[1], points[2] }, color);
 }
 
 void pGraphics::drawFilledEllipse(std::pair<float, float> pos, std::pair<float, float> size, pColor color) { 

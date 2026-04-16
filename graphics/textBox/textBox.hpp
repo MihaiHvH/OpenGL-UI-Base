@@ -18,7 +18,7 @@ class pGraphics::pTextBox : public pGraphics::pElement {
         pGraphics::pText* textObj;
 
     public:
-        //if pMaxChr == -1 => auto
+        // maxChr = -1 => auto
         pTextBox(pGraphics* gfx, std::pair<float, float> pos, std::pair<float, float> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string));
         ~pTextBox();
 
@@ -36,6 +36,12 @@ class pGraphics::pTextBox : public pGraphics::pElement {
         void setFunction(void(*newFunction)(std::string)) { function = newFunction; };
         void setText(std::string newText);
 
+        std::pair<float, float> getPos() { return pos; };
+        std::pair<float, float> getSize() { return size; };
+        int getMaxChr() { return maxChr; };
+        pColor getInsideColor() { return insideColor; };
+        pColor getBarColor() { return barColor; };
+        void triggerFunction(std::string text) { function(text); };
         pGraphics::pText* getTextObj() { return textObj; };
         std::string getText() { return text; };
 };
