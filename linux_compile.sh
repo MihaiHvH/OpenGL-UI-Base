@@ -6,7 +6,7 @@ if [ -z "$name" ]; then
 fi
 
 INCLUDES="-I./include"
-FLAGS="-g"
+FLAGS="-g -DGLEW_STATIC -DIL_STATIC_LIB"
 LIBS="-lGL -lIL -lILU -lILUT -lGLEW -lfreetype -lpng -ljpeg -ltiff -lz -lbz2 -lglfw"
 
 C_FILES=$(find ./include/freetype-gl -maxdepth 1 -name "*.c")
