@@ -2,55 +2,46 @@
 
 #include "../../main.hpp"
 
-class pGraphics::pSlider : public pGraphics {
+class pGraphics::pSlider : public pGraphics::pElement {
     private:
-    std::pair<double, double> pos;
-    std::pair<double, double> size;
-    std::pair<double, double> minMax;
-    int precision;
-    bool real;
-    void *font;
-    bool textPos;
-    std::string text;
-    pColor onColor;
-    pColor offColor;
-    pColor outlineColor;
-    pColor valueTextColor;
-    pColor textColor;
-    void(*onValueChange)(double value);
+        std::pair<float, float> minMax;
+        int decimals;
+        int valueTextSize;
+        pColor onColor;
+        pColor offColor;
+        void(*function)(float value);
 
-    double value;
-    double pxOn;
-    double pxOff;
-    std::string valueText;
+        float value;
+        float pxOn;
+        float pxOff;
+        std::string valueText;
+
+        pGraphics::pText* valueTextObj;
 
     public:
-    /*
-    if pReal = true than the value of pPrecision doesn't matter
-    if pPrecision = -1 than it is the whole number without the ending 0s
-    pPrecision shows the number with pPrecision decimals, if the pPrecision's decimal is 0 than it doesn't show the 0
-    pTextPos, if false left otherwise right
-    */
-    pSlider(std::pair<double, double> pPos, std::pair<double, double> pSize, std::pair<double, double> pMinMax, int pPrecision, bool pReal, void *pFont, bool pTextPos, std::string pText, pColor pOnColor, pColor pOffColor, pColor pOutlineColor, pColor pValueTextColor, pColor pTextColor, void(*onValueChange)(double));
-    ~pSlider();
+        pSlider(pGraphics* gfx, std::pair<float, float> pos, std::pair<float, float> size, std::pair<float, float> minMax, int decimals, std::string fontLocation, int valueTextSize, pColor onColor, pColor offColor, pColor valueTextColor, void(*function)(float));
+        ~pSlider();
 
-    void draw();
-    void handleMouse();
+        void init();
+        void draw();
+        void handleMouse();
 
-    void setPos(std::pair<double, double> newPos);
-    void setSize(std::pair<double, double> newSize);
-    void setMinMax(std::pair<double, double> newMinMax);
-    void setPrecision(int newPrecision);
-    void setReal(bool newReal);
-    void setFont(void *newFont);
-    void setTextPos(bool newTextPos);
-    void setText(std::string newText);
-    void setOnColor(pColor newOnColor);
-    void setOffColor(pColor newOffColor);
-    void setOutlineColor(pColor newOutlineColor);
-    void setValueTextColor(pColor newValueTextColor);
-    void setTextColor(pColor newTextColor);
-    void setFunction(void(*newOnValueChange)(double));
-    void setValue(double newValue);
-    double getValue();
+        void setPos(std::pair<float, float> newPos);
+        void setSize(std::pair<float, float> newSize);
+        void setMinMax(std::pair<float, float> newMinMax);
+        void setDecimals(int newDecimals);
+        void setOnColor(pColor newOnColor) { onColor = newOnColor; };
+        void setOffColor(pColor newOffColor) { offColor = newOffColor; };
+        void setFunction(void(*newFunction)(float)) { function = newFunction; };
+        void setValue(float newValue);
+        
+        std::pair<float, float> getPos() { return pos; };
+        std::pair<float, float> getSize() { return size; };
+        std::pair<float, float> getMinMax();
+        int getDecimals() { return decimals; };
+        pColor getOnColor() { return onColor; };
+        pColor getOffColor() { return offColor; };
+        void triggerFunction(float value) { function(value); };
+        pGraphics::pText* getValueTextObj() { return valueTextObj; };
+        float getValue() { return value; };
 };

@@ -2,44 +2,46 @@
 
 #include "../../main.hpp"
 
-class pGraphics::pTextBox : public pGraphics {
+class pGraphics::pTextBox : public pGraphics::pElement {
     private: 
-    bool selected = false;
-    std::pair<double, double> barPos;
-    std::pair<double, double> barSize;
-    std::pair<double, double> pos;
-    std::pair<double, double> size;
-    int maxChr;
-    void* font;
-    pColor outlineColor;
-    pColor insideColor;
-    pColor barColor;
-    pColor textColor;
-    void(*onEnter)(std::string text);
-    std::string text = "";
-    std::string oText = "";
-    int barAltPos = -1;
-    int maxBarAltPos = -1;
+        bool selected = false;
+        std::pair<float, float> barPos;
+        std::pair<float, float> barSize;
+        int maxChr;
+        pColor insideColor;
+        pColor barColor;
+        void(*function)(std::string text);
+        std::string text = "";
+        int barAltPos = -1;
+        int maxBarAltPos = -1;
+
+        pGraphics::pText* textObj;
 
     public:
-    //if pMaxChr == -1 => auto
-    pTextBox(std::pair<double, double> pPos, std::pair<double, double> pSize, int pMaxChr, void* pFont, pColor pOutlineColor, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pOnEnter)(std::string));
-    ~pTextBox();
+        // maxChr = -1 => auto
+        pTextBox(pGraphics* gfx, std::pair<float, float> pos, std::pair<float, float> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string));
+        ~pTextBox();
 
-    void onKeyPress(unsigned char key);
-    void checkClick();
-    void draw();
-    void onSpeciaKeyPress(int key);
+        void init();
+        void draw();
+        void checkClick();
+        void onKeyPress(unsigned int key);
+        void onSpeciaKeyPress(int key, int action);
 
-    void setPos(std::pair<double, double> newPos);
-    void setSize(std::pair<double, double> newSize);
-    void setMaxChr(int newMaxChr);
-    void setFont(void* newFont);
-    void setOutlineColor(pColor newOutlineColor);
-    void setInsideColor(pColor newInsideColor);
-    void setBarColor(pColor newBarColor);
-    void setTextColor(pColor newTextColor);
-    void setFunction(void(*newOnEnter)(std::string));
-    void setText(std::string newText);
-    std::string getText();
+        void setPos(std::pair<float, float> newPos);
+        void setSize(std::pair<float, float> newSize);
+        void setMaxChr(int newMaxChr) { maxChr = newMaxChr; };
+        void setInsideColor(pColor newInsideColor) { insideColor = newInsideColor; };
+        void setBarColor(pColor newBarColor) { barColor = newBarColor; };
+        void setFunction(void(*newFunction)(std::string)) { function = newFunction; };
+        void setText(std::string newText);
+
+        std::pair<float, float> getPos() { return pos; };
+        std::pair<float, float> getSize() { return size; };
+        int getMaxChr() { return maxChr; };
+        pColor getInsideColor() { return insideColor; };
+        pColor getBarColor() { return barColor; };
+        void triggerFunction(std::string text) { function(text); };
+        pGraphics::pText* getTextObj() { return textObj; };
+        std::string getText() { return text; };
 };

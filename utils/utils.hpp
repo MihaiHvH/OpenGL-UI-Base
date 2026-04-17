@@ -10,21 +10,15 @@ namespace utils {
         if constexpr (std::is_integral<T>::value) {
             std::uniform_int_distribution<T> dist(min, max);
             T number = dist(mt);
-            for (int i = 0; i < excluding.size(); ++i)
-                if (excluding[i] == number) {
-                    number = dist(mt);
-                    i = 0;
-                }
+            while (std::find(excluding.being(), excluding.end(), number) != excluding.end())
+                number = dist(mt);
             return number;
         }
         else if constexpr (std::is_floating_point<T>::value) {
             std::uniform_real_distribution<T> dist(min, max);
             T number = dist(mt);
-            for (int i = 0; i < excluding.size(); ++i)
-                if (excluding[i] == number) {
-                    number = dist(mt);
-                    i = 0;
-                }
+            while (std::find(excluding.being(), excluding.end(), number) != excluding.end())
+                number = dist(mt);
             return number;
         }
         else {

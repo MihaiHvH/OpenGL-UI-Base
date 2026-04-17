@@ -3,20 +3,29 @@
 pGraphics::pImage::~pImage() {
     if (textureID != 0)
         glDeleteTextures(1, &textureID);
+    if (textObj != nullptr)
+        delete textObj;
 }
 
-pGraphics::pImage::pImage(std::pair<double, double> pPos, std::pair<double, double> pSize, std::string pAltText, std::string pImageLocation) {
+pGraphics::pImage::pImage(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::string pFontLocation, std::string pAltText, std::string pImageLocation) {
+    gfx = pGfx;
     pos = pPos;
     size = pSize;
-    altText = pAltText;
     imageLocation = pImageLocation;
+
+    if (!pFontLocation.empty() && !pAltText.empty())
+        textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, 14, pAltText, gfx->red);
 }
 
 void pGraphics::pImage::load() {
+    if (!loaded && textObj != nullptr)
+        textObj->load();
+
     if (textureID != 0) {
         glDeleteTextures(1, &textureID);
         textureID = 0;
     }
+
     loaded = false;
     
     ILuint image = ilLoadImage(imageLocation.c_str());
@@ -36,6 +45,9 @@ void pGraphics::pImage::load() {
 }
 
 void pGraphics::pImage::draw(int alpha) {
+    if (borderSize != 0)
+        gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
+
     if (loaded && textureID != 0) {
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
@@ -53,33 +65,16 @@ void pGraphics::pImage::draw(int alpha) {
         glDisable(GL_TEXTURE_2D);
     }
     else {
-        this->drawRectangle(pos, size, this->black);
-        std::pair<int, int> sz = this->getTextSize(altText.c_str(), GLUT_BITMAP_HELVETICA_12);
-        this->drawText({ pos.first + size.first / 2 - sz.first / 2, pos.second + size.second / 2 + sz.second / 2 }, GLUT_BITMAP_HELVETICA_12, altText.c_str(), this->red);
+        gfx->drawRectangle(pos, size, gfx->black);
+        if (textObj != nullptr) {
+            std::pair<float, float> textSize = textObj->getTextSize();
+            textObj->setPos({ pos.first + (size.first - textSize.first) / 2, pos.second + (size.second + textSize.second) / 2 });
+            textObj->draw();
+        }
     }
-}
-
-void pGraphics::pImage::setPos(std::pair<double, double> newPos) {
-    pos = newPos;
-}
-
-void pGraphics::pImage::setSize(std::pair<double, double> newSize) {
-    size = newSize;
-}
-
-void pGraphics::pImage::setAltText(std::string newAltText) {
-    altText = newAltText;
 }
 
 void pGraphics::pImage::setImage(std::string newImageLocation) {
     imageLocation = newImageLocation;
     load();
-}
-
-std::string pGraphics::pImage::getImage() {
-    return imageLocation;
-}
-
-bool pGraphics::pImage::isImageLoaded() {
-    return loaded;
 }
