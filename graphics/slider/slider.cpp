@@ -47,6 +47,12 @@ void pGraphics::pSlider::init() {
 }
 
 void pGraphics::pSlider::draw() {
+    if (!showing)
+        return;
+
+    if (borderSize != 0)
+        gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
+
     gfx->drawRectangle(pos, { pxOn, size.second }, onColor);
     gfx->drawRectangle({ pos.first + pxOn, pos.second }, { pxOff, size.second }, offColor);
 
@@ -82,10 +88,8 @@ void pGraphics::pSlider::handleMouse() {
             }
             value = std::ceil(value * multiplier) / multiplier;
         }
-        if (oldValueText != valueText) {
+        if (oldValueText != valueText)
             function(value);
-            screen.render();
-        }
     }
 }
 

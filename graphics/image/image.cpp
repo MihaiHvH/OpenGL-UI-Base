@@ -45,6 +45,9 @@ void pGraphics::pImage::load() {
 }
 
 void pGraphics::pImage::draw(int alpha) {
+    if (!showing)
+        return;
+
     if (borderSize != 0)
         gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
 

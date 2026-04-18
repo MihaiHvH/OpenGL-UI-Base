@@ -126,24 +126,113 @@ void pGraphics::init() {
     mat4_set_identity(&screen.model);
     mat4_set_identity(&screen.view);
     onResize(screen.size.first, screen.size.second);
+
+    for (auto const& [name, slider] : sliders)
+        slider->init();
+    for (auto const& [name, textBox] : textBoxes)
+        textBox->init();
+    for (auto const& [name, text] : texts)
+        text->load();
+
+    if (!images.empty())
+        ilInit();
+
+    for (auto const& [name, image] : images)
+        image->load();
 }
 
-pGraphics::pButton* pGraphics::createButton(std::pair<float, float> pos, std::pair<float, float> size, std::vector<pColor> colors, void(*function)(int)) {
-    return new pGraphics::pButton(this, pos, size, colors, function);
+pGraphics::pButton* pGraphics::createButton(std::string name, std::pair<float, float> pos, std::pair<float, float> size, std::vector<pColor> colors, void(*function)(int)) {
+    if (buttons.find(name) != buttons.end())
+        throw std::runtime_error("[createButton] Error: You can't name two buttons the same!");
+    pButton* button = new pGraphics::pButton(this, pos, size, colors, function);
+    buttons[name] = button;
+    return buttons.at(name);
 }
 
-pGraphics::pImage* pGraphics::createImage(std::pair<float, float> pos, std::pair<float, float> size, std::string imageLocation, std::string altText, std::string fontLocation) {
-    return new pGraphics::pImage(this, pos, size, imageLocation, altText, fontLocation);
+pGraphics::pImage* pGraphics::createImage(std::string name, std::pair<float, float> pos, std::pair<float, float> size, std::string imageLocation, std::string altText, std::string fontLocation) {
+    if (images.find(name) != images.end())
+        throw std::runtime_error("[createImage] Error: You can't name two images the same!");
+    pImage* image = new pGraphics::pImage(this, pos, size, imageLocation, altText, fontLocation);
+    images[name] = image;
+    return images.at(name);
 }
 
-pGraphics::pSlider* pGraphics::createSlider(std::pair<float, float> pos, std::pair<float, float> size, std::pair<float, float> minMax, int decimals, std::string fontLocation, int valueTextSize, pColor onColor, pColor offColor, pColor valueTextColor, void(*function)(float)) {
-    return new pGraphics::pSlider(this, pos, size, minMax, decimals, fontLocation, valueTextSize, onColor, offColor, valueTextColor, function);
+pGraphics::pSlider* pGraphics::createSlider(std::string name, std::pair<float, float> pos, std::pair<float, float> size, std::pair<float, float> minMax, int decimals, std::string fontLocation, int valueTextSize, pColor onColor, pColor offColor, pColor valueTextColor, void(*function)(float)) {
+    if (sliders.find(name) != sliders.end())
+        throw std::runtime_error("[createSlider] Error: You can't name two sliders the same!");
+    pSlider* slider = new pGraphics::pSlider(this, pos, size, minMax, decimals, fontLocation, valueTextSize, onColor, offColor, valueTextColor, function);
+    sliders[name] = slider;
+    return sliders.at(name);
 }
 
-pGraphics::pText* pGraphics::createText(std::pair<float, float> pos, std::string fontLocation, int fontSize, std::string text, pColor textColor) {
-    return new pGraphics::pText(pos, fontLocation, fontSize, text, textColor);
+pGraphics::pText* pGraphics::createText(std::string name, std::pair<float, float> pos, std::string fontLocation, int fontSize, std::string text, pColor textColor) {
+    if (texts.find(name) != texts.end())
+        throw std::runtime_error("[createText] Error: You can't name two texts the same!");
+    pText* textElement = new pGraphics::pText(pos, fontLocation, fontSize, text, textColor);
+    texts[name] = textElement;
+    return texts.at(name);
 }
 
-pGraphics::pTextBox* pGraphics::createTextBox(std::pair<float, float> pos, std::pair<float, float> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string)) {
-    return new pGraphics::pTextBox(this, pos, size, maxChr, fontLocation, fontSize, insideColor, barColor, textColor, function);
+pGraphics::pTextBox* pGraphics::createTextBox(std::string name, std::pair<float, float> pos, std::pair<float, float> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string)) {
+    if (textBoxes.find(name) != textBoxes.end())
+        throw std::runtime_error("[createTextBox] Error: You can't name two textBoxes the same!");
+    pTextBox* textBox = new pGraphics::pTextBox(this, pos, size, maxChr, fontLocation, fontSize, insideColor, barColor, textColor, function);
+    textBoxes[name] = textBox;
+    return textBoxes.at(name);
+}
+
+void pGraphics::processSpecialInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    for (auto const& [name, textBox] : textBoxes)
+        if (textBox->enabled)
+            textBox->onSpeciaKeyPress(key, action);
+}
+
+void pGraphics::processInput(GLFWwindow* window, unsigned int key) {
+    for (auto const& [name, textBox] : textBoxes)
+        if (textBox->enabled)
+            textBox->onKeyPress(key);
+}
+
+void pGraphics::handleMouseKeys(GLFWwindow* window, int button, int action, int mods) {
+    switch(button) {
+        case GLFW_MOUSE_BUTTON_LEFT: {
+            screen.leftClick = action;
+            
+            if (screen.leftClick != GLFW_PRESS)
+                break;
+
+            for (auto const& [name, button]: buttons)
+                if (button->enabled)
+                    button->checkClick();
+
+            for (auto const& [name, slider]: sliders)
+                if (slider->enabled)
+                    slider->handleMouse();
+
+            for (auto const& [name, textBox]: textBoxes)
+                if (textBox->enabled)
+                    textBox->checkClick();
+
+            break;
+        }
+        case GLFW_MOUSE_BUTTON_RIGHT: {
+            screen.rightClick = action;
+
+            if (screen.rightClick != GLFW_PRESS)
+                break;
+
+            break;
+        }
+    }
+}
+
+void pGraphics::handleMouseMovement(GLFWwindow* window, int x, int y) {
+    screen.mousePointer = { x, y };
+    if (screen.leftClick == GLFW_PRESS) handleMouseDrag(window, x, y);
+}
+
+void pGraphics::handleMouseDrag(GLFWwindow* window, int x, int y) {
+    for (auto const& [name, slider] : sliders)
+        if (slider->enabled)
+            slider->handleMouse();
 }

@@ -22,6 +22,9 @@ pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<float, float> pPos, std
 }
 
 void pGraphics::pTextBox::draw() {
+    if (!showing)
+        return;
+        
     if (borderSize != 0)
         gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
     
@@ -56,19 +59,16 @@ void pGraphics::pTextBox::onKeyPress(unsigned int key) {
             ++maxBarAltPos;
         }
     }
-    screen.render();
 }
 
 void pGraphics::pTextBox::checkClick() {
     if (gfx->mouseInRegion(pos, size)) {
         selected = !selected;
-        screen.render();
         if (!selected)
             function(text);
     }
     else if (selected) {
         selected = false;
-        screen.render();
         function(text);
     }
 }
@@ -94,7 +94,6 @@ void pGraphics::pTextBox::onSpeciaKeyPress(int key, int action) {
         text.erase(text.begin() + barAltPos + 1);
         --maxBarAltPos;
     }
-    if (oBarPos != barPos.first) screen.render();
 }
 
 void pGraphics::pTextBox::setPos(std::pair<float, float> newPos) {
@@ -109,10 +108,9 @@ void pGraphics::pTextBox::setSize(std::pair<float, float> newSize) {
 }
 
 void pGraphics::pTextBox::setText(std::string newText) {
-    barPos = { 4 + pos.first, 4 + pos.second };
+    text = newText;
+    barPos = { 4 + pos.first + textObj->getTextSize().first, 4 + pos.second };
     barSize = { 2, size.second - 8 };
     barAltPos = maxBarAltPos = -1;
-    text = newText;
-    barPos.first = textObj->getTextSize(newText).first;
-    barAltPos = maxBarAltPos = newText.size();
+    barAltPos = maxBarAltPos = newText.size() - 1;
 }

@@ -16,12 +16,11 @@ void pGraphics::pButton::checkClick() {
     if (gfx->mouseInRegion(pos, size)) {
         if (++state >= colors.size()) state = 0;
         function(state);
-        screen.render();
     }
 }
 
 void pGraphics::pButton::draw() {
-    if (colors.empty()) return;
+    if (colors.empty() || !showing) return;
     if (borderSize != 0)
         gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
     gfx->drawRectangle(pos, size, colors.at(state));

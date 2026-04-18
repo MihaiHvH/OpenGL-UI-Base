@@ -16,6 +16,7 @@
 #include <random>
 #include <unordered_map>
 #include <cstring>
+#include <stdexcept>
 
 #include "include/GL/glew.h"
 #include "include/GLFW/glfw3.h"

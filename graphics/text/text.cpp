@@ -96,6 +96,9 @@ void pGraphics::pText::setText(std::string newText) {
 }
 
 void pGraphics::pText::draw() {
+    if (!showing)
+        return;
+
     if (borderSize != 0)
         gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
 

@@ -3,26 +3,26 @@
 pScreen screen;
 pInterface interface;
 
-pGraphics::pButton* Button = interface.graphics.createButton({ 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, [](int state) {
+pGraphics::pButton* Button = interface.graphics.createButton("Example button", { 10, 10}, { 100, 50 }, { interface.graphics.blue, interface.graphics.cyan }, [](int state) {
     printf("Button state: %d\n", state);
 });
 
-pGraphics::pTextBox* textBox = interface.graphics.createTextBox({ 130, 10 }, { 100, 40 }, -1, "include/freetype-gl/fonts/Vera.ttf", 20, interface.graphics.gray, interface.graphics.purple, interface.graphics.black, [](std::string text) {
+pGraphics::pTextBox* textBox = interface.graphics.createTextBox("Example textBox", { 130, 10 }, { 100, 40 }, -1, "include/freetype-gl/fonts/Vera.ttf", 20, interface.graphics.gray, interface.graphics.purple, interface.graphics.black, [](std::string text) {
     printf("TextBox text: %s\n", text.c_str());
 });
 
-pGraphics::pButton* checkBox = interface.graphics.createButton({ 260, 10 }, { 30, 30 }, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
+pGraphics::pButton* checkBox = interface.graphics.createButton("Example checkbox", { 260, 10 }, { 30, 30 }, { interface.graphics.purple, interface.graphics.yellow }, [](int state) {
     printf("CheckBox state: %d\n", state);
 });
 
-pGraphics::pImage* imageALT = interface.graphics.createImage({ 10, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/imagep.png");
-pGraphics::pImage* image = interface.graphics.createImage({ 150, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/image.png");
+pGraphics::pImage* imageALT = interface.graphics.createImage("Example alt image", { 10, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/imagep.png");
+pGraphics::pImage* image = interface.graphics.createImage("Example image", { 150, 200 }, { 100, 100 }, "include/freetype-gl/fonts/Vera.ttf", "ALT TEXT", "images/image.png");
 
-pGraphics::pSlider* slider = interface.graphics.createSlider({ 260, 50 }, { 120, 50 }, { 0.f, 100.f }, 2, "include/freetype-gl/fonts/Vera.ttf", 16, interface.graphics.blue, interface.graphics.yellow, interface.graphics.red, [](float value) {
+pGraphics::pSlider* slider = interface.graphics.createSlider("Example slider", { 260, 50 }, { 120, 50 }, { 0.f, 100.f }, 2, "include/freetype-gl/fonts/Vera.ttf", 16, interface.graphics.blue, interface.graphics.yellow, interface.graphics.red, [](float value) {
     printf("Slider value: %f\n", value);
 });
 
-pGraphics::pText* text = interface.graphics.createText({ 260, 100 }, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.black);
+pGraphics::pText* text = interface.graphics.createText("Example text", { 260, 100 }, "include/freetype-gl/fonts/Vera.ttf", 20, "Hello World", interface.graphics.black);
 
 void render() {
     glDisable(GL_TEXTURE_2D);
@@ -54,46 +54,23 @@ void resize(GLFWwindow *window, int newWidth, int newHeight) {
 }
 
 void processSpecialInput(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    textBox->onSpeciaKeyPress(key, action);
+    interface.graphics.processSpecialInput(window, key, scancode, action, mods);
 }
 
 void processInput(GLFWwindow *window, unsigned int key) {
-    textBox->onKeyPress(key);
+    interface.graphics.processInput(window, key);
 }
 
 void handleMouseKeys(GLFWwindow *window, int button, int action, int mods) {
-    switch(button) {
-        case GLFW_MOUSE_BUTTON_LEFT: {
-            screen.leftClick = action;
-            
-            if (screen.leftClick != GLFW_PRESS)
-                break;
-
-            Button->checkClick();
-            textBox->checkClick();
-            checkBox->checkClick();
-            slider->handleMouse();
-
-            break;
-        }
-        case GLFW_MOUSE_BUTTON_RIGHT: {
-            screen.rightClick = action;
-
-            if (screen.rightClick != GLFW_PRESS)
-                break;
-
-            break;
-        }
-    }
+    interface.graphics.handleMouseKeys(window, button, action, mods);
 }
 
-void handleMouseDrag(int x, int y) { 
-    slider->handleMouse();
+void handleMouseDrag(GLFWwindow* window, int x, int y) { 
+    interface.graphics.handleMouseDrag(window, x, y);
 }
 
-void handleMouseMovement(GLFWwindow *window, double x, double y) {
-    screen.mousePointer = { x, y };
-    if (screen.leftClick == GLFW_PRESS) handleMouseDrag(x, y);
+void handleMouseMovement(GLFWwindow* window, double x, double y) {
+    interface.graphics.handleMouseMovement(window, x, y);
 }
 
 void errorCallback(int error, const char* description) {
@@ -108,21 +85,20 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    GLFWwindow* window = glfwCreateWindow(screen.size.first, screen.size.second, screen.windowName.c_str(), NULL, NULL);
+    screen.window = glfwCreateWindow(screen.size.first, screen.size.second, screen.windowName.c_str(), NULL, NULL);
 
-    if (!window) {
+    if (!screen.window) {
         glfwTerminate();
         return 0;
     }
 
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(screen.window);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, screen.size.first, screen.size.second, 0, -1, 1);
     glClearColor(1, 1, 1, 1);
     
-    screen.window = window;
     screen.render = render;
 
     glewExperimental = GL_TRUE;
@@ -132,29 +108,18 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    slider->init();
-    textBox->init();
-    text->load();
-    
-    /* Image loading */
-
-    ilInit();
-
-    image->load();
-    imageALT->load();
-
     interface.graphics.init();
 
-    glfwSetWindowSizeCallback(window, resize);
-    glfwSetKeyCallback(window, processSpecialInput);
-    glfwSetCharCallback(window, processInput);
-    glfwSetMouseButtonCallback(window, handleMouseKeys);
-    glfwSetCursorPosCallback(window, handleMouseMovement);
+    glfwSetWindowSizeCallback(screen.window, resize);
+    glfwSetKeyCallback(screen.window, processSpecialInput);
+    glfwSetCharCallback(screen.window, processInput);
+    glfwSetMouseButtonCallback(screen.window, handleMouseKeys);
+    glfwSetCursorPosCallback(screen.window, handleMouseMovement);
 
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(screen.window))
         render();
 
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(screen.window);
     glfwTerminate();
 
     return 0;
