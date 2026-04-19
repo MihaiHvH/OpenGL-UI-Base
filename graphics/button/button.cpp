@@ -4,7 +4,7 @@ pGraphics::pButton::~pButton() {
     
 }
 
-pGraphics::pButton::pButton(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::vector<pColor> pColors, void(*pFunction)(int)) {
+pGraphics::pButton::pButton(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::vector<colors::pColor> pColors, void(*pFunction)(int)) {
     gfx = pGfx;
     pos = pPos;
     size = pSize;
@@ -26,7 +26,7 @@ void pGraphics::pButton::draw() {
     gfx->drawRectangle(pos, size, colors.at(state));
 }
 
-void pGraphics::pButton::setColors(std::vector<pColor> newColors) {
+void pGraphics::pButton::setColors(std::vector<colors::pColor> newColors) {
     if (newColors.empty()) return;
     colors = newColors;
     if (state >= colors.size()) state = 0;

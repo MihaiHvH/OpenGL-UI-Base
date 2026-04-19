@@ -17,6 +17,7 @@
 #include <unordered_map>
 #include <cstring>
 #include <stdexcept>
+#include <memory>
 
 #include "include/GL/glew.h"
 #include "include/GLFW/glfw3.h"
@@ -34,7 +35,8 @@
 #define IL_USE_PRAGMA_LIBS
 #define ILUT_USE_OPENGL
 
-#include "structs.hpp"
+#include "interface/screen/screen.hpp"
+#include "interface/colors/colors.hpp"
 #include "utils/utils.hpp"
 #include "graphics/graphics.hpp"
 #include "graphics/text/text.hpp"

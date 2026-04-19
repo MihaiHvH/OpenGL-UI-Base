@@ -1,23 +1,11 @@
 #include "../main.hpp"
 
 pGraphics::pGraphics() {
-    black =  createNewColor(0, 0, 0);
-    white =  createNewColor(255, 255,255);
-    gray =   createNewColor(128, 128, 128);
-    red =    createNewColor(255, 0, 0);
-    green =  createNewColor(0, 255, 0);
-    blue =   createNewColor(0, 0, 255);
-    yellow = createNewColor(255, 255, 0);
-    cyan =   createNewColor(0, 255, 255);
-    purple = createNewColor(255, 0, 255);
+
 }
 
 pGraphics::~pGraphics() {
 
-}
-
-pColor pGraphics::createNewColor(int r, int g, int b, int a) {
-    return { r, g, b, a };
 }
 
 bool pGraphics::mouseInRegion(std::pair<float, float> pos, std::pair<float, float> size) {
@@ -27,7 +15,7 @@ bool pGraphics::mouseInRegion(std::pair<float, float> pos, std::pair<float, floa
            screen.mousePointer.second <= pos.second + size.second;
 }
 
-void pGraphics::drawPolygon(std::vector<std::pair<float, float>> points, pColor color) {
+void pGraphics::drawPolygon(std::vector<std::pair<float, float>> points, colors::pColor color) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
@@ -37,11 +25,11 @@ void pGraphics::drawPolygon(std::vector<std::pair<float, float>> points, pColor 
     glEnd();
 }
 
-void pGraphics::drawRectangle(std::pair<float, float> pos, std::pair<float, float> size, pColor color) {
+void pGraphics::drawRectangle(std::pair<float, float> pos, std::pair<float, float> size, colors::pColor color) {
     drawPolygon({ { pos.first, pos.second }, { pos.first + size.first, pos.second }, { pos.first + size.first, pos.second + size.second}, { pos.first, pos.second + size.second } }, color);
 }
 
-void pGraphics::drawFilledCircle(std::pair<float, float> centrePos, float r, pColor color) {
+void pGraphics::drawFilledCircle(std::pair<float, float> centrePos, float r, colors::pColor color) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
@@ -54,7 +42,7 @@ void pGraphics::drawFilledCircle(std::pair<float, float> centrePos, float r, pCo
     glEnd();
 }
 
-void pGraphics::drawOutlinedCircle(std::pair<float, float> centrePos, float r, float lineThickness, pColor color) {
+void pGraphics::drawOutlinedCircle(std::pair<float, float> centrePos, float r, float lineThickness, colors::pColor color) {
     float inner = r - lineThickness * 0.5;
     float outer = r + lineThickness * 0.5;
     glEnable(GL_BLEND);
@@ -71,11 +59,11 @@ void pGraphics::drawOutlinedCircle(std::pair<float, float> centrePos, float r, f
     glEnd();
 }
 
-void pGraphics::drawTriangle(std::pair<float, float> points[3], pColor color) {
+void pGraphics::drawTriangle(std::pair<float, float> points[3], colors::pColor color) {
     drawPolygon({ points[0], points[1], points[2] }, color);
 }
 
-void pGraphics::drawFilledEllipse(std::pair<float, float> pos, std::pair<float, float> size, pColor color) { 
+void pGraphics::drawFilledEllipse(std::pair<float, float> pos, std::pair<float, float> size, colors::pColor color) { 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
@@ -93,7 +81,7 @@ void pGraphics::drawFilledEllipse(std::pair<float, float> pos, std::pair<float, 
     glEnd(); 
 }
 
-void pGraphics::drawOutlinedEllipse(std::pair<float, float> pos, std::pair<float, float> size, float lineThickness, pColor color) { 
+void pGraphics::drawOutlinedEllipse(std::pair<float, float> pos, std::pair<float, float> size, float lineThickness, colors::pColor color) { 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
@@ -118,14 +106,22 @@ void pGraphics::drawOutlinedEllipse(std::pair<float, float> pos, std::pair<float
 }
 
 void pGraphics::onResize(int newWidth, int newHeight) {
-    mat4_set_orthographic(&screen.projection, 0, newWidth, newHeight, 0, -1, 1);
+    size = { newWidth, newHeight };
+    mat4_set_orthographic(&projection, 0, newWidth, newHeight, 0, -1, 1);
+    glViewport(0, 0, newWidth, newHeight);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, newWidth, newHeight, 0, -1, 1);
 }
 
 void pGraphics::init() {
-    mat4_set_identity(&screen.projection);
-    mat4_set_identity(&screen.model);
-    mat4_set_identity(&screen.view);
-    onResize(screen.size.first, screen.size.second);
+    if (isInit)
+        return;
+
+    mat4_set_identity(&projection);
+    mat4_set_identity(&model);
+    mat4_set_identity(&view);
+    onResize(size.first, size.second);
 
     for (auto const& [name, slider] : sliders)
         slider->init();
@@ -134,73 +130,34 @@ void pGraphics::init() {
     for (auto const& [name, text] : texts)
         text->load();
 
-    if (!images.empty())
-        ilInit();
+    ilInit();
 
     for (auto const& [name, image] : images)
         image->load();
+
+    isInit = true;
 }
 
-pGraphics::pButton* pGraphics::createButton(std::string name, std::pair<float, float> pos, std::pair<float, float> size, std::vector<pColor> colors, void(*function)(int)) {
-    if (buttons.find(name) != buttons.end())
-        throw std::runtime_error("[createButton] Error: You can't name two buttons the same!");
-    pButton* button = new pGraphics::pButton(this, pos, size, colors, function);
-    buttons[name] = button;
-    return buttons.at(name);
-}
-
-pGraphics::pImage* pGraphics::createImage(std::string name, std::pair<float, float> pos, std::pair<float, float> size, std::string imageLocation, std::string altText, std::string fontLocation) {
-    if (images.find(name) != images.end())
-        throw std::runtime_error("[createImage] Error: You can't name two images the same!");
-    pImage* image = new pGraphics::pImage(this, pos, size, imageLocation, altText, fontLocation);
-    images[name] = image;
-    return images.at(name);
-}
-
-pGraphics::pSlider* pGraphics::createSlider(std::string name, std::pair<float, float> pos, std::pair<float, float> size, std::pair<float, float> minMax, int decimals, std::string fontLocation, int valueTextSize, pColor onColor, pColor offColor, pColor valueTextColor, void(*function)(float)) {
-    if (sliders.find(name) != sliders.end())
-        throw std::runtime_error("[createSlider] Error: You can't name two sliders the same!");
-    pSlider* slider = new pGraphics::pSlider(this, pos, size, minMax, decimals, fontLocation, valueTextSize, onColor, offColor, valueTextColor, function);
-    sliders[name] = slider;
-    return sliders.at(name);
-}
-
-pGraphics::pText* pGraphics::createText(std::string name, std::pair<float, float> pos, std::string fontLocation, int fontSize, std::string text, pColor textColor) {
-    if (texts.find(name) != texts.end())
-        throw std::runtime_error("[createText] Error: You can't name two texts the same!");
-    pText* textElement = new pGraphics::pText(pos, fontLocation, fontSize, text, textColor);
-    texts[name] = textElement;
-    return texts.at(name);
-}
-
-pGraphics::pTextBox* pGraphics::createTextBox(std::string name, std::pair<float, float> pos, std::pair<float, float> size, int maxChr, std::string fontLocation, int fontSize, pColor insideColor, pColor barColor, pColor textColor, void(*function)(std::string)) {
-    if (textBoxes.find(name) != textBoxes.end())
-        throw std::runtime_error("[createTextBox] Error: You can't name two textBoxes the same!");
-    pTextBox* textBox = new pGraphics::pTextBox(this, pos, size, maxChr, fontLocation, fontSize, insideColor, barColor, textColor, function);
-    textBoxes[name] = textBox;
-    return textBoxes.at(name);
-}
-
-void pGraphics::processSpecialInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void pGraphics::processSpecialInput(int key, int scancode, int action, int mods) {
     for (auto const& [name, textBox] : textBoxes)
         if (textBox->enabled)
             textBox->onSpeciaKeyPress(key, action);
 }
 
-void pGraphics::processInput(GLFWwindow* window, unsigned int key) {
+void pGraphics::processInput(unsigned int key) {
     for (auto const& [name, textBox] : textBoxes)
         if (textBox->enabled)
             textBox->onKeyPress(key);
 }
 
-void pGraphics::handleMouseKeys(GLFWwindow* window, int button, int action, int mods) {
+void pGraphics::handleMouseKeys(int button, int action, int mods) {
     switch(button) {
         case GLFW_MOUSE_BUTTON_LEFT: {
             screen.leftClick = action;
             
             if (screen.leftClick != GLFW_PRESS)
                 break;
-
+                
             for (auto const& [name, button]: buttons)
                 if (button->enabled)
                     button->checkClick();
@@ -226,12 +183,12 @@ void pGraphics::handleMouseKeys(GLFWwindow* window, int button, int action, int 
     }
 }
 
-void pGraphics::handleMouseMovement(GLFWwindow* window, int x, int y) {
+void pGraphics::handleMouseMovement(int x, int y) {
     screen.mousePointer = { x, y };
-    if (screen.leftClick == GLFW_PRESS) handleMouseDrag(window, x, y);
+    if (screen.leftClick == GLFW_PRESS) handleMouseDrag(x, y);
 }
 
-void pGraphics::handleMouseDrag(GLFWwindow* window, int x, int y) {
+void pGraphics::handleMouseDrag(int x, int y) {
     for (auto const& [name, slider] : sliders)
         if (slider->enabled)
             slider->handleMouse();

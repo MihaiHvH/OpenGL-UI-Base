@@ -14,7 +14,7 @@ pGraphics::pImage::pImage(pGraphics* pGfx, std::pair<float, float> pPos, std::pa
     imageLocation = pImageLocation;
 
     if (!pFontLocation.empty() && !pAltText.empty())
-        textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, 14, pAltText, gfx->red);
+        textObj = new pGraphics::pText(gfx, { 0, 0 }, pFontLocation, 14, pAltText, color["red"]);
 }
 
 void pGraphics::pImage::load() {
@@ -68,7 +68,7 @@ void pGraphics::pImage::draw(int alpha) {
         glDisable(GL_TEXTURE_2D);
     }
     else {
-        gfx->drawRectangle(pos, size, gfx->black);
+        gfx->drawRectangle(pos, size, color["black"]);
         if (textObj != nullptr) {
             std::pair<float, float> textSize = textObj->getTextSize();
             textObj->setPos({ pos.first + (size.first - textSize.first) / 2, pos.second + (size.second + textSize.second) / 2 });

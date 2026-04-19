@@ -1,6 +1,7 @@
 #include "text.hpp"
 
-pGraphics::pText::pText(std::pair<float, float> pPos, std::string pFontLocation, int pFontSize, std::string pText, pColor pTextColor) {
+pGraphics::pText::pText(pGraphics* pGfx, std::pair<float, float> pPos, std::string pFontLocation, int pFontSize, std::string pText, colors::pColor pTextColor) {
+    gfx = pGfx;
     pos = pPos;
     fontLocation = pFontLocation;
     fontSize = pFontSize;
@@ -71,7 +72,7 @@ void pGraphics::pText::load() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, atlas->width, atlas->height, 0, GL_RGB, GL_UNSIGNED_BYTE, atlas->data);
 
-    textShader = shader_load("include/freetype-gl/shaders/text.vert", "include/freetype-gl/shaders/text.frag");
+    textShader = shader_load_from_string(vertexShader, fragmentShader);
 }
 
 void pGraphics::pText::setFont(std::string newFontLocation, int newFontSize) {
@@ -109,16 +110,16 @@ void pGraphics::pText::draw() {
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
-    mat4_set_identity(&screen.model);
-    mat4_translate(&screen.model, pos.first, pos.second, 0);
+    mat4_set_identity(&gfx->model);
+    mat4_translate(&gfx->model, pos.first, pos.second, 0);
     
     glUseProgram(textShader);
     glUniform1i(glGetUniformLocation(textShader, "texture" ), 0);
     glUniform3f(glGetUniformLocation(textShader, "pixel" ), 1.f / atlas->width, 1.f / atlas->height, atlas->depth);
-    glUniformMatrix4fv(glGetUniformLocation(textShader, "model" ), 1, 0, screen.model.data);
-    glUniformMatrix4fv(glGetUniformLocation(textShader, "view" ), 1, 0, screen.view.data);
-    glUniformMatrix4fv(glGetUniformLocation(textShader, "projection" ), 1, 0, screen.projection.data);
-    glUniformMatrix4fv(glGetUniformLocation(textShader, "projection" ), 1, 0, screen.projection.data);
+    glUniformMatrix4fv(glGetUniformLocation(textShader, "model" ), 1, 0, gfx->model.data);
+    glUniformMatrix4fv(glGetUniformLocation(textShader, "view" ), 1, 0, gfx->view.data);
+    glUniformMatrix4fv(glGetUniformLocation(textShader, "projection" ), 1, 0, gfx->projection.data);
+    glUniformMatrix4fv(glGetUniformLocation(textShader, "projection" ), 1, 0, gfx->projection.data);
     vertex_buffer_render(textBuffer, GL_TRIANGLES);
     
     glDisable(GL_TEXTURE_2D);

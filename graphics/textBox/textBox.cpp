@@ -6,7 +6,7 @@ pGraphics::pTextBox::~pTextBox() {
     delete textObj;
 }
 
-pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, pColor pInsideColor, pColor pBarColor, pColor pTextColor, void(*pFunction)(std::string text)) {
+pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, int pMaxChr, std::string pFontLocation, int pFontSize, colors::pColor pInsideColor, colors::pColor pBarColor, colors::pColor pTextColor, void(*pFunction)(std::string text)) {
     gfx = pGfx;
     pos = pPos;
     size = pSize;
@@ -18,7 +18,7 @@ pGraphics::pTextBox::pTextBox(pGraphics* pGfx, std::pair<float, float> pPos, std
     barPos = { 4 + pPos.first, 4 + pPos.second };
     barSize = { 2, pSize.second - 8 };
 
-    textObj = new pGraphics::pText({ 0, 0 }, pFontLocation, pFontSize, text, pTextColor);
+    textObj = new pGraphics::pText(gfx, { 0, 0 }, pFontLocation, pFontSize, text, pTextColor);
 }
 
 void pGraphics::pTextBox::draw() {

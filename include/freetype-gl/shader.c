@@ -95,3 +95,30 @@ shader_load( const char * vert_filename,
     }
     return handle;
 }
+
+GLuint shader_load_from_string(const char* vert, const char* frag) {
+    GLuint handle = glCreateProgram();
+    GLint link_status;
+
+    if(vert && strlen(vert)) {
+        GLuint vert_shader = shader_compile(vert, GL_VERTEX_SHADER);
+        glAttachShader(handle, vert_shader);
+        glDeleteShader(vert_shader);
+    }
+    if(frag && strlen(frag)) {
+        GLuint frag_shader = shader_compile(frag, GL_FRAGMENT_SHADER);
+        glAttachShader(handle, frag_shader);
+        glDeleteShader(frag_shader);
+    }
+
+    glLinkProgram(handle);
+
+    glGetProgramiv(handle, GL_LINK_STATUS, &link_status );
+    if (link_status == GL_FALSE) {
+        GLchar messages[256];
+        glGetProgramInfoLog( handle, sizeof(messages), 0, &messages[0] );
+        fprintf( stderr, "%s\n", messages );
+        exit(1);
+    }
+    return handle;
+}
