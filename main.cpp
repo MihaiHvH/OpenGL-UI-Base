@@ -52,13 +52,11 @@ int main(int argc, char** argv) {
     }
 
     interface.createNewWindow("Main Window", "OpenGL-UI-Base", 640, 640, render);
-    interface.createNewWindow("Secondary window", "Pop-up", 120, 120, []() {
+    interface.createNewWindow("Secondary window", "Pop-up", 120, 120, [&]() {
         // render function
+        textPop->setPos({ interface.window["Secondary window"].size.first / 2 - textPop->getTextSize().first / 2, interface.window["Secondary window"].size.second / 2 - textPop->getTextSize().second / 2 });
         textPop->draw();
     });
-    
-    textPop->setPos({ 60 - textPop->getTextSize().first / 2, 60 - textPop->getTextSize().second / 2 });
-
     // border example
     Button->addBorder(3, color["gunmetal"]);
     checkBox->addBorder(5, color["black"]);

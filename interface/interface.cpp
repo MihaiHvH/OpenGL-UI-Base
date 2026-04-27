@@ -37,8 +37,6 @@ void pInterface::createNewWindow(std::string id, std::string name, int width, in
 
     window[id].init();
 
-    window[id].onResize(width, height);
-
     glfwSetWindowUserPointer(window[id].window, &window[id]);
     glfwSetWindowSizeCallback(window[id].window, [](GLFWwindow* window, int newWidth, int newHeight) {
         GLFWwindow* previousContext = glfwGetCurrentContext();
