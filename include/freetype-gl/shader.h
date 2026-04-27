@@ -78,6 +78,8 @@ namespace ftgl {
 
 /** @} */
 
+GLuint shader_load_from_string(const char* vert, const char* frag);
+
 #ifdef __cplusplus
 }
 }

@@ -4,7 +4,7 @@ pGraphics::pSlider::~pSlider() {
     delete valueTextObj;
 }
 
-pGraphics::pSlider::pSlider(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::pair<float, float> pMinMax, int pDecimals, std::string pFontLocation, int pValueTextSize, pColor pOnColor, pColor pOffColor, pColor pValueTextColor, void(*pFunction)(float value)) {
+pGraphics::pSlider::pSlider(pGraphics* pGfx, std::pair<float, float> pPos, std::pair<float, float> pSize, std::pair<float, float> pMinMax, int pDecimals, std::string pFontLocation, int pValueTextSize, colors::pColor pOnColor, colors::pColor pOffColor, colors::pColor pValueTextColor, void(*pFunction)(float value)) {
     gfx = pGfx;
     pos = pPos;
     size = pSize;
@@ -39,7 +39,7 @@ pGraphics::pSlider::pSlider(pGraphics* pGfx, std::pair<float, float> pPos, std::
         value = std::ceil(value * multiplier) / multiplier;
     }
 
-    valueTextObj = new pGraphics::pText({ 0, 0 }, pFontLocation, valueTextSize, valueText, pValueTextColor);
+    valueTextObj = new pGraphics::pText(gfx, { 0, 0 }, pFontLocation, valueTextSize, valueText, pValueTextColor);
 }
 
 void pGraphics::pSlider::init() {
@@ -47,6 +47,12 @@ void pGraphics::pSlider::init() {
 }
 
 void pGraphics::pSlider::draw() {
+    if (!showing)
+        return;
+
+    if (borderSize != 0)
+        gfx->drawRectangle({ pos.first - borderSize, pos.second - borderSize }, { size.first + 2 * borderSize, size.second + 2 * borderSize }, borderColor);
+
     gfx->drawRectangle(pos, { pxOn, size.second }, onColor);
     gfx->drawRectangle({ pos.first + pxOn, pos.second }, { pxOff, size.second }, offColor);
 
@@ -82,10 +88,8 @@ void pGraphics::pSlider::handleMouse() {
             }
             value = std::ceil(value * multiplier) / multiplier;
         }
-        if (oldValueText != valueText) {
+        if (oldValueText != valueText)
             function(value);
-            screen.render();
-        }
     }
 }
 
