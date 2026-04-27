@@ -18,6 +18,8 @@ void pInterface::createNewWindow(std::string id, std::string name, int width, in
     window[id].window = glfwCreateWindow(width, height, name.c_str(), NULL, sharedContextWindow);
     window[id].windowName = name;
     window[id].renderFunction = renderFunction;
+    window[id].size = { width, height };
+
     if (!window[id].window) {
         glfwTerminate();
         throw std::runtime_error("[createNewWindow] Error creating window.");
@@ -99,6 +101,32 @@ void pInterface::run() {
         glfwPollEvents();
     }
     glfwTerminate();
+}
+
+void pInterface::renameWindow(std::string id, std::string newName) { 
+    if (!doesTheWindowExist(id))
+        throw std::runtime_error("[renameWindow] The window " + id + " doesn't exist.");
+    glfwSetWindowTitle(window[id].window, newName.c_str()); 
+}
+
+void pInterface::setWindowSize(std::string id, std::pair<int, int> newSize) {
+    if (!doesTheWindowExist(id))
+        throw std::runtime_error("[renameWindow] The window " + id + " doesn't exist.");
+    glfwSetWindowSize(window[id].window, newSize.first, newSize.second); 
+}
+
+void pInterface::setWindowPos(std::string id, std::pair<int, int> newPos) {
+    if (!doesTheWindowExist(id))
+        throw std::runtime_error("[renameWindow] The window " + id + " doesn't exist.");
+    glfwSetWindowPos(window[id].window, newPos.first, newPos.second); 
+}
+
+void pInterface::setWindowSizeLimits(std::string id, std::pair<int, int> minSize, std::pair<int, int> maxSize) {
+    if (!doesTheWindowExist(id))
+        throw std::runtime_error("[renameWindow] The window " + id + " doesn't exist.");
+    window[id].minSize = minSize;
+    window[id].maxSize = maxSize;
+    glfwSetWindowSizeLimits(window[id].window, minSize.first, minSize.second, maxSize.first, maxSize.second);
 }
 
 pGraphics::pButton* pInterface::createButton(std::string windowID, std::string name, std::pair<float, float> pos, std::pair<float, float> size, std::vector<colors::pColor> colors, void(*function)(int)) {

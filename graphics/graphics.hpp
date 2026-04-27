@@ -9,6 +9,9 @@ class pGraphics {
 
         std::string windowName = "";
         std::pair<int, int> size = { 0, 0 };
+        std::pair<int, int> minSize = { 0, 0 };
+        std::pair<int, int> maxSize = { 0, 0 };
+        
         GLFWwindow* window= nullptr;
         void(*renderFunction)();
 

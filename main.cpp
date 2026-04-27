@@ -52,8 +52,9 @@ int main(int argc, char** argv) {
     }
 
     interface.createNewWindow("Main Window", "OpenGL-UI-Base", 640, 640, render);
-    interface.createNewWindow("Secondary window", "Pop-up", 120, 120, [&]() {
-        // render function
+    interface.setWindowSizeLimits("Main Window", { 120, 120 }, { 640, 640 });
+    interface.createNewWindow("Secondary window", "Pop-up", 120, 120, []() {
+        // render lambda function
         textPop->setPos({ interface.window["Secondary window"].size.first / 2 - textPop->getTextSize().first / 2, interface.window["Secondary window"].size.second / 2 - textPop->getTextSize().second / 2 });
         textPop->draw();
     });

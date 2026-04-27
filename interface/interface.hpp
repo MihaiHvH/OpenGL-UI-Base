@@ -10,7 +10,12 @@ class pInterface {
         std::unordered_map<std::string, pGraphics> window;
         GLFWwindow* sharedContextWindow = nullptr;
 
+        bool doesTheWindowExist(std::string id) { return window.find(id) != window.end(); };
         void createNewWindow(std::string id, std::string name, int width, int height, void(*renderFunction)());
+        void renameWindow(std::string id, std::string newName);
+        void setWindowSize(std::string id, std::pair<int, int> newSize);
+        void setWindowSizeLimits(std::string id, std::pair<int, int> minSize, std::pair<int, int> maxSize);
+        void setWindowPos(std::string id, std::pair<int, int> newPos);
         void run();
 
         pGraphics::pButton* createButton(std::string windowID, std::string name, std::pair<float, float> pos, std::pair<float, float> size, std::vector<colors::pColor> colors, void(*function)(int)); 
