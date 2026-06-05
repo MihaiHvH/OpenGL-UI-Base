@@ -108,10 +108,18 @@ void pGraphics::drawOutlinedEllipse(std::pair<float, float> pos, std::pair<float
 void pGraphics::onResize(int newWidth, int newHeight) {
     size = { newWidth, newHeight };
     mat4_set_orthographic(&projection, 0, newWidth, newHeight, 0, -1, 1);
-    glViewport(0, 0, newWidth, newHeight);
+
+    int fbWidth = newWidth;
+    int fbHeight = newHeight;
+    if (window)
+        glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
+
+    glViewport(0, 0, fbWidth, fbHeight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, newWidth, newHeight, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
 void pGraphics::init() {

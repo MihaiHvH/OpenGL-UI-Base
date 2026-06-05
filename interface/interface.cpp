@@ -33,7 +33,7 @@ void pInterface::createNewWindow(std::string id, std::string name, int width, in
     if (glCreateProgram == nullptr) {
         glewExperimental = GL_TRUE;
         GLenum err = glewInit();
-        if (err != GLEW_OK)
+        if (err != GLEW_OK && err != 4)
             throw std::runtime_error(reinterpret_cast<const char*>(glewGetErrorString(err)));
     }
 
@@ -46,6 +46,14 @@ void pInterface::createNewWindow(std::string id, std::string name, int width, in
         pGraphics* app = static_cast<pGraphics*>(glfwGetWindowUserPointer(window));
         if (app)
             app->onResize(newWidth, newHeight);
+        glfwMakeContextCurrent(previousContext);
+    });
+    glfwSetFramebufferSizeCallback(window[id].window, [](GLFWwindow* window, int fbWidth, int fbHeight) {
+        GLFWwindow* previousContext = glfwGetCurrentContext();
+        glfwMakeContextCurrent(window);
+        pGraphics* app = static_cast<pGraphics*>(glfwGetWindowUserPointer(window));
+        if (app)
+            app->onResize(app->size.first, app->size.second);
         glfwMakeContextCurrent(previousContext);
     });
     glfwSetKeyCallback(window[id].window, [](GLFWwindow* window, int key, int scancode, int action, int mods){

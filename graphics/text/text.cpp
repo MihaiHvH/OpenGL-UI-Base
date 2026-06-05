@@ -56,7 +56,7 @@ void pGraphics::pText::addText(vertex_buffer_t* buffer, std::string text) {
 
 void pGraphics::pText::load() {
     if (!globalAtlas) {
-        globalAtlas = texture_atlas_new(512, 512, 3);
+        globalAtlas = texture_atlas_new(512, 512, 1);
         glGenTextures(1, &globalAtlas->id);
     }
     textBuffer = vertex_buffer_new("vertex:3f,tex_coord:2f,color:4f,ashift:1f,agamma:1f");
@@ -70,7 +70,7 @@ void pGraphics::pText::load() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, atlas->width, atlas->height, 0, GL_RGB, GL_UNSIGNED_BYTE, atlas->data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, atlas->width, atlas->height, 0, GL_RED, GL_UNSIGNED_BYTE, atlas->data);
 
     textShader = shader_load_from_string(vertexShader, fragmentShader);
 }
@@ -80,6 +80,7 @@ void pGraphics::pText::setFont(std::string newFontLocation, int newFontSize) {
 
     if (fontCache.find(cacheKey) == fontCache.end()) {
         fontCache[cacheKey] = texture_font_new_from_file(atlas, newFontSize, newFontLocation.c_str());
+        fontCache[cacheKey]->padding = 2;
         texture_font_load_glyphs(fontCache[cacheKey], textCache);
     }
 
@@ -107,18 +108,16 @@ void pGraphics::pText::draw() {
 
     glBindTexture(GL_TEXTURE_2D, atlas->id);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
     mat4_set_identity(&gfx->model);
     mat4_translate(&gfx->model, pos.first, pos.second, 0);
     
     glUseProgram(textShader);
-    glUniform1i(glGetUniformLocation(textShader, "texture" ), 0);
-    glUniform3f(glGetUniformLocation(textShader, "pixel" ), 1.f / atlas->width, 1.f / atlas->height, atlas->depth);
+    glUniform1i(glGetUniformLocation(textShader, "tex" ), 0);
     glUniformMatrix4fv(glGetUniformLocation(textShader, "model" ), 1, 0, gfx->model.data);
     glUniformMatrix4fv(glGetUniformLocation(textShader, "view" ), 1, 0, gfx->view.data);
-    glUniformMatrix4fv(glGetUniformLocation(textShader, "projection" ), 1, 0, gfx->projection.data);
     glUniformMatrix4fv(glGetUniformLocation(textShader, "projection" ), 1, 0, gfx->projection.data);
     vertex_buffer_render(textBuffer, GL_TRIANGLES);
     
